@@ -1,0 +1,70 @@
+<div class="splashOpaque" *ngIf="showSplash">
+  <div class="sk-cube-grid">
+    <div class="sk-cube sk-cube1"></div>
+    <div class="sk-cube sk-cube2"></div>
+    <div class="sk-cube sk-cube3"></div>
+    <div class="sk-cube sk-cube4"></div>
+    <div class="sk-cube sk-cube5"></div>
+    <div class="sk-cube sk-cube6"></div>
+    <div class="sk-cube sk-cube7"></div>
+    <div class="sk-cube sk-cube8"></div>
+    <div class="sk-cube sk-cube9"></div>
+  </div>
+</div>
+<ion-header>
+
+  <ion-toolbar color="primary" text-center hideBackButton>
+    <ion-buttons slot="end">
+      <ion-button>
+        <img [src]="localStorageServ.localStorageObj['dataUser'].logo" class='imagenNav'>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-button icon-only (click)="dismiss()">
+        <ion-icon name="arrow-back">
+        </ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Clientes</ion-title>
+
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content padding>
+  <ion-searchbar animated [(ngModel)]="searchParam" (ionChange)="buscar()" debounce="1000">
+  </ion-searchbar>
+
+
+  <ion-button expand="full" color="primary" (click)="nuevoCliente()">Nuevo cliente</ion-button>
+
+  <div >
+    <ion-item  detail (click)="irACliente(cliente)" *ngFor="let cliente of clientesDisplay">
+      <ion-grid>
+        <ion-row>
+          <ion-text>
+            <strong>Empresa: </strong>{{cliente.Empresa}}
+          </ion-text>
+        </ion-row>
+        <ion-row>
+          <ion-text>
+            <strong>Tipo Identificacíon: </strong>{{cliente["Tipo Identificacíon"]}}
+          </ion-text>
+        </ion-row>
+        <ion-row>
+          <ion-text>
+            <strong>Nombre: </strong>{{cliente.Nombre}} + {{cliente.Apellidos}}
+          </ion-text>
+        </ion-row>
+      </ion-grid>
+
+    </ion-item>
+    <ion-row *ngIf="clientesDisplay.length > 0">
+      <ion-col size="12">
+        Mostrando los primeros 20 registros encontrados..
+      </ion-col>
+    </ion-row>
+  </div>
+
+
+</ion-content>

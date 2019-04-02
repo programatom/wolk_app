@@ -1,0 +1,80 @@
+<div class="splashOpaque" *ngIf="showSplash">
+  <div class="sk-cube-grid">
+    <div class="sk-cube sk-cube1"></div>
+    <div class="sk-cube sk-cube2"></div>
+    <div class="sk-cube sk-cube3"></div>
+    <div class="sk-cube sk-cube4"></div>
+    <div class="sk-cube sk-cube5"></div>
+    <div class="sk-cube sk-cube6"></div>
+    <div class="sk-cube sk-cube7"></div>
+    <div class="sk-cube sk-cube8"></div>
+    <div class="sk-cube sk-cube9"></div>
+  </div>
+</div>
+<ion-header>
+
+  <ion-toolbar color="primary" text-center hideBackButton>
+    <ion-buttons slot="end">
+      <ion-button>
+        <img [src]="localStorageServ.localStorageObj['dataUser'].logo" class='imagenNav'>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-button icon-only (click)="dismiss()">
+        <ion-icon name="arrow-back">
+        </ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Reporte de gastos</ion-title>
+  </ion-toolbar>
+
+</ion-header>
+<ion-content padding>
+
+  <ion-item text-wrap>
+    <ion-label position="fixed">Motivo</ion-label>
+    <ion-input type="text" maxlength="40" [(ngModel)]="motivo"></ion-input>
+  </ion-item>
+
+  <ion-item text-wrap>
+    <ion-label position="fixed">Monto</ion-label>
+    <ion-input type="number" min = "0" [(ngModel)]="monto"></ion-input>
+  </ion-item>
+
+
+  <ion-item>
+    <ion-label>Medio de pago</ion-label>
+    <ion-select okText="Ok" cancelText="Cancelar" value = "01" placeholder = "Efectivo" [(ngModel)]="medioDePagoDisplay" (ionChange)="selectMedioDePago()">
+      <ion-select-option *ngFor="let medio of mediosDePago" [value]="medio['Forma de pago']">{{medio["Forma de pago"]}}</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Moneda</ion-label>
+    <ion-select okText="Ok" cancelText="Cancelar" [(ngModel)]="moneda" value = "CRC" placeholder = "CRC" (ionChange)='buscarTarifaDeCambio()'>
+      <ion-select-option value='{{moneda.id_moneda}}' *ngFor="let moneda of monedas">
+        {{moneda.nombre_moneda}}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Tipo de cambio: <span class='span'>{{tarifaDeCambio}}</span></ion-label>
+  </ion-item>
+
+  <ion-item>
+    <ion-textarea [(ngModel)]="observaciones" placeholder="Observaciones" maxlength = "100"></ion-textarea>
+  </ion-item>
+
+  <ion-button (click)="procesarGasto()" expand="block" color="primary"
+  [disabled] = "moneda == '' ||
+                tarifaDeCambio == 0 ||
+                motivo == '' ||
+                monto == 0 ||
+                medioDePago == '' ||
+                observaciones == ''">
+    Procesar gasto
+  </ion-button>
+
+
+</ion-content>

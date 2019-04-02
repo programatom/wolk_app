@@ -1,0 +1,56 @@
+<div class="splashOpaque" *ngIf="showSplash">
+  <div class="sk-cube-grid">
+    <div class="sk-cube sk-cube1"></div>
+    <div class="sk-cube sk-cube2"></div>
+    <div class="sk-cube sk-cube3"></div>
+    <div class="sk-cube sk-cube4"></div>
+    <div class="sk-cube sk-cube5"></div>
+    <div class="sk-cube sk-cube6"></div>
+    <div class="sk-cube sk-cube7"></div>
+    <div class="sk-cube sk-cube8"></div>
+    <div class="sk-cube sk-cube9"></div>
+  </div>
+</div>
+
+<ion-header>
+  <ion-toolbar color="primary" text-center hideBackButton>
+    <ion-buttons slot="end">
+      <ion-button>
+        <img [src]="localStorageServ.localStorageObj['dataUser'].logo" class='imagenNav'>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-button icon-only (click)="dismiss()">
+        <ion-icon name="arrow-back">
+        </ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Parcial</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+
+  <ion-item>
+    <ion-label>Forma de pago</ion-label>
+    <ion-select okText="Ok" cancelText="Cancelar" [(ngModel)]="formaDePagoID" value = "caja x efectivo" placeholder="Caja x Efectivo">
+      <ion-select-option *ngFor="let formaDePago of formasDePago" [value]="formaDePago['Forma de pago']">{{formaDePago["Forma de pago"]}}</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Motivo</ion-label>
+    <ion-select okText="Ok" cancelText="Cancelar" [(ngModel)]="motivoID" value = "03" placeholder="Corrige monto">
+      <ion-select-option *ngFor="let motivo of motivos" [value]="motivo.id_codigo_referencia">{{motivo.codigo_referencia}}</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item>
+    <ion-textarea [(ngModel)]="observaciones" placeholder="Observaciones" maxlength = "38"></ion-textarea>
+  </ion-item>
+
+  <ion-button (click)="procesarNCObtenerID()" [disabled]="observaciones.length < 1" expand="block">
+    Procesar Nota de Crédito
+  </ion-button>
+
+</ion-content>

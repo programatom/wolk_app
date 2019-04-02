@@ -1,0 +1,24 @@
+.color-total{
+  color: var(--ion-color-danger);
+}
+.columna{
+  text-align: center !important;
+   background-color: var(--ion-color-light) !important;
+}
+
+.productoItem{
+  background-color:var(--ion-color-primary) !important;
+}
+.montoTotal{
+  color: var(--ion-color-grisOscuro);
+  font-size: 0.9em;
+}
+.tamañoCantidadProducto{
+  font-size: 4.5vw;
+}
+
+.linea-divisoria{
+  height: 100%;
+  width: 2vw;
+  background-color: white !important;
+}

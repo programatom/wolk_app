@@ -1,0 +1,80 @@
+<div class="splashOpaque" *ngIf="showSplash">
+  <div class="sk-cube-grid">
+    <div class="sk-cube sk-cube1"></div>
+    <div class="sk-cube sk-cube2"></div>
+    <div class="sk-cube sk-cube3"></div>
+    <div class="sk-cube sk-cube4"></div>
+    <div class="sk-cube sk-cube5"></div>
+    <div class="sk-cube sk-cube6"></div>
+    <div class="sk-cube sk-cube7"></div>
+    <div class="sk-cube sk-cube8"></div>
+    <div class="sk-cube sk-cube9"></div>
+  </div>
+</div>
+<ion-header>
+
+  <ion-toolbar color="primary" text-center>
+    <ion-title>Cliente</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <img [src]="localStorageServ.localStorageObj['dataUser'].logo" class='imagenNav'>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+  <ion-item-group>
+    <ion-item-divider color="secondary"><strong style="font-size:5vw">INFORMACIÓN CLIENTE</strong></ion-item-divider>
+
+    <ion-item text-wrap [disabled]="this.dataFacturaServ.dataFactura.noPaga == false">
+      <ion-label fixed>Cliente</ion-label>
+      <ion-input [(ngModel)]="cliente" (ionChange)="limpiarObjCliente()"></ion-input>
+      <ion-button slot="end" fill="clear" (click)='buscarCliente()' color='transparent' class='boton-icono'>
+        <ion-icon color='secondary' name='search' class='icono-boton' class="icono-boton"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <ion-item [disabled]="this.dataFacturaServ.dataFactura.noPaga == false">
+      <ion-label>Condición venta</ion-label>
+      <ion-select okText="Ok" cancelText="Cancelar" value="01" placeholder="Contado" [(ngModel)]="condicionVenta" (ionChange)='habilitarCredito()'>
+        <ion-select-option *ngFor="let condicion of condicionesVenta" [value]="condicion.id_condicion_venta">{{condicion.condicion_venta}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item [disabled]="this.dataFacturaServ.dataFactura.noPaga == false">
+      <ion-label>Plazo crédito</ion-label>
+      <ion-select okText="Ok" cancelText="Cancelar" [(ngModel)]="plazoCredito" [disabled]='creditoNoSeleccionado'>
+        <ion-select-option *ngFor="let plazo of plazos">{{plazo.nroMeses}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item [disabled]="this.dataFacturaServ.dataFactura.noPaga == false">
+      <ion-label>Medio de pago</ion-label>
+      <ion-select okText="Ok" cancelText="Cancelar" value="01" placeholder="Efectivo" [(ngModel)]="medioDePagoDisplay" (ionChange)="selectMedioDePago()" [interfaceOptions]="selectOptionsMediosDePago">
+        <ion-select-option *ngFor="let medio of mediosDePago" [value]="medio.id_medio_pago">{{medio.medio_pago}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item [disabled]="this.dataFacturaServ.dataFactura.noPaga == false">
+      <ion-label>Moneda</ion-label>
+      <ion-select okText="Ok" cancelText="Cancelar" [(ngModel)]="moneda" value="CRC" placeholder="CRC" (ionChange)='buscarTarifaDeCambio()'>
+        <ion-select-option value='{{moneda.id_moneda}}' *ngFor="let moneda of monedas">
+          {{moneda.nombre_moneda}}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item [disabled]="this.dataFacturaServ.dataFactura.noPaga == false">
+      <ion-label>Tipo de cambio: <span class='span'>{{tarifaDeCambio}}</span></ion-label>
+    </ion-item>
+
+  </ion-item-group>
+  <br>
+  <br>
+  <ion-button color="primary" (click)="irAFacturasTotales()" expand="block"><strong>AGREGAR PRODUCTOS</strong></ion-button>
+</ion-content>

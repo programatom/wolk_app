@@ -1,0 +1,67 @@
+<div class="splashOpaque" *ngIf="showSplash">
+  <div class="sk-cube-grid">
+    <div class="sk-cube sk-cube1"></div>
+    <div class="sk-cube sk-cube2"></div>
+    <div class="sk-cube sk-cube3"></div>
+    <div class="sk-cube sk-cube4"></div>
+    <div class="sk-cube sk-cube5"></div>
+    <div class="sk-cube sk-cube6"></div>
+    <div class="sk-cube sk-cube7"></div>
+    <div class="sk-cube sk-cube8"></div>
+    <div class="sk-cube sk-cube9"></div>
+  </div>
+</div>
+<ion-header>
+
+  <ion-toolbar color = 'primary'>
+    <ion-title>Pago</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click) ="dismissModal()">
+        <ion-icon name="arrow-back">
+        </ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-item>
+    <ion-label>Forma Pago</ion-label>
+    <ion-select okText="Ok" cancelText="Cancelar" placeholder="caja x efectivo" [(ngModel)]="this.dataFacturaServ.dataFactura.pagoOfflineData.formaDePago">
+      <ion-select-option *ngFor="let forma of formasPago" [value]="forma['Codigo']">{{forma["Forma de pago"]}}</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item lines="none">
+    <ion-text><strong>Monto Total: </strong> {{montoTotal}}</ion-text>
+  </ion-item>
+
+  <ion-item text-wrap>
+    <ion-label>Monto Cliente: </ion-label>
+    <ion-input type="number" [(ngModel)]="montoCliente" min="0" (ionChange)="changeMontoCliente()"></ion-input>
+  </ion-item>
+
+  <ion-grid>
+    <ion-row>
+      <ion-item lines="none">
+        <ion-text><strong>Pendiente: </strong>{{pendiente}}</ion-text>
+      </ion-item>
+    </ion-row>
+    <ion-row>
+      <ion-item lines="none">
+        <ion-text><strong>Vuelto: </strong>{{vuelto}}</ion-text>
+      </ion-item>
+    </ion-row>
+  </ion-grid>
+
+  <br>
+
+  <ion-button  color="primary" (click)="procesoPagoFacturaCliente('pagar')" expand="block"  [disabled] ="pagarDisabled"><strong>PAGAR</strong></ion-button>
+  <ion-button  color="primary" (click)="dismissModal()" expand="block" ><strong>VOLVER A FACTURA</strong></ion-button>
+  <ion-button  color="primary" (click)="procesoPagoFacturaCliente('completo')" expand="block" ><strong>PAGAR COMPLETO</strong></ion-button>
+  <ion-button  color="primary" (click)="procesoPagoFacturaCliente('credito')" expand="block" ><strong>FACTURA CREDITO</strong></ion-button>
+
+</ion-content>

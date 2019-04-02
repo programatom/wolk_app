@@ -1,0 +1,52 @@
+<ion-header>
+
+  <ion-toolbar color="primary" text-center>
+    <ion-title>DOCUMENTOS DE CONTINGENCIA</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <img [src]="localStorageServ.localStorageObj['dataUser'].logo" class='imagenNav'>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-back-button>
+      </ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+  <ion-list>
+    <ion-item-sliding #slidingItem *ngFor="let factura of facturas; let i = index">
+      <ion-item detail (click)="visualizarFactura(factura.factura, factura.fecha, factura.key)">
+        <ion-grid>
+          <ion-row>
+            <ion-text>
+              <strong>Cliente: </strong> {{factura.factura.cliente}}
+            </ion-text>
+          </ion-row>
+          <ion-row>
+            <ion-text>
+              <strong>Fecha: </strong> {{factura.fecha}}
+            </ion-text>
+          </ion-row>
+          <ion-row *ngIf="factura.factura.isProcesada == false">
+            <ion-text>
+              <strong>Estado: </strong> Sin Procesar
+            </ion-text>
+          </ion-row>
+
+          <ion-row *ngIf="factura.factura.isProcesada">
+            <ion-text>
+              <strong>Estado: </strong> {{factura.factura.exceptionHacienda}}
+            </ion-text>
+          </ion-row>
+
+        </ion-grid>
+      </ion-item>
+      <ion-item-options side="end">
+        <ion-item-option color="danger" (click)="eliminarFactura(factura, i, slidingItem)">Eliminar</ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+</ion-content>

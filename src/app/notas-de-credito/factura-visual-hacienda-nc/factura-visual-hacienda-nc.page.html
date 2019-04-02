@@ -1,0 +1,162 @@
+<div class="splashOpaque" *ngIf="showSplash">
+  <div class="sk-cube-grid">
+    <div class="sk-cube sk-cube1"></div>
+    <div class="sk-cube sk-cube2"></div>
+    <div class="sk-cube sk-cube3"></div>
+    <div class="sk-cube sk-cube4"></div>
+    <div class="sk-cube sk-cube5"></div>
+    <div class="sk-cube sk-cube6"></div>
+    <div class="sk-cube sk-cube7"></div>
+    <div class="sk-cube sk-cube8"></div>
+    <div class="sk-cube sk-cube9"></div>
+  </div>
+</div>
+
+<ion-header>
+
+  <ion-toolbar color='primary'>
+    <ion-title>{{fecha}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button >
+        <img [src]="this.localStorageServ.localStorageObj['dataUser'].logo" class='imagenNav'>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content padding>
+
+  <ion-row>
+    <ion-col class = "columna">
+      <ion-text>
+        <strong>SUBTOTAL</strong> <br><br>
+        {{subTotal}} CRC
+      </ion-text>
+    </ion-col>
+    <ion-col class = "columna">
+      <ion-text>
+        <strong>DESCUENTOS</strong> <br><br>
+        {{monoDescuento}} CRC
+      </ion-text>
+    </ion-col>
+  </ion-row>
+  <br>
+  <ion-row>
+    <ion-col class = "columna">
+      <ion-text>
+        <strong>SUBTOTAL DESCUENTO</strong> <br><br>
+        {{subTotalDesc}} CRC
+      </ion-text>
+    </ion-col>
+    <ion-col class = "columna">
+      <ion-text>
+        <strong>IMPUESTOS</strong> <br><br>
+        {{monImpuesto}} CRC
+      </ion-text>
+    </ion-col>
+  </ion-row>
+  <br>
+  <ion-row>
+    <ion-col class = "columna">
+      <ion-text>
+        <strong>TOTAL</strong> <br><br>
+        <b class = "color-total">{{totalFinal}} CRC</b>
+      </ion-text>
+    </ion-col>
+  </ion-row>
+
+  <br>
+
+  <div *ngFor="let producto of productos; let i = index">
+
+    <ion-item color="primary" no-lines text-wrap class='productoItem'>
+      <ion-icon name="{{producto.icono}}" (click)="verMasProducto(i)" color="light" slot="end">
+      </ion-icon>
+      <ion-text style="color:white">
+        <strong style="font-size:6vw;"> {{producto["Cantidad"]}} </strong> | {{producto["Código Producto"]}} <strong>{{producto['Nombre Producto']}}</strong> P.U: {{producto["Precio Venta sin Imp"]}}
+      </ion-text>
+    </ion-item>
+
+    <ion-item *ngIf="producto.verMas == true">
+      <ion-text>
+        <strong>Descuento:</strong> {{producto.subTotales['Descuento']}}
+      </ion-text>
+    </ion-item>
+    <ion-item *ngIf="producto.verMas == true">
+      <ion-text>
+        <strong>Sub Total:</strong> {{producto.subTotales['Impuestos']}}
+      </ion-text>
+    </ion-item>
+    <ion-item *ngIf="producto.verMas == true">
+      <ion-text>
+        <strong>Descuento:</strong> {{producto.subTotales['Sub Total']}}
+      </ion-text>
+    </ion-item>
+    <ion-item *ngIf="producto.verMas == true">
+      <ion-text>
+        <strong>Sub Total descuento:</strong> {{producto.subTotales['Sub Total descuento']}}
+      </ion-text>
+    </ion-item>
+    <ion-item *ngIf="producto.verMas == true">
+      <ion-text>
+        <strong>Total Linea:</strong> {{producto.subTotales['Total Linea']}}
+      </ion-text>
+    </ion-item>
+
+  </div>
+  <br>
+  <ion-item>
+    <ion-text>
+      <strong>Condicion de venta: </strong> {{this.factura["Condicion Venta"]}}
+    </ion-text>
+  </ion-item>
+  <ion-item>
+    <ion-text>
+      <strong>Medio de pago: </strong> {{this.factura["Medios de Pago"]}}
+    </ion-text>
+  </ion-item>
+  <ion-item>
+    <ion-text>
+      <strong>Cliente: </strong> {{this.factura["Clientes"]}}
+    </ion-text>
+  </ion-item>
+
+
+  <ion-button  expand="block" color="primary" (click) = "procesar('04')" [disabled]="factura['Consecutivo Hacienda'] != '0'">
+    Tiquete electrónico
+  </ion-button>
+
+  <ion-button  expand="block" color="primary" (click) = "procesar('01')" [disabled]="factura['Consecutivo Hacienda'] != '0'">
+    Factura electrónica
+  </ion-button>
+
+  <br>
+  <ion-text>
+    Printer Selected:
+  </ion-text>
+  <ion-item *ngIf="selectedPrinter !=undefined">
+    <div style="color:grey; font-size = 5 vw">
+      {{selectedPrinter.name}} ...
+    </div>
+  </ion-item>
+  <ion-item *ngIf="selectedPrinter == undefined"></ion-item>
+
+  <ion-button  color = "primary" (click) = "imprimir(false)" expand="block" >
+    Imprimir
+  </ion-button>
+  <ion-button  color = "primary" (click) = "imprimir(true)" expand="block" >
+    Re-imprimir
+  </ion-button>
+
+  <ion-button color = "primary" (click) = "irAParcialPage()" expand="block">
+    APLICAR NC PARCIAL
+  </ion-button>
+  <ion-button color = "primary" (click) = "irAAnularPage()" expand="block">
+    APLICAR NC TOTAL
+  </ion-button>
+
+  <br>

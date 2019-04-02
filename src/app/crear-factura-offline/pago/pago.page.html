@@ -1,0 +1,54 @@
+
+<ion-header>
+
+  <ion-toolbar color = 'primary'>
+    <ion-title>Pago</ion-title>
+    <ion-buttons slot="start">
+      <ion-button  icon-only (click) = "dismissModal()">
+        <ion-icon name = "arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-item lines="none">
+    <ion-label>Forma Pago</ion-label>
+    <ion-select okText="Ok" cancelText="Cancelar" value = "caja x efectivo" [(ngModel)]="formaSeleccionada">
+      <ion-select-option *ngFor="let forma of formasPago" [value]="forma['Codigo']">{{forma["Forma de pago"]}}</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item lines="none">
+    <ion-text><strong>Monto Total: </strong> {{montoTotal}}</ion-text>
+  </ion-item>
+
+  <ion-item text-wrap>
+    <ion-label>Monto Cliente: </ion-label>
+    <ion-input type="number" [(ngModel)]="montoCliente" (ionChange)="changeMontoCliente()"></ion-input>
+  </ion-item>
+
+  <ion-grid>
+    <ion-row>
+      <ion-item lines="none">
+        <ion-text><strong>Pendiente: </strong>{{pendiente}}</ion-text>
+      </ion-item>
+    </ion-row>
+    <ion-row>
+      <ion-item lines="none">
+        <ion-text><strong>Vuelto: </strong>{{vuelto}}</ion-text>
+      </ion-item>
+    </ion-row>
+  </ion-grid>
+
+  <br>
+
+  <ion-button  color="primary" (click)="guardarPago('pagar')" expand="block" [disabled] ="pagarDisabled"><strong>PAGAR</strong></ion-button>
+  <ion-button  color="primary" (click)="dismissModal()" expand="block"><strong>VOLVER A FACTURA</strong></ion-button>
+  <ion-button  color="primary" (click)="guardarPago('completo')" expand="block"><strong>PAGAR COMPLETO</strong></ion-button>
+  <ion-button  color="primary" (click)="guardarPago('credito')" expand="block"><strong>FACTURA CREDITO</strong></ion-button>
+
+</ion-content>

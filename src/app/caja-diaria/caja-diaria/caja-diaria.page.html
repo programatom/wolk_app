@@ -1,0 +1,184 @@
+<div class="splashOpaque" *ngIf="showSplash">
+  <div class="sk-cube-grid">
+    <div class="sk-cube sk-cube1"></div>
+    <div class="sk-cube sk-cube2"></div>
+    <div class="sk-cube sk-cube3"></div>
+    <div class="sk-cube sk-cube4"></div>
+    <div class="sk-cube sk-cube5"></div>
+    <div class="sk-cube sk-cube6"></div>
+    <div class="sk-cube sk-cube7"></div>
+    <div class="sk-cube sk-cube8"></div>
+    <div class="sk-cube sk-cube9"></div>
+  </div>
+</div>
+<ion-header>
+
+  <ion-toolbar color = "primary" text-center hideBackButton>
+    <ion-buttons slot="end">
+      <ion-button >
+        <img [src]="localStorageServ.localStorageObj['dataUser'].logo" class='imagenNav'>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-button icon-only (click)="dismiss()">
+        <ion-icon name="arrow-back">
+        </ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Caja diaria</ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content>
+
+  <div class="posicion-datos-usuario">
+    <ion-grid class="grid">
+      <ion-row>
+        <ion-col col-4 align-self-center>
+          <strong>Usuario id: </strong>
+        </ion-col>
+        <ion-col align-self-center>
+          {{this.localStorageServ.localStorageObj.dataUser["NombreUsuario"]}}
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col col-4 align-self-center>
+          <strong>Estado de caja: </strong>
+        </ion-col>
+        <ion-col align-self-center>
+          {{datosCaja.estado}}
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="datosCaja.estado == 'ABIERTA'">
+        <ion-col col-4 align-self-center>
+          <strong>Fecha de apertura: </strong>
+        </ion-col>
+        <ion-col align-self-center>
+          {{datosCaja.fecha}}
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="datosCaja.estado == 'CERRADA'">
+        <ion-col col-4 align-self-center>
+          <strong>Fecha de cierre: </strong>
+        </ion-col>
+        <ion-col align-self-center>
+          {{datosCaja.fecha}}
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col col-4 align-self-center>
+          <strong>Saldo Caja: </strong>
+        </ion-col>
+        <ion-col align-self-center>
+          <ion-text>
+             {{datosCaja.saldo_caja}}
+          </ion-text>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col col-4 align-self-center>
+          <strong>Saldo inicial: </strong>
+        </ion-col>
+        <ion-col align-self-center>
+          <ion-text>
+             {{datosCaja.saldo_inicial}}
+          </ion-text>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+<div *ngIf="datosCaja.estado == 'CERRADA' && initiallyClosed == true">
+  <ion-button expand="block" (click)="abrirCaja()">
+    ABRIR CAJA
+  </ion-button>
+</div>
+
+<div *ngIf="datosCaja.estado != 'CERRADA' || initiallyClosed == false">
+
+  <ion-item color="primary" lines="none" text-wrap class= 'productoItem'>
+    <ion-icon [name]="iconoGastos" (click)="verMasGastosFN()" color="light" slot="end">
+    </ion-icon>
+    <ion-text class="text-light">
+      <strong style="font-size:6vw;"> Gastos </strong> | Total: <strong>  {{datosCaja.totalGastos}}</strong>
+    </ion-text>
+  </ion-item>
+  <div *ngIf="verMasGastos == true && datosCaja.arrayGastos.length > 0">
+    <div *ngFor="let gasto of datosCaja.arrayGastos">
+      <br>
+      <ion-item >
+        <ion-text>
+          <strong>Cantidad:</strong> {{gasto.Cant}}
+        </ion-text>
+      </ion-item>
+      <ion-item>
+        <ion-text>
+          <strong>Medio Pago:</strong> {{gasto["Medio Pago"]}}
+        </ion-text>
+      </ion-item>
+      <ion-item>
+        <ion-text>
+          <strong>Monto Pagado:</strong> {{gasto["Monto Pagado"]}}
+        </ion-text>
+      </ion-item>
+      <br>
+    </div>
+  </div>
+
+
+  <ion-item color="primary" lines="none" text-wrap class= 'productoItem'>
+    <ion-icon [name]="iconoIngresos" (click)="verMasIngresosFN()" color="light" slot="end">
+    </ion-icon>
+    <ion-text class="text-light">
+      <strong style="font-size:6vw;"> Ingresos </strong> | Total: <strong> {{datosCaja.totalIngresos}}</strong>
+    </ion-text>
+  </ion-item>
+  <div *ngIf="verMasIngresos == true && datosCaja.arrayIngresos.length > 0">
+    <div *ngFor="let ingreso of datosCaja.arrayIngresos">
+      <br>
+      <ion-item >
+        <ion-text>
+          <strong>Cantidad:</strong> {{ingreso.Cant}}
+        </ion-text>
+      </ion-item>
+      <ion-item>
+        <ion-text>
+          <strong>Medio Pago:</strong> {{ingreso["Medio Pago"]}}
+        </ion-text>
+      </ion-item>
+      <ion-item>
+        <ion-text>
+          <strong>Monto Pagado:</strong> {{ingreso["Monto Pagado"]}}
+        </ion-text>
+      </ion-item>
+      <br>
+    </div>
+  </div>
+
+  <br>
+  <ion-item text-wrap>
+    <ion-label>Monto fisico: </ion-label>
+    <ion-input type="number" min="0" [(ngModel)]="montoFisico" (ionChange)="changeMontoFisico()"></ion-input>
+  </ion-item>
+  <ion-item text-wrap>
+    <ion-label position="floating">Observaciones </ion-label>
+    <ion-input type="text" [(ngModel)]="observaciones"></ion-input>
+  </ion-item>
+  <ion-item text-wrap line="none">
+    <ion-label>Balance: </ion-label>
+    <ion-input type="number" [(ngModel)]="balance" value="Readonly" readonly></ion-input>
+  </ion-item>
+
+  <br>
+  <ion-button expand="block" (click)="cerrarCajaAlert()"
+  [disabled]="datosCaja.estado =='CERRADA' || montoFisico == 0 || observaciones == ''">
+    CERRAR CAJA
+  </ion-button>
+  <ion-button expand="block" (click)="imprimirInforme()">
+    IMPRIMIR INFORME GENERAL
+  </ion-button>
+</div>
+
+</ion-content>

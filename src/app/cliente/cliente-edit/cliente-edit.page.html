@@ -1,0 +1,121 @@
+<div class="splashOpaque" *ngIf="showSplash">
+  <div class="sk-cube-grid">
+    <div class="sk-cube sk-cube1"></div>
+    <div class="sk-cube sk-cube2"></div>
+    <div class="sk-cube sk-cube3"></div>
+    <div class="sk-cube sk-cube4"></div>
+    <div class="sk-cube sk-cube5"></div>
+    <div class="sk-cube sk-cube6"></div>
+    <div class="sk-cube sk-cube7"></div>
+    <div class="sk-cube sk-cube8"></div>
+    <div class="sk-cube sk-cube9"></div>
+  </div>
+</div>
+<ion-header>
+
+  <ion-toolbar color="primary" text-center hideBackButton>
+    <ion-buttons slot="end">
+      <ion-button>
+        <img [src]="localStorageServ.localStorageObj['dataUser'].logo" class='imagenNav'>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-button icon-only (click)="dismiss()">
+        <ion-icon name="arrow-back">
+        </ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{cliente.Nombre}}</ion-title>
+  </ion-toolbar>
+
+</ion-header>
+<ion-content padding>
+  <ion-list>
+    <ion-list-header>
+      <ion-label>Correos</ion-label>
+    </ion-list-header>
+    <ion-item *ngFor="let correo of objData.correos; let i = index">
+      <ion-grid>
+        <ion-row>
+          <ion-text>
+            <strong>Correo: </strong>{{correo["correo"]}}
+          </ion-text>
+        </ion-row>
+      </ion-grid>
+      <ion-icon color = "primary" name="square-outline" slot="end" *ngIf="correo.principal == '0'" (click)="changeCheck('correos', i)"></ion-icon>
+      <ion-icon color = "primary" name="checkbox" slot="end" *ngIf="correo.principal == '1'" (click)="changeCheck('correos', i)"></ion-icon>
+    </ion-item>
+  </ion-list>
+  <ion-list>
+    <ion-list-header>
+      <ion-label>Direcciones</ion-label>
+    </ion-list-header>
+    <ion-item *ngFor="let direccion of objData.direcciones; let i = index">
+      <ion-grid>
+        <ion-row>
+          <ion-text>
+            <strong>Provincia: </strong>{{direccion.Provincia}}
+          </ion-text>
+        </ion-row>
+        <ion-row>
+          <ion-text>
+            <strong>Canton: </strong>{{direccion.Canton}}
+          </ion-text>
+        </ion-row>
+        <ion-row>
+          <ion-text>
+            <strong>Distrito: </strong>{{direccion.Distrito}}
+          </ion-text>
+        </ion-row>
+        <ion-row>
+          <ion-text>
+            <strong>Barrio: </strong>{{direccion.Barrio}}
+          </ion-text>
+        </ion-row>
+        <ion-row>
+          <ion-text>
+            <strong>Señas: </strong>{{direccion["Señas"]}}
+          </ion-text>
+        </ion-row>
+      </ion-grid>
+      <ion-icon color = "primary" name="square-outline" slot="end" *ngIf="direccion.Principal == '0'" (click)="changeCheck('direcciones', i)"></ion-icon>
+      <ion-icon color = "primary" name="checkbox" slot="end" *ngIf="direccion.Principal == '1'" (click)="changeCheck('direcciones', i)"></ion-icon>
+    </ion-item>
+  </ion-list>
+  <ion-list>
+    <ion-list-header>
+      <ion-label>Telefonos</ion-label>
+    </ion-list-header>
+    <ion-item *ngFor="let telefono of objData.telefonos; let i = index">
+      <ion-grid>
+        <ion-row>
+          <ion-text>
+            <strong>Codigo País: </strong>{{telefono["CodPais"]}}
+          </ion-text>
+        </ion-row>
+        <ion-row>
+          <ion-text>
+            <strong>Teléfono: </strong>{{telefono["Teléfono"]}}
+          </ion-text>
+        </ion-row>
+      </ion-grid>
+      <ion-icon color = "primary" name="square-outline" slot="end" *ngIf="telefono.Principal == '0'" (click)="changeCheck('telefonos', i)"></ion-icon>
+      <ion-icon color = "primary" name="checkbox" slot="end" *ngIf="telefono.Principal == '1'" (click)="changeCheck('telefonos', i)"></ion-icon>
+    </ion-item>
+  </ion-list>
+
+  <ion-button expand="full" (click)="guardarCambios()">
+    Guardar cambios
+  </ion-button>
+  <ion-button expand="full" routerLink ="/correo-new" routerDirection= "forward">
+    Nuevo correo
+  </ion-button>
+  <ion-button expand="full" routerLink ="/direccion-new" routerDirection= "forward">
+    Nueva direccion
+  </ion-button>
+  <ion-button expand="full" routerLink ="/telefono-new" routerDirection= "forward">
+    Nuevo telefono
+  </ion-button>
+
+
+</ion-content>

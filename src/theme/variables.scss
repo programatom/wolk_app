@@ -4,16 +4,16 @@
 /** Ionic CSS Variables **/
 :root {
   /** primary **/
-  --ion-color-primary: #3880ff;
-  --ion-color-primary-rgb: 56, 128, 255;
+  --ion-color-primary: rgb(102,168,188);
+  --ion-color-primary-rgb: 102, 168, 188;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
   --ion-color-primary-shade: #3171e0;
   --ion-color-primary-tint: #4c8dff;
 
   /** secondary **/
-  --ion-color-secondary: #0cd1e8;
-  --ion-color-secondary-rgb: 12, 209, 232;
+  --ion-color-secondary: rgb(115,192,205);
+  --ion-color-secondary-rgb: 115, 192, 205;
   --ion-color-secondary-contrast: #ffffff;
   --ion-color-secondary-contrast-rgb: 255, 255, 255;
   --ion-color-secondary-shade: #0bb8cc;
@@ -74,4 +74,43 @@
   --ion-color-light-contrast-rgb: 0, 0, 0;
   --ion-color-light-shade: #d7d8da;
   --ion-color-light-tint: #f5f6f9;
+
+  /** gris **/
+  --ion-color-gris: #a6a6b4;
+  --ion-color-gris-rgb: 166,166,180;
+  --ion-color-gris-contrast: #000000;
+  --ion-color-gris-contrast-rgb: 0,0,0;
+  --ion-color-gris-shade: #92929e;
+  --ion-color-gris-tint: #afafbc;
+
+  /** gris oscuro**/
+  --ion-color-grisOscuro: #646464;
+  --ion-color-grisOscuro-rgb: 100,100,100;
+  --ion-color-grisOscuro-contrast: #ffffff;
+  --ion-color-grisOscuro-contrast-rgb: 255,255,255;
+  --ion-color-grisOscuro-shade: #585858;
+  --ion-color-grisOscuro-tint: #747474;
+
+  $item-md-detail-push-show: true;
+  $text-input-md-margin-start: 0px;
+  $text-input-md-highlight-color-valid: var(--ion-color-primary);
+  $ion-item-highlight-color-focused: var(--ion-color-primary);
+}
+
+.ion-color-grisOscuro{
+  --ion-color-grisOscuro: var(--ion-color-grisOscuro) !important ;
+  --ion-color-grisOscuro-rgb: var(--ion-color-grisOscuro-rgb) !important ;
+  --ion-color-grisOscuro-contrast: var(--ion-color-grisOscuro-contrast) !important ;
+  --ion-color-grisOscuro-contrast-rgb: var(--ion-color-grisOscuro-contrast-rgb) !important ;
+  --ion-color-grisOscuro-shade: var(--ion-color-grisOscuro-shade) !important ;
+  --ion-color-grisOscuro-tint: var(--ion-color-grisOscuro-tint) !important ;
+}
+
+.ion-color-gris{
+  --ion-color-gris: var(--ion-color-gris) !important ;
+  --ion-color-gris-rgb: var(--ion-color-gris-rgb) !important ;
+  --ion-color-gris-contrast: var(--ion-color-gris-contrast) !important ;
+  --ion-color-gris-contrast-rgb: var(--ion-color-gris-contrast-rgb) !important ;
+  --ion-color-gris-shade: var(--ion-color-gris-shade) !important ;
+  --ion-color-gris-tint: var(--ion-color-gris-tint) !important ;
 }

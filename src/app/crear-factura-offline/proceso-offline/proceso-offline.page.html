@@ -1,0 +1,151 @@
+<div class="splashOpaque" *ngIf="showSplash">
+  <div class="sk-cube-grid">
+    <div class="sk-cube sk-cube1"></div>
+    <div class="sk-cube sk-cube2"></div>
+    <div class="sk-cube sk-cube3"></div>
+    <div class="sk-cube sk-cube4"></div>
+    <div class="sk-cube sk-cube5"></div>
+    <div class="sk-cube sk-cube6"></div>
+    <div class="sk-cube sk-cube7"></div>
+    <div class="sk-cube sk-cube8"></div>
+    <div class="sk-cube sk-cube9"></div>
+  </div>
+</div>
+
+<ion-header>
+
+  <ion-toolbar color='primary'>
+    <ion-title>{{fecha}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button >
+        <img [src]="this.localStorageServ.localStorageObj['dataUser'].logo" class='imagenNav'>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content padding>
+
+  <ion-row>
+    <ion-col class = "columna">
+      <ion-text>
+        <strong>SUBTOTAL</strong> <br><br>
+        {{subTotal}} CRC
+      </ion-text>
+    </ion-col>
+    <ion-col class = "columna">
+      <ion-text>
+        <strong>DESCUENTOS</strong> <br><br>
+        {{monoDescuento}} CRC
+      </ion-text>
+    </ion-col>
+  </ion-row>
+  <br>
+  <ion-row>
+    <ion-col class = "columna">
+      <ion-text>
+        <strong>SUBTOTAL DESCUENTO</strong> <br><br>
+        {{subTotalDesc}} CRC
+      </ion-text>
+    </ion-col>
+    <ion-col class = "columna">
+      <ion-text>
+        <strong>IMPUESTOS</strong> <br><br>
+        {{monImpuesto}} CRC
+      </ion-text>
+    </ion-col>
+  </ion-row>
+  <br>
+  <ion-row>
+    <ion-col class = "columna">
+      <ion-text>
+        <strong>TOTAL</strong> <br><br>
+        <b class = "color-total">{{totalFinal}} CRC</b>
+      </ion-text>
+    </ion-col>
+  </ion-row>
+
+  <br>
+
+  <div *ngFor="let producto of productos; let i = index">
+
+    <ion-item color="primary" no-lines text-wrap class='productoItem'>
+      <ion-icon name="{{producto.html.icono}}" (click)="verMasProducto(i)" color="light" slot="end">
+      </ion-icon>
+      <ion-text style="color:white">
+        <strong style="font-size:6vw;"> {{producto.cantidad}} </strong> | {{producto.codigo_producto}} <strong>{{producto.nombre_producto}}</strong> P.U: {{producto.precio_venta_sin_imp}}
+      </ion-text>
+    </ion-item>
+
+    <ion-item *ngIf="producto.html.verMas == true">
+      <ion-text>
+        <strong>% Descuento:</strong> {{producto.subtotales.descuento_porc}} %
+      </ion-text>
+    </ion-item>
+    <ion-item *ngIf="producto.html.verMas == true">
+      <ion-text>
+        <strong>Sub Total:</strong> {{producto.subtotales.sub_total}}
+      </ion-text>
+    </ion-item>
+    <ion-item *ngIf="producto.html.verMas == true">
+      <ion-text>
+        <strong>Descuento:</strong> {{producto.subtotales.descuento}}
+      </ion-text>
+    </ion-item>
+    <ion-item *ngIf="producto.html.verMas == true">
+      <ion-text>
+        <strong>Sub Total descuento:</strong> {{producto.subtotales.sub_total_descuento}}
+      </ion-text>
+    </ion-item>
+    <ion-item *ngIf="producto.html.verMas == true">
+      <ion-text>
+        <strong>Total Linea:</strong> {{producto.subtotales.total_linea}}
+      </ion-text>
+    </ion-item>
+
+  </div>
+  <br>
+
+  <ion-item *ngFor="let campo of factura.facturaOfflineVisualize">
+    <ion-text>
+      <strong>{{campo.variable}}:</strong> {{campo.valor}}
+    </ion-text>
+  </ion-item>
+  <ion-item>
+    <ion-text>
+      <strong>Cliente: </strong> {{this.factura.cliente}}
+    </ion-text>
+  </ion-item>
+
+
+  <ion-button  expand="block" color="primary" (click) = "procesar('04')" [disabled]="factura.isProcesada || factura.exceptionHacienda == 'procesando'">
+    Tiquete electrónico
+  </ion-button>
+
+  <ion-button  expand="block" color="primary" (click) = "procesar('01')" [disabled]="factura.isProcesada || factura.exceptionHacienda == 'procesando'">
+    Factura electrónica
+  </ion-button>
+
+  <br>
+  <ion-text>
+    Printer Selected:
+  </ion-text>
+  <ion-item *ngIf="selectedPrinter !=undefined">
+    <div style="color:grey; font-size = 5 vw">
+      {{selectedPrinter.name}} ...
+    </div>
+  </ion-item>
+  <ion-item *ngIf="selectedPrinter == undefined"></ion-item>
+
+  <ion-button  color = "primary" (click) = "imprimir(false)" expand="block" [disabled]="factura.isProcesada == false">
+    <strong>IMPRIMIR</strong>
+  </ion-button>
+  <ion-button  color = "primary" (click) = "imprimir(true)" expand="block" [disabled]="factura.isProcesada == false">
+    <strong>RE-IMPRIMIR</strong>
+  </ion-button>
+
+  <br>

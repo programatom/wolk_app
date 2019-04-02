@@ -1,0 +1,117 @@
+<div class="splashOpaque" *ngIf="showSplash">
+  <div class="sk-cube-grid">
+    <div class="sk-cube sk-cube1"></div>
+    <div class="sk-cube sk-cube2"></div>
+    <div class="sk-cube sk-cube3"></div>
+    <div class="sk-cube sk-cube4"></div>
+    <div class="sk-cube sk-cube5"></div>
+    <div class="sk-cube sk-cube6"></div>
+    <div class="sk-cube sk-cube7"></div>
+    <div class="sk-cube sk-cube8"></div>
+    <div class="sk-cube sk-cube9"></div>
+  </div>
+</div>
+<ion-header>
+
+  <ion-toolbar color="primary" text-center hideBackButton>
+    <ion-buttons slot="end">
+      <ion-button>
+        <img [src]="localStorageServ.localStorageObj['dataUser'].logo" class='imagenNav'>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-button icon-only (click)="dismiss()">
+        <ion-icon name="arrow-back">
+        </ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Verificacion de productos</ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content padding>
+  <ion-item [disabled]="verificando">
+    <ion-label position="fixed">
+      Localizacion
+    </ion-label>
+    <ion-input [(ngModel)]="localizacion">
+    </ion-input>
+  </ion-item>
+  <ion-button expand="block" (click)="iniciarVerif()" [disabled]="verificando || localizacion =='' ">
+    Iniciar verificacion
+  </ion-button>
+
+  <ion-item>
+    <ion-label>
+      Nº Verificados
+    </ion-label>
+    <ion-input readonly [(ngModel)]="arrayProductosDisplay.length">
+    </ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label>
+      Total diferencia
+    </ion-label>
+    <ion-input readonly [(ngModel)]="diferenciaTotal">
+    </ion-input>
+  </ion-item>
+
+
+  <ion-item text-wrap [disabled]="verificando == false">
+    <ion-label fixed>Código</ion-label>
+    <ion-input [(ngModel)]="codigoProducto"></ion-input>
+    <ion-buttons>
+      <ion-button  slot="end" fill="clear" (click)='buscarProducto()' color='transparent' >
+        <ion-icon color='secondary' name='search' class='icono-boton'></ion-icon>
+      </ion-button>
+      <ion-button  slot="end" fill="clear" (click)='scanDiv()' color='transparent'>
+        <ion-icon color='secondary' name='qr-scanner' class='icono-boton'></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-item>
+
+  <ion-item text-wrap [disabled]="verificando == false">
+    <ion-label fixed>Existencia real</ion-label>
+    <ion-input type = "number" [(ngModel)]="existenciaReal"></ion-input>
+    <ion-buttons>
+      <ion-button slot="end" fill="clear" clear (click)='cantidadProductoFn("agregar")' color='transparent'>
+        <ion-icon color='secondary' name='add-circle' class='icono-boton'></ion-icon>
+      </ion-button>
+      <ion-button  slot="end" fill="clear" clear (click)='cantidadProductoFn("quitar")' color='transparent'>
+        <ion-icon color='secondary' name='remove-circle' class='icono-boton'></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-item>
+
+  <ion-button [disabled]="verificando == false"  color="primary" (click)="agregarProducto()" expand="block"><strong>AGREGAR PRODUCTO</strong></ion-button>
+
+
+
+  <div *ngFor="let producto of arrayProductosDisplay; let i = index">
+    <ion-item color="primary" lines="none" text-wrap class='bounceInUp productoItem'>
+      <ion-buttons slot="end">
+        <ion-icon class="icono-boton" name="close-circle" (click)="eliminarProducto(i)" color="light" item-end>
+        </ion-icon>
+      </ion-buttons>
+      <ion-text class="text-light">
+        <strong style="font-size:6vw;"> {{producto.Existencia}} </strong> | {{producto['Código Producto']}} <strong>{{producto['Nombre Producto']}}</strong>
+        <strong style="font-size:6vw;"> {{producto.diferencia}} </strong>
+      </ion-text>
+    </ion-item>
+  </div>
+
+  <ion-item>
+    <ion-textarea [(ngModel)]="observaciones" placeholder="Observaciones" maxlength = "38"></ion-textarea>
+  </ion-item>
+
+
+  <ion-button expand="block" (click) = "imprimir()"
+    [disabled] = "arrayProductosDisplay.length == 0">
+    <strong>IMPRIMIR</strong>
+  </ion-button>
+  <ion-button expand="block" (click) = "dismissAlert()" [disabled]="verificando == false">
+    <strong>NUEVA VERIFICACIÓN</strong>
+  </ion-button>
+
+</ion-content>

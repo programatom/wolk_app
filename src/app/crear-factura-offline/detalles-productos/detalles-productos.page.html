@@ -1,0 +1,155 @@
+
+
+<ion-header>
+
+  <ion-toolbar color='primary'>
+    <ion-title>Detalles productos</ion-title>
+    <ion-buttons slot="end">
+      <ion-button >
+        <img [src]="localStorageServ.localStorageObj['dataUser'].logo" class='imagenNav'>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-back-button>
+
+      </ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content>
+  <ion-item-group>
+    <ion-item-divider color="secondary"><strong>DATOS DE LINEA MODO OFFLINE</strong></ion-item-divider>
+    <ion-row>
+      <ion-col>
+        <ion-item lines="none">
+          <ion-label>CCV</ion-label>
+          <ion-checkbox [(ngModel)]="CCV"></ion-checkbox>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <ion-item text-wrap
+    [disabled]="this.dataFacturaServ.dataFacturaOffline.noPaga == false">
+      <ion-label position="fixed">Código</ion-label>
+      <ion-input [(ngModel)]="objProductoSeleccionado.codigo_producto"></ion-input>
+      <ion-button  [disabled]="this.dataFacturaServ.dataFacturaOffline.noPaga == false" icon-only slot="end" fill="clear" (click)='buscarProducto()' color='transparent' class='boton-icono'>
+        <ion-icon color='secondary' name='search' class='icono-boton'></ion-icon>
+      </ion-button>
+      <ion-button  [disabled]="this.dataFacturaServ.dataFacturaOffline.noPaga == false" icon-only slot="end" fill="clear" (click)='scanDiv()' color='transparent' class='boton-icono'>
+        <ion-icon color='secondary' name='qr-scanner' class='icono-boton'></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <ion-item text-wrap [disabled]="this.dataFacturaServ.dataFacturaOffline.noPaga == false">
+      <ion-label position="fixed">Precio</ion-label>
+      <ion-input type = "number" [(ngModel)]="objProductoSeleccionado.precio_venta_sin_imp" [disabled]='this.localStorageServ.localStorageObj["dataUser"].msg == "03"'></ion-input>
+    </ion-item>
+
+    <ion-item text-wrap [disabled]="this.dataFacturaServ.dataFacturaOffline.noPaga == false">
+      <ion-label position="fixed">Cantidad</ion-label>
+      <ion-input [(ngModel)]="objProductoSeleccionado.cantidad" type="number"></ion-input>
+      <ion-button  icon-only slot="end" fill="clear" (click)='cantidadProductoFn("agregar")' color='transparent' class='boton-icono'>
+        <ion-icon color='secondary' name='add-circle' class='icono-boton'></ion-icon>
+      </ion-button>
+      <ion-button  icon-only slot="end" fill="clear" (click)='cantidadProductoFn("quitar")' color='transparent' class='boton-icono'>
+        <ion-icon color='secondary' name='remove-circle' class='icono-boton'></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <ion-row>
+      <ion-col size="6">
+        <ion-item text-wrap [disabled]="this.dataFacturaServ.dataFacturaOffline.noPaga == false">
+          <ion-label position="fixed">Desc.</ion-label>
+          <ion-input type ="number" [(ngModel)]="objProductoSeleccionado.descuento" [disabled]='this.localStorageServ.localStorageObj["dataUser"].msg == "03"'></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item text-wrap [disabled]="this.dataFacturaServ.dataFacturaOffline.noPaga == false">
+          <ion-label position="fixed">Desc. Fijo</ion-label>
+          <ion-input type ="number" [(ngModel)]="dataFacturaServ.dataFacturaOffline.descuentoFijo" disabled></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+
+    <ion-item lines="none">
+      <ion-label>Exonerar impuestos</ion-label>
+      <ion-checkbox [(ngModel)]="exonerarImpuestosBool" [disabled]='this.localStorageServ.localStorageObj["dataUser"].msg == "03"'></ion-checkbox>
+    </ion-item>
+  </ion-item-group>
+  <ion-button  [disabled]="this.dataFacturaServ.dataFacturaOffline.noPaga == false" color="primary" (click)="agregarProducto()" expand="block"><strong>AGREGAR PRODUCTO</strong></ion-button>
+  <ion-row>
+    <ion-col>
+      <ion-text>
+        <strong>SUBTOTAL:</strong> {{subTotal}}
+      </ion-text>
+      <br>
+      <ion-text>
+        <strong>MONDESC:</strong> {{monoDescuento}}
+      </ion-text>
+      <br>
+      <ion-text>
+        <strong>SUBT. DESC:</strong> {{subTotalDesc}}
+      </ion-text>
+    </ion-col>
+    <ion-col>
+      <ion-text>
+        <strong>MONIMP.:</strong> {{monImpuesto}}
+      </ion-text>
+      <br>
+      <ion-text>
+        <strong>TOTAL:</strong> {{totalFinal}}
+      </ion-text>
+    </ion-col>
+  </ion-row>
+  <div *ngFor="let producto of arrayProductosDisplay; let i = index">
+
+    <ion-item color="primary" lines="none" text-wrap class='bounceInUp productoItem' [disabled]="this.dataFacturaServ.dataFacturaOffline.noPaga == false">
+      <ion-icon name="close-circle" (click)="eliminarProducto(i)" color="light" slot="end">
+      </ion-icon>
+      <ion-icon name="{{producto.html.icono}}" (click)="verMasProducto(i)" color="light" slot="end">
+      </ion-icon>
+      <ion-icon name="search" (click)="busquedaProductoUnico(producto.codigo_producto)" color="light" slot="end">
+      </ion-icon>
+      <ion-text class="text-light">
+        <strong style="font-size:6vw;"> {{producto.cantidad}} </strong> | {{producto.codigo_producto}} <strong>{{producto.nombre_producto}}</strong> P.U: {{producto.precio_venta_sin_imp}}
+      </ion-text>
+    </ion-item>
+
+    <ion-item *ngIf="producto.html.verMas == true">
+        <ion-text>
+          <strong>% Descuento:</strong> {{producto.subtotales.descuento_porc}} %
+        </ion-text>
+    </ion-item>
+    <ion-item *ngIf="producto.html.verMas == true">
+        <ion-text>
+          <strong>Sub Total:</strong> {{producto.subtotales.sub_total}}
+        </ion-text>
+    </ion-item>
+    <ion-item *ngIf="producto.html.verMas == true">
+        <ion-text>
+          <strong>Descuento:</strong> {{producto.subtotales.descuento}}
+        </ion-text>
+    </ion-item>
+    <ion-item *ngIf="producto.html.verMas == true">
+        <ion-text>
+          <strong>Sub Total descuento:</strong> {{producto.subtotales.sub_total_descuento}}
+        </ion-text>
+    </ion-item>
+    <ion-item *ngIf="producto.html.verMas == true">
+        <ion-text>
+          <strong>Impuestos:</strong> {{producto.subtotales.impuestos}}
+        </ion-text>
+    </ion-item>
+    <ion-item *ngIf="producto.html.verMas == true">
+        <ion-text>
+          <strong>Total Linea:</strong> {{producto.subtotales.total_linea}}
+        </ion-text>
+    </ion-item>
+
+  </div>
+  <ion-button *ngIf="arrayProductosDisplay.length > 0"  color="primary" (click)="irAFactura()" expand="block"><strong>VER FACTURA</strong></ion-button>
+</ion-content>

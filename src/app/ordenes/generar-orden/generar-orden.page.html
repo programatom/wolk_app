@@ -1,0 +1,161 @@
+<div class="splashOpaque" *ngIf="showSplash">
+  <div class="sk-cube-grid">
+    <div class="sk-cube sk-cube1"></div>
+    <div class="sk-cube sk-cube2"></div>
+    <div class="sk-cube sk-cube3"></div>
+    <div class="sk-cube sk-cube4"></div>
+    <div class="sk-cube sk-cube5"></div>
+    <div class="sk-cube sk-cube6"></div>
+    <div class="sk-cube sk-cube7"></div>
+    <div class="sk-cube sk-cube8"></div>
+    <div class="sk-cube sk-cube9"></div>
+  </div>
+</div>
+<ion-header>
+
+  <ion-toolbar color="primary" text-center hideBackButton>
+    <ion-buttons slot="end">
+      <ion-button>
+        <img [src]="localStorageServ.localStorageObj['dataUser'].logo" class='imagenNav'>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-button icon-only (click)="dismiss()">
+        <ion-icon name="arrow-back">
+        </ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Orden</ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+
+
+<ion-content padding>
+
+  <ion-item [disabled]="orden.isGenerada">
+    <ion-grid>
+      <ion-row>
+        <ion-text>
+          <strong>Salida</strong>
+        </ion-text>
+      </ion-row>
+    </ion-grid>
+    <ion-icon color = "primary" name="square-outline" slot="end" *ngIf="ordenesServ.orden.id_tipo_movimiento == 'E'" (click)="changeCheck('salida')"></ion-icon>
+    <ion-icon color = "primary" name="checkbox" slot="end" *ngIf="ordenesServ.orden.id_tipo_movimiento == 'S'" (click)="changeCheck('entrada')"></ion-icon>
+  </ion-item>
+
+  <ion-item [disabled]="orden.isGenerada">
+    <ion-grid>
+      <ion-row>
+        <ion-text>
+          <strong>Entrada</strong>
+        </ion-text>
+      </ion-row>
+    </ion-grid>
+    <ion-icon color = "primary" name="square-outline" slot="end" *ngIf="ordenesServ.orden.id_tipo_movimiento == 'S'" (click)="changeCheck('entrada')"></ion-icon>
+    <ion-icon color = "primary" name="checkbox" slot="end" *ngIf="ordenesServ.orden.id_tipo_movimiento == 'E'" (click)="changeCheck('salida')"></ion-icon>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="fixed">
+      Nº orden
+    </ion-label>
+    <ion-input readonly [(ngModel)]="ordenesServ.orden.num_documento">
+    </ion-input>
+  </ion-item>
+
+  <ion-item [disabled]="orden.isGenerada">
+    <ion-label position="fixed">
+      Fecha:
+    </ion-label>
+    <ion-row>
+      <ion-col size="4">
+        <ion-input placeholder="DD" type="number" max="99" [(ngModel)]="dia">
+        </ion-input>
+      </ion-col>
+      <ion-col size="4">
+        <ion-input placeholder="MM" type="number" max="99" [(ngModel)]="mes">
+        </ion-input>
+      </ion-col>
+      <ion-col size="4">
+        <ion-input placeholder="AAAA" type="number" max="9999" [(ngModel)]="anno">
+        </ion-input>
+      </ion-col>
+    </ion-row>
+  </ion-item>
+
+  <ion-item [disabled]="orden.isGenerada">
+    <ion-label>Tipo de movimientos</ion-label>
+    <ion-select okText="Ok" cancelText="Cancelar" [(ngModel)]="ordenesServ.orden.id_tipo_ajuste" >
+      <ion-select-option *ngFor="let tipos of tiposDeMovimientos" [value]="tipos.id_tipo_ajuste">{{tipos.nombre_ajuste}}</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item [disabled]="orden.isGenerada">
+    <ion-textarea [(ngModel)]="ordenesServ.orden.Observaciones" placeholder="Observaciones" maxlength = "100"></ion-textarea>
+  </ion-item>
+
+  <ion-button expand="block" (click)="generarOrden()"
+  [disabled] ="ordenesServ.orden.id_tipo_ajuste == undefined || ordenesServ.orden.Observaciones == '' || orden.isGenerada">
+    Generar orden
+  </ion-button>
+
+  <ion-row>
+    <ion-col>
+      <ion-item lines="none" [disabled]="orden.isGenerada == false">
+        <ion-label>CCV</ion-label>
+        <ion-checkbox slot="end" [(ngModel)]="CCV"></ion-checkbox>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+
+
+  <ion-item text-wrap [disabled]="orden.isGenerada == false">
+    <ion-label fixed>Código</ion-label>
+    <ion-input [(ngModel)]="codigoProducto"></ion-input>
+    <ion-buttons>
+      <ion-button  slot="end" fill="clear" (click)='buscarProducto()' color='transparent' [disabled]="orden.isGenerada == false" >
+        <ion-icon color='secondary' name='search' class='icono-boton'></ion-icon>
+      </ion-button>
+      <ion-button  slot="end" fill="clear" (click)='scanDiv()' color='transparent' [disabled]="orden.isGenerada == false">
+        <ion-icon color='secondary' name='qr-scanner' class='icono-boton'></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-item>
+
+  <ion-item text-wrap>
+    <ion-label fixed>Cantidad</ion-label>
+    <ion-input type = "number" [(ngModel)]="cantidadProducto" [disabled]="orden.isGenerada == false"></ion-input>
+    <ion-buttons>
+      <ion-button slot="end" fill="clear" clear (click)='cantidadProductoFn("agregar")' color='transparent' [disabled]="orden.isGenerada == false">
+        <ion-icon color='secondary' name='add-circle' class='icono-boton'></ion-icon>
+      </ion-button>
+      <ion-button  slot="end" fill="clear" clear (click)='cantidadProductoFn("quitar")' color='transparent' [disabled]="orden.isGenerada == false">
+        <ion-icon color='secondary' name='remove-circle' class='icono-boton'></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-item>
+
+  <ion-button  color="primary" (click)="agregarProducto()" expand="block" [disabled]="orden.isGenerada == false"><strong>AGREGAR PRODUCTO</strong></ion-button>
+
+
+
+  <div *ngFor="let producto of arrayProductosDisplay; let i = index">
+    <ion-item color="primary" lines="none" text-wrap class='bounceInUp productoItem'>
+      <ion-buttons slot="end">
+        <ion-icon class="icono-boton" name="close-circle" (click)="eliminarProducto(i)" color="light" item-end>
+        </ion-icon>
+      </ion-buttons>
+      <ion-text class="text-light">
+        <strong style="font-size:6vw;"> {{producto.Cantidad}} </strong> | {{producto['Código Producto']}} <strong>{{producto['Nombre Producto']}}</strong>
+      </ion-text>
+    </ion-item>
+  </div>
+
+  <ion-button *ngIf="arrayProductosDisplay.length > 0"  color="primary" (click)="imprimir(false)" expand="block"><strong>IMPRIMIR</strong></ion-button>
+  <ion-button *ngIf="arrayProductosDisplay.length > 0"  color="primary" (click)="imprimir(true)" expand="block"><strong>REIMPRIMIR</strong></ion-button>
+
+
+</ion-content>

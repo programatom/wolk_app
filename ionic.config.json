@@ -1,5 +1,7 @@
 {
   "name": "wolk-app",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

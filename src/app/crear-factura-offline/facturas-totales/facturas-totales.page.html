@@ -1,0 +1,88 @@
+
+<ion-header>
+
+  <ion-toolbar color="primary" text-center>
+    <ion-title>Facturas totales modo offline</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <img [src]="localStorageServ.localStorageObj['dataUser'].logo" class='imagenNav'>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-row>
+    <ion-col class="columna">
+      <ion-text>
+        <strong>SUBTOTAL</strong> <br><br>
+        {{subTotal}} CRC
+      </ion-text>
+    </ion-col>
+    <ion-col class="columna">
+      <ion-text>
+        <strong>DESCUENTOS</strong> <br><br>
+        {{monoDescuento}} CRC
+      </ion-text>
+    </ion-col>
+  </ion-row>
+  <br>
+  <ion-row>
+    <ion-col class="columna">
+      <ion-text>
+        <strong>SUBTOTAL DESCUENTO</strong> <br><br>
+        {{subTotalDesc}} CRC
+      </ion-text>
+    </ion-col>
+    <ion-col class="columna">
+      <ion-text>
+        <strong>IMPUESTOS</strong> <br><br>
+        {{monImpuesto}} CRC
+      </ion-text>
+    </ion-col>
+  </ion-row>
+  <br>
+  <ion-row>
+    <ion-col class="columna">
+      <ion-text>
+        <strong>TOTAL</strong> <br><br>
+        <b class="color-total">{{totalFinal}} CRC</b>
+      </ion-text>
+    </ion-col>
+  </ion-row>
+  <br>
+
+  <ion-item text-wrap>
+    <ion-label position="floating">Copiar en email</ion-label>
+    <ion-input type="text" [(ngModel)]="email"></ion-input>
+  </ion-item>
+  <ion-item text-wrap>
+    <ion-label position="floating">Observaciones</ion-label>
+    <ion-input type="text" [(ngModel)]="this.dataFacturaServ.dataFacturaOffline.observaciones"></ion-input>
+  </ion-item>
+
+  <ion-button color="primary" (click)="pago()" expand="block" [disabled]="this.dataFacturaServ.dataFacturaOffline.pagoOfflineData.pendiente == 0"><strong>PAGAR</strong></ion-button>
+
+  <br><br>
+
+  <ion-button color="primary" (click)="imprimir()" expand="block" [disabled]="this.dataFacturaServ.dataFacturaOffline.noPaga">
+    <strong>IMPRIMIR</strong>
+  </ion-button>
+
+  <ion-button color="primary" (click)="guardarFactura()" expand="block" [disabled]="this.dataFacturaServ.dataFacturaOffline.noPaga">
+    <strong>GUARDAR FACTURA</strong>
+  </ion-button>
+
+
+
+  <ion-button color="primary" (click)="facturaNueva()" expand="block">
+    <strong>FACTURA NUEVA</strong>
+  </ion-button>
+
+</ion-content>

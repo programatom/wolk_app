@@ -1,0 +1,168 @@
+<div class="splashOpaque" *ngIf="showSplash">
+  <div class="sk-cube-grid">
+    <div class="sk-cube sk-cube1"></div>
+    <div class="sk-cube sk-cube2"></div>
+    <div class="sk-cube sk-cube3"></div>
+    <div class="sk-cube sk-cube4"></div>
+    <div class="sk-cube sk-cube5"></div>
+    <div class="sk-cube sk-cube6"></div>
+    <div class="sk-cube sk-cube7"></div>
+    <div class="sk-cube sk-cube8"></div>
+    <div class="sk-cube sk-cube9"></div>
+  </div>
+</div>
+<ion-header>
+
+  <ion-toolbar color = "primary" text-center>
+    <ion-title>Facturas totales</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <img [src]="localStorageServ.localStorageObj['dataUser'].logo" class='imagenNav'>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-segment [(ngModel)]="monedaSegment" color="primary" *ngIf="otraMoneda">
+<ion-segment-button value="CRC">
+  CRC
+</ion-segment-button>
+<ion-segment-button value="otraMoneda">
+  {{monedaNombre}}
+</ion-segment-button>
+</ion-segment>
+<br><br>
+<div *ngIf="monedaSegment == 'CRC'">
+  <ion-row>
+    <ion-col class = "columna">
+
+      <ion-text>
+        <strong>SUBTOTAL</strong> <br><br>
+        {{subTotal}} CRC
+      </ion-text>
+    </ion-col>
+    <ion-col class = "columna">
+      <ion-text>
+        <strong>DESCUENTOS</strong> <br><br>
+        {{monoDescuento}} CRC
+      </ion-text>
+    </ion-col>
+  </ion-row>
+  <br>
+  <ion-row>
+    <ion-col class = "columna">
+      <ion-text>
+        <strong>SUBTOTAL DESCUENTO</strong> <br><br>
+        {{subTotalDesc}} CRC
+      </ion-text>
+    </ion-col>
+    <ion-col class = "columna">
+      <ion-text>
+        <strong>IMPUESTOS</strong> <br><br>
+        {{monImpuesto}} CRC
+      </ion-text>
+    </ion-col>
+  </ion-row>
+  <br>
+  <ion-row align-items-center>
+    <ion-col class = "columna">
+      <ion-text>
+        <strong>TOTAL</strong> <br><br>
+        <b class = "color-total">{{totalFinal}} CRC</b>
+      </ion-text>
+    </ion-col>
+  </ion-row>
+  <br>
+</div>
+
+<div *ngIf="monedaSegment == 'otraMoneda'">
+  <ion-row>
+    <ion-col class = "columna">
+      <ion-text>
+        <strong>SUBTOTAL</strong> <br><br>
+        {{subTotalOtraMoneda}} {{monedaNombre}}
+      </ion-text>
+    </ion-col>
+    <ion-col class = "columna">
+      <ion-text>
+        <strong>DESCUENTOS</strong> <br><br>
+        {{monoDescuentoOtraMoneda}} {{monedaNombre}}
+      </ion-text>
+    </ion-col>
+  </ion-row>
+  <br>
+  <ion-row>
+    <ion-col class = "columna">
+      <ion-text>
+        <strong>SUBTOTAL DESCUENTO</strong> <br><br>
+        {{subTotalDescOtraMoneda}} {{monedaNombre}}
+      </ion-text>
+    </ion-col>
+    <ion-col class = "columna">
+      <ion-text>
+        <strong>IMPUESTOS</strong> <br><br>
+        {{monImpuestoOtraMoneda}} {{monedaNombre}}
+      </ion-text>
+    </ion-col>
+  </ion-row>
+  <br>
+  <ion-row>
+    <ion-col class = "columna">
+      <ion-text>
+        <strong>TOTAL</strong> <br><br>
+        <b class = "color-total">{{totalFinalOtraMoneda}} {{monedaNombre}}</b>
+      </ion-text>
+    </ion-col>
+  </ion-row>
+  <br>
+</div>
+<ion-item text-wrap>
+  <ion-label position="floating">Copiar en email</ion-label>
+  <ion-input type="text" [(ngModel)]="email"></ion-input>
+</ion-item>
+<ion-item text-wrap>
+  <ion-label position="floating">Observaciones</ion-label>
+  <ion-input type="text" [(ngModel)]="this.dataFacturaServ.dataFactura.observaciones"></ion-input>
+</ion-item>
+<ion-button  color = "primary" (click) = "guardarEmitir()" expand="block" [disabled] = "this.dataFacturaServ.dataFactura.pagoOfflineData.pendiente == 0"><strong>GUARDAR Y PAGAR</strong></ion-button>
+<ion-button  color = "primary" (click) = "procesarDocumentoHacienda('04')" expand="block"
+[disabled] = "this.dataFacturaServ.dataFactura.noPaga || this.dataFacturaServ.dataFactura.isProcesada || this.dataFacturaServ.dataFactura.usuarioExcepcionBool">
+<strong>ENVIAR-TIQUETE ELETRÓNICO</strong></ion-button>
+<ion-button  color = "primary" (click) = "procesarDocumentoHacienda('01')"
+[disabled] = "this.dataFacturaServ.dataFactura.noPaga || this.dataFacturaServ.dataFactura.isProcesada || this.dataFacturaServ.dataFactura.usuarioExcepcionBool" expand="block">
+<strong>ENVIAR-FACTURA ELECTRÓNICA</strong></ion-button>
+<br>
+<ion-text>
+  Printer Selected:
+</ion-text>
+<ion-item *ngIf="selectedPrinter !=undefined">
+  <div style="color:grey; font-size = 5 vw">
+    {{selectedPrinter.name}} ...
+  </div></ion-item>
+<ion-item *ngIf="selectedPrinter == undefined"></ion-item>
+
+<ion-button  color = "primary" (click) = "buscarPrintString(false)" expand="block" [disabled]="this.dataFacturaServ.dataFactura.noPaga">
+  <strong>IMPRIMIR</strong>
+</ion-button>
+<ion-button  color = "primary" (click) = "buscarPrintString(true)" expand="block" [disabled]="this.dataFacturaServ.dataFactura.noPaga">
+  <strong>RE-IMPRIMIR</strong>
+</ion-button>
+
+<br><br>
+
+<ion-button  color = "primary" (click) = "facturaNuevaEliminando()" [disabled] = "this.dataFacturaServ.dataFactura.isProcesadaInterno" expand="block">
+  <strong>ELIMINAR Y VOLVER</strong>
+</ion-button>
+<ion-button  color = "primary" (click) = "facturaNueva()" expand="block" [disabled] = "this.dataFacturaServ.dataFactura.isProcesadaInterno == false">
+  <strong>VOLVER</strong>
+</ion-button>
+
+
+
+</ion-content>

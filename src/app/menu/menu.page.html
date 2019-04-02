@@ -1,0 +1,100 @@
+<div class="splashOpaque" *ngIf="showSplash">
+  <div class="sk-cube-grid">
+    <div class="sk-cube sk-cube1"></div>
+    <div class="sk-cube sk-cube2"></div>
+    <div class="sk-cube sk-cube3"></div>
+    <div class="sk-cube sk-cube4"></div>
+    <div class="sk-cube sk-cube5"></div>
+    <div class="sk-cube sk-cube6"></div>
+    <div class="sk-cube sk-cube7"></div>
+    <div class="sk-cube sk-cube8"></div>
+    <div class="sk-cube sk-cube9"></div>
+  </div>
+</div>
+<ion-header>
+
+  <ion-toolbar color='primary'>
+    <ion-title>
+      Panel principal
+    </ion-title>
+    <ion-buttons slot="start">
+      <ion-button *ngIf="localStorageServ.localStorageObj['dataUser']!= undefined">
+        <img [src]="localStorageServ.localStorageObj['dataUser'].logo" class='imagenNav'>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button icon-only (click)='logout()'>
+        <ion-icon name="md-log-out" color='light' class='icono-logout'></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content>
+  <div class="posicion-datos-usuario">
+    <ion-grid class="grid">
+      <ion-row>
+        <ion-col col-4 align-self-center>
+          <strong>Nombre: </strong>
+        </ion-col>
+        <ion-col align-self-center>
+          {{nombreUsuario}}
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col col-4 align-self-center>
+          <strong>Terminal: </strong>
+        </ion-col>
+        <ion-col align-self-center>
+          {{terminal}}
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col col-4 align-self-center>
+          <strong>Sucursal: </strong>
+        </ion-col>
+        <ion-col align-self-center>
+          {{sucursal}}
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col col-4 align-self-center>
+          <strong>Ubicación: </strong>
+        </ion-col>
+        <ion-col align-self-center>
+          {{ubicacion}}
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <div>
+    <ion-button expand="block" (click)='irAFactura()'>
+      Menu Facturas
+    </ion-button>
+    <ion-button expand="block" (click)="irACajaDiaria()">
+      Caja diaria
+    </ion-button>
+    <ion-button expand="block" (click)="irAClientes()">
+      Clientes
+    </ion-button>
+    <ion-button expand="block" (click)="irAReporteDeGastos()">
+      Reporte de gastos
+    </ion-button>
+    <ion-button expand="block" (click)="irAOrdenes()">
+      Ordenes de S/E
+    </ion-button>
+    <ion-button expand="block" (click)="irAVerificacion()"
+      [disabled]='this.localStorageServ.localStorageObj["dataUser"].msg == "03"'  >
+      Verificacion de producto
+    </ion-button>
+    <ion-button expand="block" (click)="seleccionarImpresora()">
+      Seleccionar impresora
+    </ion-button>
+  </div>
+
+
+
+</ion-content>

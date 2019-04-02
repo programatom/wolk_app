@@ -1,0 +1,56 @@
+
+<ion-header>
+
+  <ion-toolbar color="primary" text-center>
+    <ion-title>Cliente modo offline</ion-title>
+    <ion-buttons slot="end">
+      <ion-button >
+        <img [src]="localStorageServ.localStorageObj['dataUser'].logo" class='imagenNav'>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-back-button>
+
+      </ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+  <ion-item-group>
+    <ion-item-divider color="secondary"><strong>INFORMACIÓN CLIENTE</strong></ion-item-divider>
+    <ion-item text-wrap>
+      <ion-label position="fixed">Cliente</ion-label>
+      <ion-input [(ngModel)]="cliente" type="text" (ionChange)="limpiarObjCliente()"></ion-input>
+      <ion-button  icon-only slot="end" fill="clear" (click)='buscarCliente()' color='transparent' class='boton-icono'>
+        <ion-icon color='secondary' name='search' class='icono-boton'></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Condición venta</ion-label>
+      <ion-select okText="Ok" cancelText="Cancelar" [(ngModel)]="condicionVenta" (ionChange)='habilitarCredito()'>
+        <ion-select-option *ngFor="let condicion of this.localStorageServ.localStorageObj.condicionesVenta" [value]="condicion.id_condicion_venta">{{condicion.condicion_venta}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Plazo crédito</ion-label>
+      <ion-select okText="Ok" cancelText="Cancelar" [(ngModel)]="plazoCredito" [disabled]='creditoNoSeleccionado'>
+        <ion-select-option *ngFor="let plazo of this.localStorageServ.localStorageObj.plazos">{{plazo.nroMeses}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Medio de pago</ion-label>
+      <ion-select okText="Ok" cancelText="Cancelar" [(ngModel)]="medioDePagoDisplay" (ionChange)="selectMedioDePago()" [interfaceOptions]="selectOptionsMediosDePago">
+        <ion-select-option *ngFor="let medio of this.localStorageServ.localStorageObj.mediosDePago" [value]="medio.id_medio_pago">{{medio.medio_pago}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+  </ion-item-group>
+  <br>
+  <br>
+  <ion-button  color="primary" (click)="irAFacturasTotales()" expand="block"><strong>SIGUIENTE</strong></ion-button>
+</ion-content>

@@ -1,0 +1,75 @@
+<div class="splashOpaque" *ngIf="showSplash">
+  <div class="sk-cube-grid">
+    <div class="sk-cube sk-cube1"></div>
+    <div class="sk-cube sk-cube2"></div>
+    <div class="sk-cube sk-cube3"></div>
+    <div class="sk-cube sk-cube4"></div>
+    <div class="sk-cube sk-cube5"></div>
+    <div class="sk-cube sk-cube6"></div>
+    <div class="sk-cube sk-cube7"></div>
+    <div class="sk-cube sk-cube8"></div>
+    <div class="sk-cube sk-cube9"></div>
+  </div>
+</div>
+<ion-header>
+
+  <ion-toolbar color="primary" text-center hideBackButton>
+    <ion-buttons slot="end">
+      <ion-button>
+        <img [src]="localStorageServ.localStorageObj['dataUser'].logo" class='imagenNav'>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-button icon-only (click)="dismiss()">
+        <ion-icon name="arrow-back">
+        </ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Dirección nueva</ion-title>
+  </ion-toolbar>
+
+</ion-header>
+<ion-content padding>
+
+  <ion-item>
+    <ion-label>Provincia</ion-label>
+    <ion-select okText="Ok" cancelText="Cancelar" [(ngModel)]="idProvincia" (ionChange)="selectChange('provincia')">
+      <ion-select-option *ngFor="let provincia of provincias" [value]="provincia.id_provincia">{{provincia.nombre_provincia}}</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-item [disabled]="selectStatus.hasProvincia == false">
+    <ion-label>Cantón</ion-label>
+    <ion-select okText="Ok" cancelText="Cancelar" [(ngModel)]="idCanton" (ionChange)="selectChange('canton')">
+      <ion-select-option *ngFor="let canton of cantones" [value]="canton.id_canton">{{canton.nombre_canton}}</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-item [disabled]="selectStatus.hasCanton == false">
+    <ion-label>Distrito</ion-label>
+    <ion-select okText="Ok" cancelText="Cancelar" [(ngModel)]="idDistrito" (ionChange)="selectChange('distrito')">
+      <ion-select-option *ngFor="let distrito of distritos" [value]="distrito.id_distrito">{{distrito.nombre_distrito}}</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-item [disabled]="selectStatus.hasDistrito == false">
+    <ion-label>Barrio</ion-label>
+    <ion-select okText="Ok" cancelText="Cancelar" [(ngModel)]="idBarrio" (ionChange)="selectChange('barrio')">
+      <ion-select-option *ngFor="let barrio of barrios" [value]="barrio.id_barrio">{{barrio.nombre_barrio}}</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-item>
+    <ion-textarea [(ngModel)]="sennas" placeholder="Ingrese las señales aquí..."></ion-textarea>
+  </ion-item>
+  <ion-item [disabled]="this.clientesServ.newBackUrl == '/cliente-new'">
+    <ion-label>Principal</ion-label>
+    <ion-checkbox slot="end" [(ngModel)]="principal"></ion-checkbox>
+  </ion-item>
+
+
+  <ion-button expand="block" (click)="agregarDireccion()" [disabled]="selectStatus.hasBarrio == false || sennas == ''">
+    Agregar dirección
+  </ion-button>
+
+  <ion-button expand="block" (click)="dismiss()">
+    Volver
+  </ion-button>
+
+</ion-content>

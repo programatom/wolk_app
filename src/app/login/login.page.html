@@ -1,0 +1,58 @@
+<div class="splash" *ngIf="showSplash">
+  <div class="sk-cube-grid">
+    <div class="sk-cube sk-cube1"></div>
+    <div class="sk-cube sk-cube2"></div>
+    <div class="sk-cube sk-cube3"></div>
+    <div class="sk-cube sk-cube4"></div>
+    <div class="sk-cube sk-cube5"></div>
+    <div class="sk-cube sk-cube6"></div>
+    <div class="sk-cube sk-cube7"></div>
+    <div class="sk-cube sk-cube8"></div>
+    <div class="sk-cube sk-cube9"></div>
+  </div>
+</div>
+<div class="splashTexto" *ngIf="showSplash">
+  <div [ngClass]="{'texto-loading-fake': usuarioValidoBool === false , 'texto-loading fadeIn':usuarioValidoBool === true}">
+    Se inició la sesión con éxito. Bienvenido/a  {{usuarioValido}} .
+  </div>
+</div>
+
+<ion-content padding>
+  <img src="../assets/imgs/logo-wolk.jpg" class="slide-image" />
+
+  <div class="container-texto">
+
+    <h3 class="color-letra-h4">Ingresa a tu cuenta</h3>
+    <br>
+    <span class="color-letra-h5">Tecnología de punta en tus manos</span>
+    <br>
+
+  </div>
+  <ion-item lines="inset">
+    <ion-label color="grisOscuro" position="floating">Wolk id</ion-label>
+    <ion-input type="user" [(ngModel)]="id_cliente_ws" color="grisOscuro" (ionChange)='mostrarUser()'></ion-input>
+  </ion-item>
+
+  <ion-item *ngIf="mostrarUserVar" class='fadeIn' lines="inset">
+    <ion-label color="grisOscuro" position="floating">Usuario</ion-label>
+    <ion-input type="user" [(ngModel)]="cedula" color="grisOscuro" (ionChange)='mostrarPW()'></ion-input>
+  </ion-item>
+
+  <ion-item *ngIf="mostrarPWVar" class='fadeIn' lines="inset" >
+    <ion-label color="grisOscuro" position="floating">Password</ion-label>
+    <ion-input type="password" color="grisOscuro" [(ngModel)]="password"></ion-input>
+  </ion-item>
+
+
+  <br>
+  <ion-button color="primary" fill="clear" expand="block"(click)="ingresar()" *ngIf="mostrarPWVar" class='fadeIn'><strong>Ingresar</strong></ion-button>
+
+  <br>
+
+
+
+
+
+
+
+</ion-content>

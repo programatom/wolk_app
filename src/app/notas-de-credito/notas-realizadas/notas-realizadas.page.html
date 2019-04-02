@@ -1,0 +1,189 @@
+<div class="splashOpaque" *ngIf="showSplash">
+  <div class="sk-cube-grid">
+    <div class="sk-cube sk-cube1"></div>
+    <div class="sk-cube sk-cube2"></div>
+    <div class="sk-cube sk-cube3"></div>
+    <div class="sk-cube sk-cube4"></div>
+    <div class="sk-cube sk-cube5"></div>
+    <div class="sk-cube sk-cube6"></div>
+    <div class="sk-cube sk-cube7"></div>
+    <div class="sk-cube sk-cube8"></div>
+    <div class="sk-cube sk-cube9"></div>
+  </div>
+</div>
+<ion-header>
+
+  <ion-toolbar color="primary" text-center hideBackButton>
+    <ion-buttons slot="end">
+      <ion-button>
+        <img [src]="localStorageServ.localStorageObj['dataUser'].logo" class='imagenNav'>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-button icon-only (click)="dismiss()">
+        <ion-icon name="arrow-back">
+        </ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Notas de credito</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+
+<ion-content padding>
+
+  <ion-item>
+    <ion-label position="fixed">
+      Fecha inicial:
+    </ion-label>
+    <ion-row>
+      <ion-col size="4">
+        <ion-input placeholder="DD" type="number" max="99" [(ngModel)]="diaInicial">
+        </ion-input>
+      </ion-col>
+      <ion-col size="4">
+        <ion-input placeholder="MM" type="number" max="99" [(ngModel)]="mesInicial">
+        </ion-input>
+      </ion-col>
+      <ion-col size="4">
+        <ion-input placeholder="AAAA" type="number" max="9999" [(ngModel)]="annoInicial">
+        </ion-input>
+      </ion-col>
+    </ion-row>
+  </ion-item>
+
+
+  <ion-item>
+    <ion-label position="fixed">
+      Fecha final:
+    </ion-label>
+    <ion-row>
+      <ion-col size="4">
+        <ion-input placeholder="DD" type="number" max="99" [(ngModel)]="diaFinal">
+        </ion-input>
+      </ion-col>
+      <ion-col size="4">
+        <ion-input placeholder="MM" type="number" max="99" [(ngModel)]="mesFinal">
+        </ion-input>
+      </ion-col>
+      <ion-col size="4">
+        <ion-input placeholder="AAAA" type="number" max="9999" [(ngModel)]="annoFinal">
+        </ion-input>
+      </ion-col>
+    </ion-row>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>
+      Buscar:
+    </ion-label>
+    <ion-input type="text" [(ngModel)]="filtro">
+    </ion-input>
+  </ion-item>
+  <ion-button expand="block" (click)="buscarNC()" [disabled]="diaFinal == undefined ||
+                mesFinal == undefined ||
+                annoFinal == undefined ||
+                diaInicial == undefined ||
+                mesInicial == undefined ||
+                annoInicial == undefined">
+    Buscar notas de credito
+  </ion-button>
+
+  <div *ngFor="let notaDeCredito of notasDeCredito">
+
+    <ion-item detail=false>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12">
+            <ion-text>
+              <strong> Nº Factura: </strong> {{notaDeCredito["N° Factura"]}}
+            </ion-text>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12">
+            <ion-text>
+              <strong> Nº NC: </strong> {{notaDeCredito["N° NC"]}}
+            </ion-text>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12">
+            <ion-text>
+              <strong> Nº Terminal: </strong> {{notaDeCredito["N° Terminal"]}}
+            </ion-text>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12">
+            <ion-text>
+              <strong> Sucursal: </strong> {{notaDeCredito["Sucursal"]}}
+            </ion-text>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12">
+            <ion-text>
+              <strong> Clientes: </strong> {{notaDeCredito["Clientes"]}}
+            </ion-text>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12">
+            <ion-text>
+              <strong>Observaciones: </strong> {{notaDeCredito["Observaciones"]}}
+            </ion-text>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12">
+            <ion-text>
+              <strong>Consecutivo: </strong> {{notaDeCredito["Consecutivo Hacienda"]}}
+            </ion-text>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12">
+            <ion-text>
+              <strong>Usuario: </strong> {{notaDeCredito["Usuario Creación"]}}
+            </ion-text>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+    <ion-row>
+      <ion-col size="4">
+        <ion-button expand="block" (click)="ver(notaDeCredito)">
+          Ver
+        </ion-button>
+      </ion-col>
+      <ion-col size="4">
+        <ion-button expand="block" (click)="reImprimir(notaDeCredito)">
+          Reimprimir
+        </ion-button>
+      </ion-col>
+      <ion-col size="4">
+        <ion-button expand="block" (click)="reenviarCorreo(notaDeCredito)">
+          Reenviar correo
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <div class="linea-divisoria">
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+
+
+  <ion-row *ngIf="notasDeCredito.length > 0">
+    <ion-col size="12">
+      <ion-text>
+        Mostrando {{notasDeCredito.length}} de {{notasDeCreditoEncontradas}} notas de crédito...
+      </ion-text>
+    </ion-col>
+  </ion-row>
+
+</ion-content>

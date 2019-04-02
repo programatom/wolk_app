@@ -1,0 +1,141 @@
+<div class="splashOpaque" *ngIf="showSplash">
+  <div class="sk-cube-grid">
+    <div class="sk-cube sk-cube1"></div>
+    <div class="sk-cube sk-cube2"></div>
+    <div class="sk-cube sk-cube3"></div>
+    <div class="sk-cube sk-cube4"></div>
+    <div class="sk-cube sk-cube5"></div>
+    <div class="sk-cube sk-cube6"></div>
+    <div class="sk-cube sk-cube7"></div>
+    <div class="sk-cube sk-cube8"></div>
+    <div class="sk-cube sk-cube9"></div>
+  </div>
+</div>
+<ion-header>
+
+  <ion-toolbar color="primary" text-center hideBackButton>
+    <ion-buttons slot="end">
+      <ion-button>
+        <img [src]="localStorageServ.localStorageObj['dataUser'].logo" class='imagenNav'>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-button icon-only (click)="dismiss()"
+      [disabled] = "(this.clientesServ.clienteNewStatus.hasCorreo == false || this.clientesServ.clienteNewStatus.hasTelefono == false || this.clientesServ.clienteNewStatus.hasDireccion == false) && this.clientesServ.clienteNewStatus.isProcesado">
+        <ion-icon name="arrow-back">
+        </ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Cliente nuevo</ion-title>
+  </ion-toolbar>
+
+</ion-header>
+<ion-content padding>
+
+  <!--
+
+  Tipo Identificación: Combo que se llena con el servicio SelectTipoIdentificacion()
+  N° Identificación: Input QUE PERMITE STRING máximo de 12 caracteres NO MAS.
+  Nombre Cliente: Input que permite string hasta 50 caracteres MAXIMO no mas.
+  Apellido Cliente: Input que permite string hasta 80 caracteres MAXIMO no mas.
+  Nombre Comercial: Input que permite string hasta 60 caracteres MAXIMO no mas
+
+  -->
+
+  <ion-item [disabled]="this.clientesServ.clienteNewStatus.isProcesado">
+    <ion-label>Tipo Identificación</ion-label>
+    <ion-select okText="Ok" cancelText="Cancelar" [(ngModel)]="idTipoIdentificacion">
+      <ion-select-option *ngFor="let tipo of tiposIdentificacion" [value]="tipo.id_tipo_identificacion">{{tipo.tipo_identificacion}}</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item [disabled]="this.clientesServ.clienteNewStatus.isProcesado" text-wrap>
+    <ion-label position="floating">Nº Identificación</ion-label>
+    <ion-input [(ngModel)]="nroIdentificacion" type="text" maxlength="12"></ion-input>
+  </ion-item>
+
+  <ion-button expand="full" color="primary" (click)="consultarPadron()" [disabled]="this.clientesServ.clienteNewStatus.isProcesado">
+    Consultar padron
+  </ion-button>
+
+  <ion-item [disabled]="this.clientesServ.clienteNewStatus.isProcesado" text-wrap>
+    <ion-label position="floating">Nombre cliente</ion-label>
+    <ion-input [(ngModel)]="nombreCliente" type="text" maxlength="50"></ion-input>
+  </ion-item>
+  
+  <ion-item [disabled]="this.clientesServ.clienteNewStatus.isProcesado" text-wrap>
+    <ion-label position="floating">Apellido cliente</ion-label>
+    <ion-input [(ngModel)]="apellidoCliente" type="text" maxlength="80"></ion-input>
+  </ion-item>
+  <ion-item [disabled]="this.clientesServ.clienteNewStatus.isProcesado" text-wrap>
+    <ion-label position="floating">Nombre Comercial</ion-label>
+    <ion-input [(ngModel)]="nombreComercial" type="text" maxlength="60"></ion-input>
+  </ion-item>
+  <ion-item text-wrap [disabled]='this.localStorageServ.localStorageObj["dataUser"].msg == "03" || this.clientesServ.clienteNewStatus.isProcesado'>
+    <ion-label position="floating">% Desc Fijo</ion-label>
+    <ion-input [(ngModel)]="descFijo" type="number" maxlength="5"></ion-input>
+  </ion-item>
+
+  <ion-item [disabled]="this.clientesServ.clienteNewStatus.isProcesado">
+    <ion-label>Activo</ion-label>
+    <ion-checkbox slot="end" [(ngModel)]="activo"></ion-checkbox>
+  </ion-item>
+
+  <ion-button
+  [disabled]="this.clientesServ.clienteNewStatus.isProcesado || idTipoIdentificacion == '' || nombreCliente == '' ||
+  apellidoCliente == '' || nroIdentificacion == ''"
+  expand="full" (click)="procesarCliente()">
+    Procesar cliente
+  </ion-button>
+
+  <ion-grid>
+    <ion-row align-items-center>
+      <ion-col size="10">
+        <ion-button [disabled]="this.clientesServ.clienteNewStatus.isProcesado == false"
+         expand="full" routerDirection="forward" routerLink="/correo-new">
+          Agregar correo
+        </ion-button>
+      </ion-col>
+      <ion-col size="2" align-self-end>
+        <ion-icon name = "mail" color = "danger" *ngIf="this.clientesServ.clienteNewStatus.hasCorreo == false">
+        </ion-icon>
+        <ion-icon name = "mail" color = "success" *ngIf="this.clientesServ.clienteNewStatus.hasCorreo">
+        </ion-icon>
+      </ion-col>
+    </ion-row>
+    <ion-row align-items-center>
+      <ion-col size="10">
+        <ion-button [disabled]="this.clientesServ.clienteNewStatus.isProcesado == false"
+         expand="full" routerDirection="forward" routerLink="/direccion-new">
+          Agregar direccion
+        </ion-button>
+      </ion-col>
+      <ion-col size="2" align-self-end>
+        <ion-icon name = "home" color = "danger" *ngIf="this.clientesServ.clienteNewStatus.hasDireccion == false">
+        </ion-icon>
+        <ion-icon name = "home" color = "success" *ngIf="this.clientesServ.clienteNewStatus.hasDireccion">
+        </ion-icon>
+      </ion-col>
+    </ion-row>
+    <ion-row align-items-center>
+      <ion-col size="10">
+        <ion-button [disabled]="this.clientesServ.clienteNewStatus.isProcesado == false"
+         expand="full" routerDirection="forward" routerLink="/telefono-new">
+          Agregar telefono
+        </ion-button>
+      </ion-col>
+      <ion-col size="2" align-self-end>
+        <ion-icon name = "call" color = "danger" *ngIf="this.clientesServ.clienteNewStatus.hasTelefono == false">
+        </ion-icon>
+        <ion-icon name = "call" color = "success" *ngIf="this.clientesServ.clienteNewStatus.hasTelefono">
+        </ion-icon>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-button expand="full" (click)="dismiss()"
+  [disabled] = "(this.clientesServ.clienteNewStatus.hasCorreo == false || this.clientesServ.clienteNewStatus.hasTelefono == false || this.clientesServ.clienteNewStatus.hasDireccion == false) && this.clientesServ.clienteNewStatus.isProcesado">
+    Volver
+  </ion-button>
+
+</ion-content>
