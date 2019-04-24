@@ -52,19 +52,19 @@ export class ParcialPagePage implements OnInit {
   constructor(private _NCHttp: NotasDeCreditoHttpService,
     private pedidosGetServ: PedidosGetService,
     public localStorageServ: LocalStorageService,
-    private notasDeCreditoServ: NotasDeCreditoService,
+    private NCLogic: NotasDeCreditoService,
     private toastServ: ToastService,
     private navCtrl: NavController,
     private _NCHttpServ: NotasDeCreditoService) { }
 
   dismiss() {
-    this.navCtrl.navigateBack("/factura-visual-hacienda-nc")
+    this.navCtrl.navigateBack(this.NCLogic.backURL);
   }
 
   ngOnInit() {
 
     this.user = this.localStorageServ.localStorageObj.dataUser;
-    this.factura = this.notasDeCreditoServ.facturaElegida;
+    this.factura = this.NCLogic.facturaElegida;
 
     this._NCHttp.selectMotivos().subscribe((motivos) => {
       motivos.splice(0, 1);
@@ -127,6 +127,7 @@ export class ParcialPagePage implements OnInit {
       ZonaHoraria: "Central America Standard Time",
       Usuario: this.user.usuario
     };
+    console.log("DATA ENVIADA A PROCESAR NC PARCIAL " , data)
     this._NCHttp.procesoNCParcial(data).subscribe((respuesta) => {
       this.showSplash = false;
       let number = parseInt(respuesta);

@@ -39,6 +39,7 @@ export class FacturasTotalesPage implements OnInit {
 
   datosEmisor:ObjDatosEmisor;
 
+  hasConsecutive = false;
   constructor(public navCtrl: NavController,
     private modalCtrl: ModalController,
     public localStorageServ: LocalStorageService,
@@ -152,8 +153,38 @@ export class FacturasTotalesPage implements OnInit {
   }
 
   //---------------------------------------------------------------------------------------------------------------------
+  contadorLogic(){
+    let date = new Date();
+    let mes = (this.addCerosToNumber(date.getMonth() + 1)).toString();
+    let dia = (this.addCerosToNumber(date.getDate())).toString()
+    let año = (this.addCerosToNumber(date.getFullYear())).toString()
+    let fecha = mes + "/" + dia + "/" + año;
+    if(!this.hasConsecutive){
+      this.hasConsecutive = true;
+      if(this.localStorageServ.localStorageObj["contador"] == undefined){
+        this.localStorageServ.insertAndInstantiateValue("contador",{
+          "dia": fecha,
+          "contador":1
+        });
+        return;
+      }else{
+        if(this.localStorageServ.localStorageObj.contador.dia == fecha){
+          // Estamos en el mismo dia
+          this.localStorageServ.localStorageObj.contador.contador++;
+
+        }else{
+          // Otro dia
+          this.localStorageServ.localStorageObj.contador.dia = fecha;
+          this.localStorageServ.localStorageObj.contador.contador = 1;
+        }
+      }
+    }
+
+  }
 
   imprimir() {
+
+    this.contadorLogic();
 
     let printString = this.generarPrintString();
     console.log(printString)
@@ -189,6 +220,17 @@ export class FacturasTotalesPage implements OnInit {
     }
   }
 
+  padLeft(number, length) {
+
+    var my_string = '' + number;
+    while (my_string.length < length) {
+        my_string = '0' + my_string;
+    }
+
+    return my_string;
+
+}
+
   generarPrintString() {
     console.log(new Date())
     let date = new Date();
@@ -202,7 +244,8 @@ export class FacturasTotalesPage implements OnInit {
     let sucursal = user.sucursal;
     let usuario = user.usuario;
     let terminal = user.nro_terminal;
-    let consecutivo = año + mes + dia + "-0001";
+
+    let consecutivo = año + mes + dia + "-" +this.padLeft(this.localStorageServ.localStorageObj.contador.contador,4);
     let nombreCliente = this.dataFacturaServ.dataFacturaOffline.cliente;
     // Todas las lineas deben tener 40 caracteres.
     let direccionSplit = this.datosEmisor.direccion.split(",");

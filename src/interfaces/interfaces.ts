@@ -126,6 +126,10 @@ export interface ObjLocalStorage {
   impresora:any
   offlineOK:any
   datosEmisor
+  contador:{
+    dia
+    contador
+  }
 }
 
 

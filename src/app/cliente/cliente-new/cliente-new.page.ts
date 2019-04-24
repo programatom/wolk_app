@@ -54,7 +54,7 @@ export class ClienteNewPage implements OnInit {
   }
 
   consultarPadron(){
-    if(this.nroIdentificacion.search("_") == 0){
+    if(this.nroIdentificacion.search("_") == -1 || this.nroIdentificacion.search("-") == -1){
       this.toastServ.toastMensajeDelServidor("No se permite el ingreso de guiones en la cedula" , "error")
       this.showSplash = false;
       return;
@@ -105,14 +105,23 @@ export class ClienteNewPage implements OnInit {
       return;
     }
 
+    const longCedulasFisicas = [9];
+    const longCedulasJuridicas = [10];
+    const longDimex = [11, 12]
+
     if(this.idTipoIdentificacion == "01"){
-      if(this.nroIdentificacion.length != 9){
+      if(longCedulasFisicas.includes(this.nroIdentificacion.length)){
         this.toastServ.toastMensajeDelServidor("Para cedulas físicas el numero de identificación debe ser de 9 caracteres" , "error")
         return;
       }
-    }else{
-      if(this.nroIdentificacion.length < 9 || this.nroIdentificacion.length > 12){
-        this.toastServ.toastMensajeDelServidor("Para cedulas DIMEX, Jurídicas o NITE el numero de identificación debe ser de entre 9 y 12 caracteres" , "error")
+    }else if(this.idTipoIdentificacion == "02"){
+      if(longCedulasJuridicas.includes(this.nroIdentificacion.length)){
+        this.toastServ.toastMensajeDelServidor("Para cedulas Jurídicas el numero de identificación debe ser de 10 caracteres" , "error")
+        return;
+      }
+    }else if (this.idTipoIdentificacion == "03"){
+      if(longDimex.includes(this.nroIdentificacion.length)){
+        this.toastServ.toastMensajeDelServidor("Para cedulas DIMEX el numero de identificación debe ser de 11 o 12 caracteres" , "error")
         return;
       }
     }

@@ -244,6 +244,7 @@ export class DetallesProductosPage implements OnInit {
   inicializarProducto(producto) {
 
     this.descuentoProducto = 0;
+    this.exonerarImpuestosBool = false;
 
     if(this.CCVException == false){
       this.cantidadProducto = 1;

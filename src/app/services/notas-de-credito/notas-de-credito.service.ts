@@ -21,6 +21,8 @@ export class NotasDeCreditoService {
   user: ObjUserData;
   NCElegida = new Object() as any;
 
+  backURL = "";
+
 
   constructor(private localStorageServ: LocalStorageService,
     private procesoFacturasServ: ProcesoFacturasService,
@@ -112,6 +114,8 @@ export class NotasDeCreditoService {
           Usuario: this.user.usuario
         };
 
+        console.log("SE GUARDA EN EL SERVIDOR CON PROCESO NC CLIENTES", data);
+
         this._NCHttp.procesoNCClientes(data).subscribe((respuesta)=>{
           console.log("PROCESO RESPUESTA NC CLIENTE: " + respuesta);
           resolve();
@@ -141,7 +145,7 @@ export class NotasDeCreditoService {
           "ZonaHoraria": "Central America Standard Time",
           "Usuario":this.user.usuario
         }
-        console.log("SE GUARDA EN EL SERVIDOR", data);
+        console.log("SE GUARDA EN EL SERVIDOR CON PROCESO NC PARCIAL", data);
         this._NCHttp.procesoNCParcial(data).subscribe((respuesta)=>{
           console.log("RESPUESTA PROCESO NC PARCIAL: " + respuesta);
           factura.isguardado = "S";

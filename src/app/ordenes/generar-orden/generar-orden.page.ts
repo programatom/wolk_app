@@ -74,6 +74,22 @@ export class GenerarOrdenPage implements OnInit {
     }
   }
 
+  nuevaOrden(){
+    let header = "Confirmación";
+    let subHeader = "¿Está seguro que desea realizar una nueva orden?";
+    let buttons = [{
+      text:"Cancelar",
+      role:"cancel"
+    },{
+      text:"Aceptar",
+      handler:()=>{
+        this.arrayProductosDisplay = [];
+        this.ordenesServ.inicializarOrden();
+      }
+    }];
+  this.localStorageServ.presentAlert(header,subHeader, undefined, buttons);
+  }
+
   changeCheck(tipo) {
     if (tipo == "entrada") {
       this.ordenesServ.orden.id_tipo_movimiento = "E";

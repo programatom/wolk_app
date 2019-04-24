@@ -64,6 +64,24 @@ export class VerificacionProductoPage implements OnInit {
     this.navCtrl.navigateBack("/menu");
   }
 
+  inicializarVariables(){
+    this.arrayProductosDisplay = [];
+    this.verificando = false;
+    this.localizacion = "";
+    this.codigoProducto = "";
+    this.diferenciaTotal = 0;
+    this.existenciaReal = 1;
+  }
+
+  updateDiferencia(event){
+    let existencia = event.detail.value;
+    if(this.productoSeleccionado != undefined && this.productoSeleccionado.Existencia != undefined){
+      let diferencia = parseFloat(existencia) - parseFloat(this.productoSeleccionado.Existencia);
+      this.diferenciaTotal = this.common.aproxXDecimals(diferencia, 3);
+    }
+
+  }
+
   dismissAlert() {
 
     let header = "Atención";
@@ -74,7 +92,8 @@ export class VerificacionProductoPage implements OnInit {
     }, {
       text: "Aceptar",
       handler: () => {
-        this.navCtrl.navigateBack("/menu");
+        this.inicializarVariables();
+
       }
     }]
     this.localStorageServ.presentAlert(header, subHeader, undefined, buttons);
@@ -359,14 +378,16 @@ export class VerificacionProductoPage implements OnInit {
     this.showSplash = false;
 
     //Subtotales
-    let diferencia = parseFloat(this.existenciaReal) - parseFloat(this.productoSeleccionado.Existencia);
     // si la diferencia es positiva, hay mas existencia real que la nomral
     // Si la dif es negativa
+    let diferencia = parseFloat(this.existenciaReal) - parseFloat(this.productoSeleccionado.Existencia);
     this.productoSeleccionado.diferencia = this.common.aproxXDecimals(diferencia, 3);
-    this.diferenciaTotal = this.common.aproxXDecimals(diferencia, 3);
     this.arrayProductosDisplay.unshift(this.productoSeleccionado);
     this.showSplash = false;
-    this.cantidadProducto = 1;
+    this.diferenciaTotal = 0;
+    this.existenciaReal = 1;
+    this.codigoProducto = "";
+    this.productoSeleccionado = {};
 
   }
 

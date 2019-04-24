@@ -266,7 +266,6 @@ export class ProcesarFacturaOfflineService {
       Usuario,
     ).then((data) => {
       console.log(data);
-      this.toastServ.toastMensajeDelServidor("TEST MSG: EL ESTADO ES :" + data["Estado"]);
       if (data["Estado"] == "ACEPTADO") {
 
         factura.isProcesada = true;

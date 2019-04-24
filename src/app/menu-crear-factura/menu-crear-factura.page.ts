@@ -245,12 +245,14 @@ export class MenuCrearFacturaPage implements OnInit {
           this.irAFacturasAbiertas();
         }else if (tipo == "NC"){
           this.showSplash = false;
+          //this.toastServ.toastMensajeDelServidor("Esta función estará disponible en la próxima versión")
           this.irANotasDeCredito();
         }else if (tipo == "FSP"){
           this.showSplash = false;
           this.irFacturasSinProcesar();
         }else if (tipo == "verNC"){
           this.showSplash = false;
+          //this.toastServ.toastMensajeDelServidor("Esta función estará disponible en la próxima versión")
           this.irAVerNC();
         }
       }

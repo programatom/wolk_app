@@ -68,7 +68,6 @@ export class FacturaLogicService {
         Usuario,
       ).then(async (data) => {
         console.log(data);
-        this.toastServ.toastMensajeDelServidor("TEST MSG: EL ESTADO ES :" + data["Estado"]);
         if (data["Estado"] == "ERROR") {
           this.toastServ.toastMensajeDelServidor(data["Mensaje"], "error");
 

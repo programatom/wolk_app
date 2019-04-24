@@ -73,7 +73,7 @@
 
   <ion-item text-wrap [disabled]="verificando == false">
     <ion-label fixed>Existencia real</ion-label>
-    <ion-input type = "number" [(ngModel)]="existenciaReal"></ion-input>
+    <ion-input type = "number" [(ngModel)]="existenciaReal" (ionChange)="updateDiferencia($event)"></ion-input>
     <ion-buttons>
       <ion-button slot="end" fill="clear" clear (click)='cantidadProductoFn("agregar")' color='transparent'>
         <ion-icon color='secondary' name='add-circle' class='icono-boton'></ion-icon>

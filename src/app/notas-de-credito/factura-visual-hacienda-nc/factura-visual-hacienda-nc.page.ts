@@ -91,11 +91,13 @@ export class FacturaVisualHaciendaNCPage implements OnInit {
 
     irAAnularPage(){
       this.NCLogic.facturaElegida = this.factura;
+      this.NCLogic.backURL = "/factura-visual-hacienda-nc";
       this.navCtrl.navigateForward("/anular-factura");
     }
 
     irAParcialPage(){
       this.NCLogic.facturaElegida = this.factura;
+      this.NCLogic.backURL = "/factura-visual-hacienda-nc";
       this.navCtrl.navigateForward("/parcial-page");
     }
 

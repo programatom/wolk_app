@@ -177,9 +177,8 @@ export class ProcesarParcialPage implements OnInit {
 
   inicializarProducto(producto) {
 
-    if(this.dataFacturaServ.dataFactura.descuentoFijo != 0){
-      this.descuentoProducto = 0;
-    }
+    this.descuentoProducto = 0;
+    this.exonerarImpuestosBool = false;
 
     if(this.CCVException == false){
       this.cantidadProducto = 1;
@@ -489,7 +488,7 @@ export class ProcesarParcialPage implements OnInit {
       let data  = {
         id_cliente_ws: parseInt(this.user.idUser),
         id_facturaPV: this.factura.idNC,
-        nombreUsuario: this.user.NombreUsuario,
+        nombreUsuario: this.user.usuario,
         sePagaCon: -1,
         vuelto: -1,
         clave: this.factura.claveHaciendaNC,

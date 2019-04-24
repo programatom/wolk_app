@@ -103,11 +103,29 @@ export class ElejirFacturaPage implements OnInit {
       text:"Cancelar",
       role:"cancel"
     },{
+      text:"Aplicar NC Parcial",
+      handler:async ()=>{
+        this.NCLogic.facturaElegida = new Object ();
+        this.NCLogic.facturaElegida = factura;
+        await this.NCLogic.inicializarFacturaElegida();
+        this.navCtrl.navigateForward("/parcial-page");
+      }
+    },{
+      text:"Aplicar NC Total",
+      handler:async ()=>{
+        this.NCLogic.facturaElegida = new Object ();
+        this.NCLogic.facturaElegida = factura;
+        await this.NCLogic.inicializarFacturaElegida();
+        this.NCLogic.backURL = "/elejir-factura";
+        this.navCtrl.navigateForward("/anular-factura");
+      }
+    },{
       text:"Ver Factura",
       handler:async ()=>{
         this.NCLogic.facturaElegida = new Object ();
         this.NCLogic.facturaElegida = factura;
         await this.NCLogic.inicializarFacturaElegida();
+        this.NCLogic.backURL = "/elejir-factura";
         this.navCtrl.navigateForward("/factura-visual-hacienda-nc");
       }
     }];

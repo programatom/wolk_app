@@ -23,7 +23,7 @@ import { CommonOperationsService } from 'src/app/services/common-operations/comm
 })
 export class DetallesProductosPage implements OnInit {
 
-  codigoInicializado: any;
+    codigoInicializado: any;
 
 
     // NG model
@@ -519,7 +519,11 @@ export class DetallesProductosPage implements OnInit {
 
     let obj = new Object() as ObjSubtotales;
     let impuestoPorc = 0.13;
-    let descuentoProductoInterno = producto.monto_desc / producto.precio_venta_sin_imp_sin_cambios * 100;
+    if (producto.precio_venta_sin_imp_sin_cambios == 0){
+      var descuentoProductoInterno = 0;
+    }else{
+      var descuentoProductoInterno = producto.monto_desc / producto.precio_venta_sin_imp_sin_cambios * 100;
+    }
     obj.descuento_porc = this.round(producto.descuento + this.dataFacturaServ.dataFacturaOffline.descuentoFijo + descuentoProductoInterno);
     obj.descuento_para_procesar = this.round(producto.descuento + this.dataFacturaServ.dataFacturaOffline.descuentoFijo)
 

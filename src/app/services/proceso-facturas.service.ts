@@ -154,7 +154,6 @@ export class ProcesoFacturasService {
       console.log(data);
       let url = URL_SERVICES + 'ProcesoPagoFacturaCliente'
       this.httpPost(data, url).then((data) => {
-        this.toastServ.toastMensajeDelServidor("TEST MSG: EL ESTADO ES :" + data["Estado"],"default" , 15000);
         resolve(data);
       });
     })

@@ -24,14 +24,14 @@ export class AnularFacturaPage implements OnInit {
   constructor(private navCtrl: NavController,
               private pedidosGetServ: PedidosGetService,
               public localStorageServ: LocalStorageService,
-              private notasDeCreditoServHTTP: NotasDeCreditoHttpService,
-              private notasDeCreditoServ: NotasDeCreditoService,
+              private NCServHTTP: NotasDeCreditoHttpService,
+              private NCLogic: NotasDeCreditoService,
               private toastServ: ToastService,
               private printServ: PrintService,
               private _NCServ: NotasDeCreditoService) { }
 
   ngOnInit() {
-    this.factura = this.notasDeCreditoServ.facturaElegida;
+    this.factura = this.NCLogic.facturaElegida;
     console.log(this.factura)
     this._NCServ.searchClienteAndInsertDisAndEmOnFactura(this.factura["N° Identificación"], this.factura).then((result)=>{
       console.log(result)
@@ -78,7 +78,7 @@ export class AnularFacturaPage implements OnInit {
     console.log(data)
     this.showSplash = true;
 
-    this.notasDeCreditoServHTTP.procesoNCClientes(data).subscribe((respuesta)=>{
+    this.NCServHTTP.procesoNCClientes(data).subscribe((respuesta)=>{
       console.log(respuesta);
       let number = parseInt(respuesta);
       this.showSplash = false;
@@ -113,7 +113,7 @@ export class AnularFacturaPage implements OnInit {
     }
     console.log(data)
 
-    this.notasDeCreditoServHTTP.buscarPrintString(data).subscribe((printString)=>{
+    this.NCServHTTP.buscarPrintString(data).subscribe((printString)=>{
       console.log(printString)
       this.printServ.printFN(this.localStorageServ.localStorageObj.impresora, printString).then(()=>{
       }).catch((error)=>{
@@ -137,7 +137,7 @@ export class AnularFacturaPage implements OnInit {
 
 
   dismiss(){
-    this.navCtrl.navigateBack("/factura-visual-hacienda-nc")
+    this.navCtrl.navigateBack(this.NCLogic.backURL)
   }
 
 }
