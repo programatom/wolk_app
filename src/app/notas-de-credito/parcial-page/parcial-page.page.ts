@@ -68,10 +68,12 @@ export class ParcialPagePage implements OnInit {
 
     this._NCHttp.selectMotivos().subscribe((motivos) => {
       motivos.splice(0, 1);
+      console.log(motivos)
       this.motivos = motivos;
     })
     this.pedidosGetServ.selectCuentasFormasdePagoActivas(this.user.idUser).then((formasDePago: any) => {
       formasDePago.splice(0, 1);
+      console.log(formasDePago)
       this.formasDePago = formasDePago;
     })
   }
@@ -129,16 +131,16 @@ export class ParcialPagePage implements OnInit {
     };
     console.log("DATA ENVIADA A PROCESAR NC PARCIAL " , data)
     this._NCHttp.procesoNCParcial(data).subscribe((respuesta) => {
-      this.showSplash = false;
       let number = parseInt(respuesta);
       console.log("El id de la NC es: " + number);
       this._NCHttpServ.searchClienteAndInsertDisAndEmOnFactura(this.factura["N° Identificación"], this.factura).then((cliente)=>{
         console.log("El cliente es : " + cliente)
+        this.showSplash = false;
         if (number > 0) {
           this.factura.idNC = number;
-          console.log(this.factura);
-          this.factura.isguardado = "S";
-          this.navCtrl.navigateForward("/procesar-parcial");
+          this.NCLogic.guardar(this.factura).then(()=>{
+            this.navCtrl.navigateForward("/procesar-parcial");
+          });
         } else if (number < 0) {
           this.toastServ.toastMensajeDelServidor("Consulte a soporte ERROR al generar NC de Anulación", "error");
           return
@@ -146,7 +148,7 @@ export class ParcialPagePage implements OnInit {
           this.toastServ.toastMensajeDelServidor("Ya la factura de referencia tiene una NC de ANULACION , favor verifique", "error");
           return
         }
-      })
+      });
     })
   }
 

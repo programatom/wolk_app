@@ -15,7 +15,7 @@
 <ion-header>
 
   <ion-toolbar color='primary'>
-    <ion-title>NC Nº: {{_NCLogic.NCElegida["N° NC"]}}</ion-title>
+    <ion-title>NC Nº: {{NCLogic.NCElegida["N° NC"]}}</ion-title>
     <ion-buttons left>
       <ion-button  icon-only (click)="dismissModal()">
         <ion-icon name="arrow-back" color="light"></ion-icon>
@@ -35,10 +35,60 @@
           {{key}}
         </strong>
       </ion-col>
-      <ion-col size="12" class="datosNC">
-        {{_NCLogic.NCElegida[key]}}
+      <ion-col size="12" class="datosNC" *ngIf="key != 'Consecutivo Hacienda' && key != 'Referencia Factura Hacienda'">
+        {{NCLogic.NCElegida[key]}}
+      </ion-col>
+      <ion-col size="12" class="datosNC" *ngIf="key == 'Consecutivo Hacienda' || key == 'Referencia Factura Hacienda'">
+        {{NCLogic.NCElegida[key].substr(0,(NCLogic.NCElegida[key].length)/2) + ' _'}}
+      </ion-col>
+      <ion-col size="12" class="datosNC" *ngIf="key == 'Consecutivo Hacienda' || key == 'Referencia Factura Hacienda'">
+        {{NCLogic.NCElegida[key].substr((NCLogic.NCElegida[key].length)/2,NCLogic.NCElegida[key].length)}}
       </ion-col>
     </ion-row>
   </ion-item>
+
+  <div *ngFor="let producto of productos; let i = index">
+    <ion-item color="primary" no-lines text-wrap class='productoItem'>
+      <ion-text style="color:white">
+        <strong style="font-size:6vw;"> {{producto["Cantidad"]}} </strong> | {{producto["Código Producto"]}} <strong>{{producto['Nombre Producto']}}</strong> P.U: {{producto["Precio Venta sin Imp"]}}
+      </ion-text>
+    </ion-item>
+    <ion-item *ngIf="producto.verMas == true">
+      <ion-text>
+        <strong>Descuento:</strong> {{producto.subTotales['Descuento']}}
+      </ion-text>
+    </ion-item>
+    <ion-item *ngIf="producto.verMas == true">
+      <ion-text>
+        <strong>Sub Total:</strong> {{producto.subTotales['Impuestos']}}
+      </ion-text>
+    </ion-item>
+    <ion-item *ngIf="producto.verMas == true">
+      <ion-text>
+        <strong>Descuento:</strong> {{producto.subTotales['Sub Total']}}
+      </ion-text>
+    </ion-item>
+    <ion-item *ngIf="producto.verMas == true">
+      <ion-text>
+        <strong>Sub Total descuento:</strong> {{producto.subTotales['Sub Total descuento']}}
+      </ion-text>
+    </ion-item>
+    <ion-item *ngIf="producto.verMas == true">
+      <ion-text>
+        <strong>Total Linea:</strong> {{producto.subTotales['Total Linea']}}
+      </ion-text>
+    </ion-item>
+  </div>
+
+  <ion-button expand="block" (click)="enviarAHacienda()" [disabled]="NC.claveHaciendaNC != '0'">
+    Enviar a hacienda
+  </ion-button>
+  <ion-button  color = "primary" (click) = "imprimir(false)" expand="block" >
+    Imprimir
+  </ion-button>
+  <ion-button  color = "primary" (click) = "imprimir(true)" expand="block" >
+    Re-imprimir
+  </ion-button>
+
 
 </ion-content>

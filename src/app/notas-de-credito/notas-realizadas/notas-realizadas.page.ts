@@ -67,7 +67,10 @@ export class NotasRealizadasPage implements OnInit {
   async ver(notaDeCredito) {
     this._NCLogic.NCElegida = notaDeCredito;
     let modal = await this.presentModalNota();
-    modal.present()
+    modal.present();
+    modal.onDidDismiss().then(()=>{
+      this.buscarNC();
+    });
   }
 
   presentModalNota() {

@@ -3,7 +3,6 @@ import { LocalStorageService } from '../local-storage.service';
 import { ObjUserData } from 'src/interfaces/interfaces';
 import { ProcesoFacturasService } from '../proceso-facturas.service';
 import { ToastService } from '../toast.service';
-import { Events } from '@ionic/angular';
 import { NotasDeCreditoHttpService } from './notas-de-credito-http.service';
 import { PedidosGetService } from '../pedidos-get.service';
 
@@ -27,7 +26,6 @@ export class NotasDeCreditoService {
   constructor(private localStorageServ: LocalStorageService,
     private procesoFacturasServ: ProcesoFacturasService,
     private toastServ: ToastService,
-    private event: Events,
     private _NCHttp: NotasDeCreditoHttpService,
     private pedidosGetServ: PedidosGetService
   ) {
@@ -48,7 +46,7 @@ export class NotasDeCreditoService {
     facturaElegidaAInicializarEnComp.motivoID = "0";
     facturaElegidaAInicializarEnComp.observacionesNC = "";
     facturaElegidaAInicializarEnComp.isguardado = "N";
-    const ids:any = await this.getIDsOfCondicionYMedio(facturaElegidaAInicializarEnComp["Medios de Pago"] ,facturaElegidaAInicializarEnComp["Condicion Venta"]);
+    const ids:any = await this.getIDsOfCondicionYMedioYMotivo(facturaElegidaAInicializarEnComp["Medios de Pago"] ,facturaElegidaAInicializarEnComp["Condicion Venta"]);
     facturaElegidaAInicializarEnComp.id_condicion_de_venta = ids.id_condicion;
     facturaElegidaAInicializarEnComp.id_medio_de_pago = ids.id_medio;
 
@@ -100,6 +98,11 @@ export class NotasDeCreditoService {
   async guardar(factura){
 
     return new Promise((resolve)=>{
+      if(factura["Motivo NC"] != undefined){
+        if(factura["Motivo NC"] == "Anula Documento de Referencia"){
+          factura.motivoID == "01";
+        }
+      }
       if(factura.motivoID == "01"){
         let data = {
           id_cliente_ws: this.user.idUser,
@@ -117,6 +120,7 @@ export class NotasDeCreditoService {
         console.log("SE GUARDA EN EL SERVIDOR CON PROCESO NC CLIENTES", data);
 
         this._NCHttp.procesoNCClientes(data).subscribe((respuesta)=>{
+          factura.isguardado = "S";
           console.log("PROCESO RESPUESTA NC CLIENTE: " + respuesta);
           resolve();
         });
@@ -164,12 +168,12 @@ export class NotasDeCreditoService {
 
       this.insertDocumentoReferenciaNC(factura).then(() => {
         var id_clientews = this.user.idUser;
-        var id_documento = factura.idNC;
+        var id_documento = factura.idNC; // VARIABLE CON KEY CAMBIANTE
         var pTipoDocumento = "03";
         var RecNoDoc = "";
         var RecTipoDoc = "";
-        var pCorreos = factura.correoCliente;
-        var pNombreReceptor = factura["Clientes"];
+        var pCorreos = factura.correoCliente; // VARIABLE CON KEY CAMBIANTE
+        var pNombreReceptor = factura["Clientes"]; // VARIABLE CON KEY CAMBIANTE
         var UsuarioSucursal = this.user.sucursal;
         var UsuarioTerminal = this.user.nro_terminal;
         //var ClaveFactura =
@@ -235,14 +239,7 @@ export class NotasDeCreditoService {
   }
 
   getTotalesAndProductosFromFactura(
-    subTotal,
-    monoDescuento,
-    subTotalDesc,
-    monImpuesto,
-    totalFinal,
-    nroFactura,
-    productosDisplay
-
+    nroFactura
   ){
     return new Promise((resolve)=>{
       this.pedidosGetServ.selectTotales(this.user.idUser, this.user.nom_localizacion, nroFactura).then((subTotales: any) => {
@@ -271,27 +268,47 @@ export class NotasDeCreditoService {
   }
 
 
-  async getIDsOfCondicionYMedio(medioDePago, condicionDeVenta){
+  async getIDsOfCondicionYMedioYMotivo(medioDePago, condicionDeVenta, motivo?, formaDePago?){
     return new Promise((resolve)=>{
       this.pedidosGetServ.selectMediosPagos().then((mediosDePago: Array<any>)=>{
         this.pedidosGetServ.selectCondicionVenta().then((condicionesDeVenta: Array<any>)=>{
-          var respuesta = new Object as {
-            id_condicion:string
-            id_medio:string
-          };
-          mediosDePago.filter( (val ,index)=>{
-            if(val.medio_pago == medioDePago){
-              respuesta.id_medio = val.id_medio_pago;
-            }
-          })
-          condicionesDeVenta.filter( (val,index) =>{
-            if(val.condicion_venta == condicionDeVenta){
-              respuesta.id_condicion = val.id_condicion_venta;
-            }
+          this._NCHttp.selectMotivos().subscribe((motivos: Array<any>)=>{
+            this.pedidosGetServ.selectCuentasFormasdePagoActivas(this.user.idUser).then((formasDePago:Array<any>)=>{
+              var respuesta = new Object as {
+                id_condicion:string
+                id_medio:string
+                id_motivo?:string
+                formaDePagoID?:string
+              };
+              mediosDePago.filter( (val )=>{
+                if(val.medio_pago == medioDePago){
+                  respuesta.id_medio = val.id_medio_pago;
+                }
+              });
+              condicionesDeVenta.filter( (val) =>{
+                if(val.condicion_venta == condicionDeVenta){
+                  respuesta.id_condicion = val.id_condicion_venta;
+                }
+              });
+              if( motivo != undefined ){
+                motivos.filter( (val) =>{
+                  if(val.codigo_referencia == motivo){
+                    respuesta.id_motivo = val.id_codigo_referencia;
+                  }
+                });
+              }
+              if( formaDePago != undefined ){
+                formasDePago.filter( (val) =>{
+                  if(val["Forma de pago"] == formaDePago){
+                    respuesta.formaDePagoID = val.Codigo;
+                  }
+                });
+              }
+              resolve(respuesta);
+            });
           });
-          resolve(respuesta);
-        })
-      })
-    })
+        });
+      });
+    });
   }
 }

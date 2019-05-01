@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
-import { ObjFactura, ObjUserData } from "../../../interfaces/interfaces"
+import { ObjUserData } from "../../../interfaces/interfaces"
 
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { ToastService } from 'src/app/services/toast.service';
@@ -66,13 +66,7 @@ export class FacturaVisualHaciendaNCPage implements OnInit {
       this.fecha = this.factura["Fechas Creación"];
       this.showSplash = true;
       this.NCLogic.getTotalesAndProductosFromFactura(
-        this.subTotal,
-        this.monoDescuento,
-        this.subTotalDesc,
-        this.monImpuesto,
-        this.totalFinal,
-        this.factura["N° Factura"],
-        this.productos
+        this.factura["N° Factura"]
       ).then((data:any)=>{
         if (data.subtotales.SUBTOTAL != null) {
           this.subTotal = data.subtotales.SUBTOTAL;

@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
-import { DataFacturaService } from 'src/app/services/data-factura.service';
 import { ProductListLogicService } from 'src/app/services/product-list-logic/product-list-logic.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { CommonOperationsService } from 'src/app/services/common-operations/common-operations.service';
 import { NotasDeCreditoHttpService } from 'src/app/services/notas-de-credito/notas-de-credito-http.service';
 import { ObjUserData } from 'src/interfaces/interfaces';
 import { NotasDeCreditoService } from 'src/app/services/notas-de-credito/notas-de-credito.service';
-import { PedidosGetService } from 'src/app/services/pedidos-get.service';
 import { Events } from '@ionic/angular';
 import { PrintService } from 'src/app/services/print.service';
 
@@ -46,13 +44,11 @@ export class ProcesarParcialPage implements OnInit {
 
 
   constructor(public localStorageServ: LocalStorageService,
-              private dataFacturaServ: DataFacturaService,
               public productLogic:ProductListLogicService,
               private toastServ: ToastService,
               private common: CommonOperationsService,
               private _NCHttp: NotasDeCreditoHttpService,
               private _NCLogic: NotasDeCreditoService,
-              private pedidosGetServ:PedidosGetService,
               private event: Events,
               private printServ: PrintService
               ) {
@@ -472,7 +468,7 @@ export class ProcesarParcialPage implements OnInit {
       }).catch((mensajeError)=>{
         this.toastServ.toastMensajeDelServidor(mensajeError);
         this.showSplash = false;
-      })
+      });
     }
 
     guardarNotaDeCredito(){

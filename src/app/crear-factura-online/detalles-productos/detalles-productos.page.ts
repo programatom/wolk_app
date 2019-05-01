@@ -452,11 +452,11 @@ export class DetallesProductosPage implements OnInit {
     return new Promise((resolve) => {
       if (this.productoSeleccionado == undefined) {
         // Si voy acá es que no hay producto seleccionado, porque nunca se seleccionó uno y se ingresa a pelo
-        this.busquedaProductoUnico().then((resp:any) => {
-          if (resp.status == "fail") {
-            this.toastServ.toastNoSeEncontroProducto();
-          }else{
+        this.busquedaProductoUnico().then((encontro) => {
+          if (encontro) {
             resolve();
+          }else{
+            this.toastServ.toastNoSeEncontroProducto();
           }
         });
       } else {
@@ -468,6 +468,7 @@ export class DetallesProductosPage implements OnInit {
           resolve();
         } else {
           this.busquedaProductoUnico().then((encontro) => {
+            console.log(encontro)
             if (encontro) {
               resolve();
             }else{
@@ -508,14 +509,18 @@ export class DetallesProductosPage implements OnInit {
           this.showSplash = false;
           resolve(false);
         }else if( resp.status == "unico"){
+
           if(tipo == "html"){
             this.showSplash = false;
           }
+
           this.inicializarProducto(resp.data);
           resolve(true);
         } else {
+
           let haveProduct = this.barrerArrayDeBusquedaYCompararConCodigoIngresado(resp.data);
           if (haveProduct == false) {
+            console.log("No se encontró")
             this.showSplash = false;
             resolve(false);
           }else{
@@ -534,11 +539,13 @@ export class DetallesProductosPage implements OnInit {
   barrerArrayDeBusquedaYCompararConCodigoIngresado(array){
 
     for (let i = 0; i <= array.length - 1; i++) {
+      console.log(array[i])
       if (array[i]['Código Producto'] == this.codigoProducto) {
         this.inicializarProducto(array[i]);
         return true;
       }
     }
+
     return false;
   }
 
