@@ -122,6 +122,17 @@
   </ion-row>
   <br>
 </div>
+
+<div *ngIf="dataFacturaServ.facturasTotalesType == 'CXC'">
+  <div *ngFor="let producto of dataFacturaServ.productosCXC; let i = index" >
+    <ion-item color="primary" no-lines text-wrap class='productoItem'>
+      <ion-text style="color:white">
+        <strong style="font-size:6vw;"> {{producto["Cantidad"]}} </strong> | {{producto["Código Producto"]}} <strong>{{producto['Nombre Producto']}}</strong> P.U: {{producto["Precio Venta sin Imp"]}}
+      </ion-text>
+    </ion-item>
+  </div>
+</div>
+
 <ion-item text-wrap>
   <ion-label position="floating">Copiar en email</ion-label>
   <ion-input type="text" [(ngModel)]="email"></ion-input>
@@ -130,6 +141,7 @@
   <ion-label position="floating">Observaciones</ion-label>
   <ion-input type="text" [(ngModel)]="this.dataFacturaServ.dataFactura.observaciones"></ion-input>
 </ion-item>
+
 <ion-button  color = "primary" (click) = "guardarEmitir()" expand="block" [disabled] = "this.dataFacturaServ.dataFactura.pagoOfflineData.pendiente == 0"><strong>GUARDAR Y PAGAR</strong></ion-button>
 <ion-button  color = "primary" (click) = "procesarDocumentoHacienda('04')" expand="block"
 [disabled] = "this.dataFacturaServ.dataFactura.noPaga || this.dataFacturaServ.dataFactura.isProcesada || this.dataFacturaServ.dataFactura.usuarioExcepcionBool">

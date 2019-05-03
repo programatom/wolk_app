@@ -15,6 +15,36 @@ import { ToastService } from 'src/app/services/toast.service';
 export class NotaRealizadaModalPage implements OnInit {
 
   notaDeCreditoKeys:any;
+  /*
+  NC = {
+    "Clientes": "CLIENTE GENERICO",
+    "CodVerificador": "03",
+    "Condicion Venta": "Contado",
+    "Consecutivo Hacienda": "50601051900310174620600100006030000000025100029000",
+    "Fechas Creación": "2019-05-01 09:07:58.6966667 -06:00",
+    "Localización" : "SAN JOSE ",
+    "Medios de Pago" : "Efectivo",
+    "Monedas" : "CRC",
+    "Motivo NC" : "Corrige monto",
+    "N° Factura" : 9632,
+    "N° Identificación" : "",
+    "N° NC" : 9645,
+    "N° Terminal" : "00006",
+    "Observaciones" : "N/A",
+    "Plazo Credito" : 0,
+    "Referencia Factura Hacienda" : "50601051900310174620600100006040000000146100029000",
+    "Sucursal" : "001",
+    "Tipo Identificacíon" : "N/A",
+    "Tipo de Cambio" : 1,
+    "Total de Comprobante" : 0,
+    "Total de Descuento" : 0,
+    "Total de Impuestos" : 0,
+    "Total de Venta" : 0,
+    "Total de Venta Neta" : 0,
+    "Usuario Creación" : "tomasapp",
+    "claveHaciendaNC" : "50601051900310174620600100006030000000025100029000",
+  } as any;
+  */
   NC;
   user:ObjUserData;
   productos;
@@ -27,6 +57,7 @@ export class NotaRealizadaModalPage implements OnInit {
               private toastServ: ToastService) {
                 this.user = this.localStorageServ.localStorageObj.dataUser;
                 this.NC = this.NCLogic.NCElegida;
+                console.log(this.NC);
               }
 
   ngOnInit() {

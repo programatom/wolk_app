@@ -5,8 +5,7 @@ import { NavController } from '@ionic/angular';
 import { DataFacturaService } from 'src/app/services/data-factura.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { PedidosGetService } from 'src/app/services/pedidos-get.service';
-import { ObjFactura } from 'src/interfaces/interfaces';
-import { NotasDeCreditoService } from 'src/app/services/notas-de-credito/notas-de-credito.service';
+import { ObjFactura, ObjUserData } from 'src/interfaces/interfaces';
 
 @Component({
   selector: 'app-facturas-cuentas-cobrar',
@@ -26,13 +25,15 @@ export class FacturasCuentasCobrarPage implements OnInit {
   filtro = "";
   showSplash = false;
   facturas = [];
+
+  user: ObjUserData;
   constructor(public facurasAbiertasServ: FacturasAbiertasService,
     public localStorageServ: LocalStorageService,
     private navCtrl: NavController,
     private dataFacturaServ: DataFacturaService,
     private toastServ: ToastService,
-    private pedidosGetServ: PedidosGetService,
-    private notasDeCreditoServ: NotasDeCreditoService) {
+    private pedidosGetServ: PedidosGetService) {
+      this.user = this.localStorageServ.localStorageObj.dataUser;
     }
 
   ngOnInit() {
@@ -136,15 +137,14 @@ export class FacturasCuentasCobrarPage implements OnInit {
             // CASO 1.2 NO SE REALIZÓ NINGÚN PAGO
             factura.noPaga = true;
             this.showSplash = false;
-
-            this.navCtrl.navigateForward("/facturas-totales");
+            this.navigate(factura);
 
           }else{
             // CASO 1.3 SE REALIZÓ ALGÚN PAGO
             this.showSplash = false;
             factura.pagoOfflineData.formaDePago = facturaDatos["Forma de Pago"]
             factura.noPaga = false;
-            this.navCtrl.navigateForward("/facturas-totales");
+            this.navigate(factura);
             console.log(this.dataFacturaServ.dataFactura)
           }
         }else{
@@ -153,7 +153,7 @@ export class FacturasCuentasCobrarPage implements OnInit {
           factura.claveDocHacienda = facturaDatos["Consecutivo Hacienda"];
           factura.isProcesada = true;
           factura.noPaga = false;
-          this.navCtrl.navigateForward("/facturas-totales");
+          this.navigate(factura)
           console.log(this.dataFacturaServ.dataFactura);
         }
 
@@ -163,6 +163,17 @@ export class FacturasCuentasCobrarPage implements OnInit {
         //facturaDatos["Usuario Creación"]
       })
     })
+  }
+
+  navigate(factura){
+    console.log(factura);
+    this.showSplash = true;
+    this.pedidosGetServ.selectTotalesUbicaGrid(this.user.idUser, this.user.nom_localizacion, factura.id_facturaPV).then((respuesta: Array<any>)=>{
+      console.log(respuesta);
+      this.dataFacturaServ.productosCXC = respuesta;
+      this.dataFacturaServ.facturasTotalesType = "CXC";
+      this.navCtrl.navigateForward("/facturas-totales");
+    });
   }
 
   inicializarDataComun(factura: ObjFactura, facturaDatos){

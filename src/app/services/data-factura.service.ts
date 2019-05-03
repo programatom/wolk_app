@@ -18,6 +18,8 @@ export class DataFacturaService {
   dataFacturaOffline = new Object() as ObjFactura;
   arrayProductos = [];
   ObjUserData = new Object() as ObjUserData;
+  productosCXC = [];
+  facturasTotalesType = "normal";
 
   constructor(public http: HttpClient,
     private pedidosGetServ: PedidosGetService,

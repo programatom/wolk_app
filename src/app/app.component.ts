@@ -65,6 +65,11 @@ export class AppComponent {
               this.navCtrl.navigateRoot("/menu").then(()=>{
                 this.splashScreen.hide();
               });
+              /*
+              this.navCtrl.navigateRoot("/nota-realizada-modal").then(()=>{
+                this.splashScreen.hide();
+              });
+              */
               this.showSplash = false;
             })
           } else {

@@ -351,6 +351,7 @@ export class FacturasTotalesPage implements OnInit {
 
 
   ngOnInit() {
+    
   }
 
 }
