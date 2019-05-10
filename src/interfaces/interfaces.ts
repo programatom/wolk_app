@@ -1,7 +1,7 @@
 export interface ObjFactura {
 
     id_facturaPV: number,
-    consecutivoMH:number,
+    consecutivoMH:string,
     id_tipo_identificacion:string,
     identificacion_cliente:string,
     cliente:string,
@@ -37,7 +37,7 @@ export interface ObjFactura {
       montoAbonado?:number,
       vuelto?:number
     }
-    tiquet:boolean
+    tiquet:string
     exceptionHacienda:string
     isProcesadaInterno:boolean
     descuentoFijo:number

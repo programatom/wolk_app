@@ -138,6 +138,7 @@ export class ParcialPagePage implements OnInit {
         this.showSplash = false;
         if (number > 0) {
           this.factura.idNC = number;
+          this.factura.isguardado = "S";
           this.NCLogic.guardar(this.factura).then(()=>{
             this.navCtrl.navigateForward("/procesar-parcial");
           });

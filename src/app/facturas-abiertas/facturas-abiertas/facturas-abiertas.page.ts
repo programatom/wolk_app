@@ -98,7 +98,7 @@ export class FacturasAbiertasPage implements OnInit {
                 this.showSplash = false;
                 this.navCtrl.navigateForward("/detalles-productos");
               })
-            })
+            });
 
           }else{
             // CASO 1.3 SE REALIZÓ ALGÚN PAGO
@@ -137,6 +137,15 @@ export class FacturasAbiertasPage implements OnInit {
   }
 
   inicializarDataComun(factura: ObjFactura, facturaDatos){
+
+    if(facturaDatos["Usuario Creación"] != this.localStorageServ.localStorageObj.dataUser.usuario){
+      factura.usuarioExcepcionBool = true;
+      factura.usuarioExcepcion.idUser = this.localStorageServ.localStorageObj.dataUser.idUser;
+      factura.usuarioExcepcion.usuario = facturaDatos["Usuario Creación"]
+      factura.usuarioExcepcion.sucursal = facturaDatos["Sucursal"]
+      factura.usuarioExcepcion.nro_terminal = facturaDatos["N° Terminal"]
+      factura.usuarioExcepcion.nom_localizacion = facturaDatos["Localización"]
+    }
 
     factura.isProcesadaInterno = true;
     factura.isguardado = "S"

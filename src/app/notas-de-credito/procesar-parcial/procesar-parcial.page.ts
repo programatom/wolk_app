@@ -92,6 +92,7 @@ export class ProcesarParcialPage implements OnInit {
   ngOnInit() {
 
     this.factura = this._NCLogic.facturaElegida;
+    console.log(this.factura);
     this.user = this.localStorageServ.localStorageObj.dataUser;
     this.objNCTotalesParametrosHTTP = {
       id_cliente_ws: parseInt(this.user.idUser),

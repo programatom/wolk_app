@@ -121,7 +121,7 @@ export class FacturasCuentasCobrarPage implements OnInit {
       this.pedidosGetServ.buscarCliente(data["id_cliente_ws"],facturaDatos["N° Identificación"]).then((clientes)=>{
         console.log(facturaDatosArray);
         this.dataFacturaServ.inicializarDataOnline();
-        let factura: ObjFactura = this.dataFacturaServ.dataFactura ;
+        let factura: ObjFactura = this.dataFacturaServ.dataFactura;
 
         if(facturaDatos["Clientes"] == "CLIENTE GENERICO"){
           factura.descuentoFijo = 0;
@@ -170,6 +170,7 @@ export class FacturasCuentasCobrarPage implements OnInit {
     this.showSplash = true;
     this.pedidosGetServ.selectTotalesUbicaGrid(this.user.idUser, this.user.nom_localizacion, factura.id_facturaPV).then((respuesta: Array<any>)=>{
       console.log(respuesta);
+      this.showSplash = false;
       this.dataFacturaServ.productosCXC = respuesta;
       this.dataFacturaServ.facturasTotalesType = "CXC";
       this.navCtrl.navigateForward("/facturas-totales");

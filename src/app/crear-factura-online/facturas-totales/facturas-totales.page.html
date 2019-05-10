@@ -144,10 +144,10 @@
 
 <ion-button  color = "primary" (click) = "guardarEmitir()" expand="block" [disabled] = "this.dataFacturaServ.dataFactura.pagoOfflineData.pendiente == 0"><strong>GUARDAR Y PAGAR</strong></ion-button>
 <ion-button  color = "primary" (click) = "procesarDocumentoHacienda('04')" expand="block"
-[disabled] = "this.dataFacturaServ.dataFactura.noPaga || this.dataFacturaServ.dataFactura.isProcesada || this.dataFacturaServ.dataFactura.usuarioExcepcionBool">
+[disabled] = "this.dataFacturaServ.dataFactura.noPaga || this.dataFacturaServ.dataFactura.isProcesada || usuarioExceptionDifferentTerminalAndSucursal">
 <strong>ENVIAR-TIQUETE ELETRÓNICO</strong></ion-button>
 <ion-button  color = "primary" (click) = "procesarDocumentoHacienda('01')"
-[disabled] = "this.dataFacturaServ.dataFactura.noPaga || this.dataFacturaServ.dataFactura.isProcesada || this.dataFacturaServ.dataFactura.usuarioExcepcionBool" expand="block">
+[disabled] = "this.dataFacturaServ.dataFactura.noPaga || this.dataFacturaServ.dataFactura.isProcesada || usuarioExceptionDifferentTerminalAndSucursal" expand="block">
 <strong>ENVIAR-FACTURA ELECTRÓNICA</strong></ion-button>
 <br>
 

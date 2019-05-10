@@ -95,13 +95,13 @@ export class ProcesoOfflinePage implements OnInit {
     }
   }
 
-  procesar(ticket) {
-    this.factura.tiquet = ticket;
+  procesar(type) {
+    this.factura.tiquet = type;
     this.showSplash = true;
     if (this.factura.exceptionHacienda != "ERROR") {
       this.procesarFacturaOfflineServ.getFacturaID(this.factura, this.key);
     } else {
-      this.procesarFacturaOfflineServ.procesarDocumentoHacienda(ticket, this.factura);
+      this.procesarFacturaOfflineServ.procesarDocumentoHacienda(type, this.factura);
     }
   }
 

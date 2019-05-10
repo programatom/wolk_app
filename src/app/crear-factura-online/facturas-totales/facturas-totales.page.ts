@@ -10,7 +10,7 @@ import { ToastService } from '../../services/toast.service';
 import { DataFacturaService } from '../../services/data-factura.service';
 import { PrintService } from '../../services/print.service';
 import { ProcesoFacturasService } from '../../services/proceso-facturas.service';
-import { AlertOptions } from '@ionic/core';
+import { ObjUserData } from 'src/interfaces/interfaces';
 
 @Component({
   selector: 'app-facturas-totales',
@@ -46,10 +46,10 @@ export class FacturasTotalesPage implements OnInit {
   cliente: any;
   email: string = "";
 
-  user: any;
+  user: ObjUserData;
 
-
-  constructor(private alertCtrl: AlertController,
+  usuarioExceptionDifferentTerminalAndSucursal = false;
+  constructor(
     private event: Events,
     public localStorageServ: LocalStorageService,
     private pedidosGetServ: PedidosGetService,
@@ -69,10 +69,23 @@ export class FacturasTotalesPage implements OnInit {
     if (this.localStorageServ.localStorageObj.impresora != undefined) {
       this.selectedPrinter = this.localStorageServ.localStorageObj.impresora;
     }
+    let localizacion;
 
-    this.user = this.localStorageServ.localStorageObj['dataUser'];
+    if(this.dataFacturaServ.dataFactura.usuarioExcepcionBool){
+      this.user = this.localStorageServ.localStorageObj['dataUser'];
+      let userA:ObjUserData = this.localStorageServ.localStorageObj['dataUser'];
+      let userB = this.dataFacturaServ.dataFactura.usuarioExcepcion;
+      let arraySucursalTerminalUserA = [userA.nro_terminal, userA.sucursal];
+      if(!arraySucursalTerminalUserA.includes(userB.sucursal) || !arraySucursalTerminalUserA.includes(userB.nro_terminal)){
+        this.usuarioExceptionDifferentTerminalAndSucursal = true;
+      }
+      localizacion = userB.nom_localizacion;
+    }else{
+      this.user = this.localStorageServ.localStorageObj['dataUser'];
+      localizacion = this.user.nom_localizacion;
+    }
 
-    this.pedidosGetServ.selectTotales(this.user.idUser, this.user.nom_localizacion, this.dataFacturaServ.dataFactura.id_facturaPV)
+    this.pedidosGetServ.selectTotales(this.user.idUser, localizacion, this.dataFacturaServ.dataFactura.id_facturaPV)
       .then((data: any) => {
         this.showSplash = false;
 
@@ -83,7 +96,7 @@ export class FacturasTotalesPage implements OnInit {
         this.totalFinal = data.TOTALFINAL;
 
         if (typeof data.TOTALFINAL == "string") {
-          let stringForFloat = data.TOTALFINAL.replace(",", "");
+          let stringForFloat = data.TOTALFINAL.replace(/,/g, "");
           var total = parseFloat(stringForFloat);
         }
         let factura = this.dataFacturaServ.dataFactura;
@@ -351,7 +364,11 @@ export class FacturasTotalesPage implements OnInit {
 
 
   ngOnInit() {
-    
+
+  }
+
+  ngOnDestroy(){
+    this.dataFacturaServ.facturasTotalesType = "";
   }
 
 }

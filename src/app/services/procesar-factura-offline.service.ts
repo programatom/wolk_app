@@ -225,13 +225,12 @@ export class ProcesarFacturaOfflineService {
       ZonaHoraria,
       Usuario,
     ).then((resp) => {
-      if (factura.tiquet) {
+      if (factura.tiquet == "04") {
         this.toastServ.toastMensajeDelServidor("Procesando el ticket en hacienda...");
-        this.procesarDocumentoHacienda('04', factura);
       } else {
         this.toastServ.toastMensajeDelServidor("Procesando la factura electronica en hacienda...");
-        this.procesarDocumentoHacienda('01', factura);
       }
+      this.procesarDocumentoHacienda(factura.tiquet, factura);
     })
   }
 

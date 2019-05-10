@@ -24,7 +24,7 @@ import { ActualizacionService } from '../services/actualizacion/actualizacion.se
 export class MenuCrearFacturaPage implements OnInit {
 
   showSplash: boolean = false;
-
+  user: ObjUserData;
   constructor(private alertCtrl: AlertController,
     public localStorageServ: LocalStorageService,
     private toastServ: ToastService,
@@ -35,7 +35,9 @@ export class MenuCrearFacturaPage implements OnInit {
     private pedidosPostServ: PedidosPostService,
     private cajaDiaria: CajaDiariaService,
     private facturasAbiertasServ: FacturasAbiertasService,
-    private actualizacionServ: ActualizacionService) { }
+    private actualizacionServ: ActualizacionService) {
+      this.user = this.localStorageServ.localStorageObj.dataUser;
+    }
 
     ngOnInit(){
     }
@@ -87,7 +89,7 @@ export class MenuCrearFacturaPage implements OnInit {
               //Procesar apertura de caja
               if(typeof montoInicial[0] == "string"){
                 let monto:string = montoInicial[0];
-                let montoPunto = monto.replace(",",".");
+                let montoPunto = monto.replace(/,/g,".");
                 var montoNum = parseFloat(montoPunto);
                 if(isNaN(montoNum)){
                   this.toastServ.toastMensajeDelServidor("Ingrese un numero" , "error")
@@ -101,7 +103,7 @@ export class MenuCrearFacturaPage implements OnInit {
                 return;
               }
 
-              let user:ObjUserData = this.localStorageServ.localStorageObj.dataUser;
+              let user:ObjUserData = this.user;
               this.pedidosPostServ.abrirCaja(
                 parseInt(user.idUser),
                 user.sucursal,
@@ -135,8 +137,8 @@ export class MenuCrearFacturaPage implements OnInit {
             handler: ()=>{
               this.showSplash = true;
               let data = {
-                "id_cliente":this.localStorageServ.localStorageObj.dataUser.idUser,
-                "usuario":this.localStorageServ.localStorageObj.dataUser.usuario,
+                "id_cliente":this.user.idUser,
+                "usuario":this.user.usuario,
                 "zona_horaria": "Central America Standard Time"
               };
               this.cajaDiaria.selectAll(data).then((respuestaArray:Array<any>)=>{
@@ -228,8 +230,8 @@ export class MenuCrearFacturaPage implements OnInit {
 
     this.showSplash = true;
     let data = {
-      "id_cliente": this.localStorageServ.localStorageObj.dataUser.idUser,
-      "usuario": this.localStorageServ.localStorageObj.dataUser.usuario,
+      "id_cliente": this.user.idUser,
+      "usuario": this.user.usuario,
       "zona_horaria": "Central America Standard Time"
     };
     this.pedidosGetServ.validarCaja(data["id_cliente"], data["usuario"], data["zona_horaria"]).then((cajaValidada: any) => {
@@ -300,11 +302,11 @@ export class MenuCrearFacturaPage implements OnInit {
     let fecha2 = dia2 + "/" + mes2 + "/" + anno2;
 
     let data = {
-      "id_cliente_ws": this.localStorageServ.localStorageObj.dataUser.idUser,
+      "id_cliente_ws": this.user.idUser,
       "Fecha_ini": fecha1,
       "Fecha_fin": fecha2,
       "Moneda": "-",
-      "FiltroCodiPro": this.localStorageServ.localStorageObj.dataUser.usuario
+      "FiltroCodiPro": this.user.sucursal
     }
 
     this.showSplash = true;

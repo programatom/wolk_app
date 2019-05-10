@@ -251,7 +251,7 @@ export class DatosDeClientePage implements OnInit {
     }
 
     factura.tipo_cambio = this.tarifaDeCambio;
-    factura.consecutivoMH = 0;
+    factura.consecutivoMH = "0";
 
     if (this.clienteSeleccionado["IdTipoIdentificación"] == undefined) {
       factura.id_tipo_identificacion = "";

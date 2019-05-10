@@ -231,7 +231,7 @@ export class CajaDiariaPage implements OnInit {
           }
           if (typeof montoInicial[0] == "string") {
             let monto: string = montoInicial[0];
-            let montoPunto = monto.replace(",", ".");
+            let montoPunto = monto.replace(/,/g, ".");
             var montoNum = parseFloat(montoPunto);
           } else {
             var montoNum: number = montoInicial[0];

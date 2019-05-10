@@ -108,6 +108,7 @@ export class ElejirFacturaPage implements OnInit {
         this.NCLogic.facturaElegida = new Object ();
         this.NCLogic.facturaElegida = factura;
         await this.NCLogic.inicializarFacturaElegida();
+        this.NCLogic.backURL = "/elejir-factura";
         this.navCtrl.navigateForward("/parcial-page");
       }
     },{

@@ -341,7 +341,7 @@ export class DetallesProductosPage implements OnInit {
 
 
   stringWithCommasToDecimal(string) {
-    return parseFloat(string.replace(',', ''));
+    return parseFloat(string.replace(/,/g, ''));
   }
 
 
@@ -401,7 +401,7 @@ export class DetallesProductosPage implements OnInit {
         this.objProductoSeleccionado.isExonerado = "0";
       }
 
-      let subtotales:ObjSubtotales = this.calcularSubtotales(this.objProductoSeleccionado);
+      let subtotales:ObjSubtotales = this.calcularSubtotales(this.objProductoSeleccionado, displayStatus);
       this.objProductoSeleccionado.subtotales = subtotales;
       //Acá ya se le agregó todo al objproducto y se despacha el clon
 
@@ -422,7 +422,7 @@ export class DetallesProductosPage implements OnInit {
       }else{
         this.arrayProductosDisplay[indexMatch].isExonerado = "0";
       }
-      let subtotales:ObjSubtotales = this.calcularSubtotales(this.arrayProductosDisplay[indexMatch]);
+      let subtotales:ObjSubtotales = this.calcularSubtotales(this.arrayProductosDisplay[indexMatch], displayStatus);
       this.arrayProductosDisplay[indexMatch].subtotales = subtotales;
       this.calcularSubtotalesGlobales();
 
@@ -508,7 +508,7 @@ export class DetallesProductosPage implements OnInit {
   //--------------------------------------------------------------------------------------------------------------------------------
 
 
-  calcularSubtotales(producto: ObjProducto){
+  calcularSubtotales(producto: ObjProducto, displayStatus, indexMatch?){
 
   //  descuento_porc:number
   //  sub_total:number
@@ -533,8 +533,10 @@ export class DetallesProductosPage implements OnInit {
     obj.descuento = this.round(descuentoGlobal);
 
     obj.sub_total_descuento = this.round(obj.sub_total - obj.descuento);
+    
+    let isExonerado = producto.isExonerado;
 
-    if (this.objProductoSeleccionado.isExonerado == "1"){
+    if ( isExonerado == "1"){
       console.log("Está exonerado")
       obj.impuestos = 0;
     }else{

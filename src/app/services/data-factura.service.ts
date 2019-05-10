@@ -43,6 +43,7 @@ export class DataFacturaService {
     this.dataFactura.reimpresionString = "";
     this.dataFactura.isOffline = false;
     this.dataFactura.descuentoFijo = 0;
+    this.dataFactura.consecutivoMH = "0";
     this.dataFactura.subTotales = {
       "subTotal": 0,
       "monoDescuento": 0,

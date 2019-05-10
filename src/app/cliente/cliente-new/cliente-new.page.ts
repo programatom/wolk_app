@@ -54,7 +54,7 @@ export class ClienteNewPage implements OnInit {
   }
 
   consultarPadron(){
-    if(this.nroIdentificacion.search("_") == -1 || this.nroIdentificacion.search("-") == -1){
+    if(this.nroIdentificacion.search("_") == 0 || this.nroIdentificacion.search("-") == 0){
       this.toastServ.toastMensajeDelServidor("No se permite el ingreso de guiones en la cedula" , "error")
       this.showSplash = false;
       return;
@@ -99,7 +99,7 @@ export class ClienteNewPage implements OnInit {
       this.showSplash = false;
       return;
     }
-    if(this.nroIdentificacion.search("_") == 0){
+    if(this.nroIdentificacion.search("_") == 0 || this.nroIdentificacion.search("-") == 0){
       this.toastServ.toastMensajeDelServidor("No se permite el ingreso de guiones en la cedula" , "error")
       this.showSplash = false;
       return;
@@ -108,19 +108,19 @@ export class ClienteNewPage implements OnInit {
     const longCedulasFisicas = [9];
     const longCedulasJuridicas = [10];
     const longDimex = [11, 12]
-
+    console.log(this.idTipoIdentificacion)
     if(this.idTipoIdentificacion == "01"){
-      if(longCedulasFisicas.includes(this.nroIdentificacion.length)){
+      if(!longCedulasFisicas.includes(this.nroIdentificacion.length)){
         this.toastServ.toastMensajeDelServidor("Para cedulas físicas el numero de identificación debe ser de 9 caracteres" , "error")
         return;
       }
     }else if(this.idTipoIdentificacion == "02"){
-      if(longCedulasJuridicas.includes(this.nroIdentificacion.length)){
+      if(!longCedulasJuridicas.includes(this.nroIdentificacion.length)){
         this.toastServ.toastMensajeDelServidor("Para cedulas Jurídicas el numero de identificación debe ser de 10 caracteres" , "error")
         return;
       }
     }else if (this.idTipoIdentificacion == "03"){
-      if(longDimex.includes(this.nroIdentificacion.length)){
+      if(!longDimex.includes(this.nroIdentificacion.length)){
         this.toastServ.toastMensajeDelServidor("Para cedulas DIMEX el numero de identificación debe ser de 11 o 12 caracteres" , "error")
         return;
       }

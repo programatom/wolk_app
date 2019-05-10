@@ -67,7 +67,6 @@ export class VerificacionProductoPage implements OnInit {
   inicializarVariables(){
     this.arrayProductosDisplay = [];
     this.verificando = false;
-    this.localizacion = "";
     this.codigoProducto = "";
     this.diferenciaTotal = 0;
     this.existenciaReal = 1;

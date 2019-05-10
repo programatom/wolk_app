@@ -54,7 +54,7 @@ export class PagoPage implements OnInit {
     let identificacion_cliente = factura.identificacion_cliente;
     let sucursal = this.user.sucursal;
     let nro_terminal = this.user.nro_terminal;
-    let nom_localizacion = this.user.nro_terminal;
+    let nom_localizacion = this.user.nom_localizacion;
     let nom_formaPago = this.dataFacturaServ.dataFactura.pagoOfflineData.formaDePago;
     let cliente = factura.cliente;
     let id_condicion_venta = factura.id_condicion_venta;

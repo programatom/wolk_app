@@ -103,7 +103,7 @@
   </ion-item-group>
 
 
-  <ion-button color="primary" (click)="agregarProducto()" expand="block"><strong>AGREGAR PRODUCTO</strong></ion-button>
+  <ion-button color="primary" (click)="agregarProducto()" expand="block" [disabled]="factura.isProcesada"><strong>AGREGAR PRODUCTO</strong></ion-button>
   <ion-row>
     <ion-col>
       <ion-text>
@@ -132,7 +132,7 @@
 
   <div *ngFor="let producto of arrayProductosDisplay; let i = index">
 
-    <ion-item color="primary" lines="none" text-wrap class='bounceInUp productoItem'>
+    <ion-item color="primary" lines="none" text-wrap class='bounceInUp productoItem' [disabled]="factura.isProcesada">
       <ion-buttons slot="end">
         <ion-icon class="icono-boton" name="close-circle" (click)="eliminarProducto(i)" color="light" item-end>
         </ion-icon>

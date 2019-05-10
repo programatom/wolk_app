@@ -34,7 +34,7 @@ export class CommonOperationsService {
         if (isNaN(variable)) {
           obj["status"] = "fail";
         } else {
-          let variableForNum = variable.replace(",",".");
+          let variableForNum = variable.replace(/,/g,".");
           let varNum = parseFloat(variableForNum)
           obj["valores"].push(Math.round(varNum*1000)/1000);
         }

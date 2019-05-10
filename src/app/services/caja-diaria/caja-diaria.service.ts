@@ -24,7 +24,6 @@ export class CajaDiariaService {
     saldos.length == 0 ? saldos.push({
       "Monto Inicial": 0
     }) : saldos = saldos;
-    console.log(saldos);
 
     this.navParams.dataCajaDiaria.data = new Object() as any;
 
@@ -33,21 +32,16 @@ export class CajaDiariaService {
       let saldo = saldos[i];
 
       let saldo_incial_raw:string = saldo["Monto Inicial"].toString();
-      let saldo_incial = parseFloat((saldo_incial_raw.replace(",","")));
+      let saldo_incial = parseFloat((saldo_incial_raw.replace(/,/g,"")));
+      console.log(saldo_incial)
       totalInicial = totalInicial + saldo_incial;
     }
     this.navParams.dataCajaDiaria.data.saldo_inicial = Math.round(totalInicial*100)/100;
-
-
-
     this.navParams.dataCajaDiaria.data.estado = validacion["respuestacaja"];
 
     Object.keys(validacion)[1] != undefined ?
     this.navParams.dataCajaDiaria.data.fecha = validacion[Object.keys(validacion)[1]]:
     this.navParams.dataCajaDiaria.data.fecha = "";
-
-
-
 
     this.navParams.dataCajaDiaria.data.arrayGastos = gastos;
     var totalGasto = 0;
@@ -57,15 +51,11 @@ export class CajaDiariaService {
       gasto.html.icono = "add-circle";
 
       let monto_pagado_raw:string = gasto["Monto Pagado"].toString();
-      let monto_pagado = parseFloat((monto_pagado_raw.replace(",","")));
-
-
+      let monto_pagado = parseFloat((monto_pagado_raw.replace(/,/g,"")));
       totalGasto = totalGasto + monto_pagado;
     }
+
     this.navParams.dataCajaDiaria.data.totalGastos = Math.round(totalGasto*100)/100;
-
-
-
     this.navParams.dataCajaDiaria.data.arrayIngresos = ingresos;
     var totalIngresos = 0;
     for (let i = 0; i < ingresos.length; i ++){
@@ -74,7 +64,7 @@ export class CajaDiariaService {
       ingreso.html.icono = "add-circle";
 
       let monto_pagado_raw:string = ingreso["Monto Pagado"].toString();
-      let monto_pagado = parseFloat((monto_pagado_raw.replace(",","")));
+      let monto_pagado = parseFloat((monto_pagado_raw.replace(/,/g,"")));
 
 
       totalIngresos = totalIngresos + monto_pagado;
