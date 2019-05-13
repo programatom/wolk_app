@@ -56,6 +56,7 @@ export class DetallesProductosPage implements OnInit {
   showSplash: boolean = false;
   CCV: boolean = false;
   CCVException = false;
+  backButtonSubscription: import("/Users/tomasgarciapineiro/Desktop/proyecto facturas/wolk-app/node_modules/rxjs/internal/Subscription").Subscription;
 
   constructor(private alertCtrl: AlertController,
     private plt: Platform,
@@ -69,6 +70,9 @@ export class DetallesProductosPage implements OnInit {
     private barcodeScanner: BarcodeScanner,
     private common: CommonOperationsService) {
 
+      this.backButtonSubscription = this.plt.backButton.subscribeWithPriority(0,()=>{
+
+      });
       console.log(this.localStorageServ.localStorageObj["dataUser"])
       if(this.plt.is("cordova")){
 
@@ -743,6 +747,7 @@ export class DetallesProductosPage implements OnInit {
 
 
   ngOnDestroy() {
+    this.backButtonSubscription.unsubscribe();
     this.dataFacturaServ.arrayProductos = this.arrayProductosDisplay;
      this.dataFacturaServ.dataFactura.subTotales.subTotal = this.subTotal;
      this.dataFacturaServ.dataFactura.subTotales.monoDescuento = this.monoDescuento;

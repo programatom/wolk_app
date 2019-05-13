@@ -51,6 +51,7 @@ export class DetallesProductosPage implements OnInit {
     CCVException: boolean;
 
     descuentoFijoBool = false;
+  backButtonSubscription: import("/Users/tomasgarciapineiro/Desktop/proyecto facturas/wolk-app/node_modules/rxjs/internal/Subscription").Subscription;
   constructor(public navCtrl: NavController,
     public localStorageServ: LocalStorageService,
     private plt: Platform,
@@ -59,6 +60,10 @@ export class DetallesProductosPage implements OnInit {
     private event: Events,
     private barcodeScanner: BarcodeScanner,
     private common: CommonOperationsService) {
+
+      this.backButtonSubscription = this.plt.backButton.subscribeWithPriority(0,()=>{
+
+      });
 
       this.event.subscribe('errorServidor', () => {
         this.showSplash = false;
@@ -533,7 +538,7 @@ export class DetallesProductosPage implements OnInit {
     obj.descuento = this.round(descuentoGlobal);
 
     obj.sub_total_descuento = this.round(obj.sub_total - obj.descuento);
-    
+
     let isExonerado = producto.isExonerado;
 
     if ( isExonerado == "1"){
@@ -749,11 +754,12 @@ export class DetallesProductosPage implements OnInit {
   }
 
   ngOnDestroy(){
+    this.backButtonSubscription.unsubscribe();
     this.instanciarDatosEnStorageObj();
   }
 
   ngOnInit() {
-
+    console.log(this.dataFacturaServ.dataFacturaOffline)
     if(this.dataFacturaServ.dataFacturaOffline.arrayProductos.length != 0){
       this.arrayProductosDisplay = this.dataFacturaServ.dataFacturaOffline.arrayProductos;
     }else{

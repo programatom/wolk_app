@@ -47,8 +47,12 @@ export class MenuPage implements OnInit {
     private pedidosPostServ: PedidosPostService,
     private plt:Platform,
     private actualizacionServ: ActualizacionService) {
-
-    if(this.plt.is("cordova") == false){
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // VARIABLE TEST PONER EN FALSE PARA BUILDS DE PRODUCCION  !!!!!!!!!!!!!!!!!!!!!!!!
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // TEST VARIABLE CHANGE
+    let test = false;
+    if(this.plt.is("cordova") == false || test){
       this.localStorageServ.localStorageObj.dataUser.msg = "01";
     }
 

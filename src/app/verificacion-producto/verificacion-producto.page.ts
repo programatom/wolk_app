@@ -8,6 +8,7 @@ import { PrintService } from '../services/print.service';
 import { CommonOperationsService } from '../services/common-operations/common-operations.service';
 import { ObjProducto, ObjUserData, ObjDatosEmisor } from 'src/interfaces/interfaces';
 import { PrintStringProcessService } from '../services/print-string-process/print-string-process.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-verificacion-producto',
@@ -36,9 +37,9 @@ export class VerificacionProductoPage implements OnInit {
   diferenciaTotal: any = 0;
 
   datosEmisor:ObjDatosEmisor;
+  scanning = false;
 
-
-
+  backButtonSubscription:Subscription;
   constructor(public localStorageServ: LocalStorageService,
     private navCtrl: NavController,
     private toastServ: ToastService,
@@ -49,8 +50,14 @@ export class VerificacionProductoPage implements OnInit {
     private common: CommonOperationsService,
     private stringProcessPrint: PrintStringProcessService) {
       this.datosEmisor = this.localStorageServ.localStorageObj.datosEmisor;
+      this.backButtonSubscription = this.plt.backButton.subscribeWithPriority(0,()=>{
+
+      });
     }
 
+  ngOnDestroy(){
+    this.backButtonSubscription.unsubscribe();
+  }
   iniciarVerif() {
     this.verificando = true;
   }
@@ -229,7 +236,9 @@ export class VerificacionProductoPage implements OnInit {
   }
 
   scan() {
+    this.scanning = true;
     this.barcodeScanner.scan().then((barcodeData: any) => {
+
       this.busquedaProductoUnico(barcodeData.text).then((encontrado) => {
         if (encontrado) {
         } else {
@@ -551,9 +560,9 @@ export class VerificacionProductoPage implements OnInit {
     let sucursal = user.sucursal;
     let usuario = user.usuario;
     let terminal = user.nro_terminal;
-    let header = "\n\nCODIGO           DESCRIP             DIF"
+    let header = "\n\nCODIGO    DESCRIP                    DIF"
 
-    let printString1 = "        Verificacion inventario\n"
+    let printString1 = "        Verificación inventario\n"
       + this.stringProcessPrint.centeredString(this.datosEmisor.nombre_comercial_cliente)
       + "\n" + this.stringProcessPrint.centeredString(this.datosEmisor.nombre_cliente)
       + "\n    Ced: "+ this.datosEmisor.identificacion_cliente

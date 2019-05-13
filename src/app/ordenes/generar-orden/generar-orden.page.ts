@@ -37,6 +37,7 @@ export class GenerarOrdenPage implements OnInit {
   CCVException = false;
 
   impresora:any;
+  backButtonSubscription: import("/Users/tomasgarciapineiro/Desktop/proyecto facturas/wolk-app/node_modules/rxjs/internal/Subscription").Subscription;
 
   constructor(public localStorageServ: LocalStorageService,
     public ordenesServ: OrdenesService,
@@ -50,6 +51,14 @@ export class GenerarOrdenPage implements OnInit {
     this.user = this.localStorageServ.localStorageObj.dataUser;
     this.orden = this.ordenesServ.orden;
     this.impresora = this.localStorageServ.localStorageObj.impresora;
+    this.backButtonSubscription = this.plt.backButton.subscribeWithPriority(0,()=>{
+
+    });
+  }
+
+  ngOnDestroy(){
+    this.ordenesServ.orden = new Object() as Orden;
+    this.backButtonSubscription.unsubscribe();
   }
 
   dismiss() {
@@ -169,10 +178,7 @@ export class GenerarOrdenPage implements OnInit {
     }
   }
 
-  ngOnDestroy(){
-    console.log("destrouy")
-    this.ordenesServ.orden = new Object() as Orden;
-  }
+
 
 
   buscarProducto() {

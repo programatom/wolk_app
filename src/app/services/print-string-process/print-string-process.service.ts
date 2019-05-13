@@ -8,10 +8,10 @@ export class PrintStringProcessService {
   constructor() { }
 
   generateLineProduct(codigo: string, nombre: number, diferencia: number) {
-    var productoCut = this.cutString(codigo, 15, "right", true);
-    var existenciaCut = this.cutString(nombre.toString(), 10, "left", true);
-    var diferenciaCut = this.cutString(diferencia, 15, "left")
-    var linea = productoCut + existenciaCut + diferenciaCut + "\n";
+    var productoCut = this.cutString(codigo, 10, "right", true);
+    var nombreCut = this.cutString(nombre.toString(), 20, "right", true);
+    var numeroCut = this.cutString(diferencia, 10, "left")
+    var linea = productoCut + nombreCut + numeroCut + "\n";
     return linea;
   }
 

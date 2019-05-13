@@ -318,4 +318,13 @@ export class MenuCrearFacturaPage implements OnInit {
   }
 
 
+  ionViewWillEnter(){
+    if(this.dataFacturaServ.reInitView.bool){
+      this.dataFacturaServ.reInitView.bool = false;
+      let modo = this.dataFacturaServ.reInitView.view;
+      this.crearFactura(modo);
+    }
+  }
+
+
 }

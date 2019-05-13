@@ -164,6 +164,9 @@
   <strong>ELIMINAR Y VOLVER</strong>
 </ion-button>
 <ion-button  color = "primary" (click) = "facturaNueva()" expand="block" [disabled] = "this.dataFacturaServ.dataFactura.isProcesadaInterno == false">
+  <strong>CREAR UNA FACTURA NUEVA</strong>
+</ion-button>
+<ion-button  color = "primary" (click) = "volver()" expand="block" [disabled] = "this.dataFacturaServ.dataFactura.isProcesadaInterno == false">
   <strong>VOLVER</strong>
 </ion-button>
 

@@ -56,7 +56,9 @@ export class DatosDeClientePage implements OnInit {
     public dataFacturaServ: DataFacturaService,
     private navParams: NavigationParamsService,
     private navCtrl: NavController,
-    private router: Router) { }
+    private router: Router) {
+      console.log(this.dataFacturaServ.dataFacturaOffline)
+    }
   //---------------------------------------------------------------------------------------------------------------------
 
   limpiarObjCliente(){
@@ -339,8 +341,9 @@ export class DatosDeClientePage implements OnInit {
 
 
   ngOnDestroy() {
-    if(this.router.url == "/menu"){
-      console.log("Se vuelve al default la factura offline")
+    console.log(this.router.url)
+    if(this.router.url == "/menu-crear-factura"){
+      console.log("Se vuelve al default la factura offline");
       this.dataFacturaServ.dataFacturaOffline = new Object() as ObjFactura;
     }
     this.dataFacturaServ.dataFacturaOffline.clienteSeleccionado = this.clienteSeleccionado;

@@ -63,6 +63,7 @@ export class AppComponent {
               console.log('Se encontró el objeto dataUser');
               this.statusBar.styleLightContent();
               this.navCtrl.navigateRoot("/menu").then(()=>{
+
                 this.splashScreen.hide();
               });
               /*

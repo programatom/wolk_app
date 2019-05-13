@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavController, ModalController, AlertController } from '@ionic/angular';
 
 // Serviders
-import {ObjUserData, ObjProducto, ObjDatosEmisor } from "../../../interfaces/interfaces";
+import {ObjUserData, ObjProducto, ObjDatosEmisor, ObjFactura } from "../../../interfaces/interfaces";
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { DataFacturaService } from 'src/app/services/data-factura.service';
 import { PrintService } from 'src/app/services/print.service';
@@ -136,14 +136,17 @@ export class FacturasTotalesPage implements OnInit {
   facturaNueva() {
     let objAlert = {
       title: "Confirmación",
-      subTitle: "¿Está seguro que quiere realizar una factura nueva? Se borrarán los datos de la factura actual",
+      subTitle: "¿Está seguro que quiere realizar una factura nueva? Guarde los datos para no perder la factura actual",
       buttons: [{
         text: "Cancelar",
         role: "cancel"
       }, {
         text: "Confirmar",
         handler: () => {
-          this.navCtrl.navigateRoot("/menu");
+          this.dataFacturaServ.reInitView.bool = true;
+          this.dataFacturaServ.reInitView.view = "offline";
+          this.navCtrl.navigateBack("/menu-crear-factura").then(()=>{
+          });
         }
       }]
 

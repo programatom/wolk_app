@@ -21,6 +21,10 @@ export class DataFacturaService {
   productosCXC = [];
   facturasTotalesType = "normal";
 
+  reInitView = {
+    "bool": false,
+    "view":"online"
+  }
   constructor(public http: HttpClient,
     private pedidosGetServ: PedidosGetService,
     private localStorageServ: LocalStorageService,

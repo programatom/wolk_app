@@ -86,8 +86,10 @@
     <ion-button expand="block" (click)="irAOrdenes()">
       Ordenes de S/E
     </ion-button>
-    <ion-button expand="block" (click)="irAVerificacion()"
-      [disabled]='this.localStorageServ.localStorageObj["dataUser"].msg == "03"'  >
+    <!--
+
+      -->
+    <ion-button expand="block" (click)="irAVerificacion()" [disabled]='this.localStorageServ.localStorageObj["dataUser"].msg == "03"'>
       Verificacion de producto
     </ion-button>
     <ion-button expand="block" (click)="seleccionarImpresora()">
