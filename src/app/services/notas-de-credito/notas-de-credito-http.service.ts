@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpService } from '../http.service';
 import { URL_SERVICES } from 'src/app/config/config';
+import { ToastService } from '../toast.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotasDeCreditoHttpService {
 
-  constructor(private http: HttpService) { }
+  constructor(private http: HttpService,
+              private toastServ: ToastService) { }
 
   buscarFacturas(data: {
     id_cliente_ws: number
@@ -68,6 +70,7 @@ export class NotasDeCreditoHttpService {
     ZonaHoraria?: string
     Usuario: string
   }) {
+    this.toastServ.presentToast("TEST MSG: Se guarda en el servidor la NC. Con is guardado: " + data.isguardado );
     data.ZonaHoraria = "Central America Standard Time";
     data.pCodigoAfiliado = "";
     let url = URL_SERVICES + "procesoNCParciales";

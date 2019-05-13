@@ -12,6 +12,7 @@ import { PedidosPostService } from '../services/pedidos-post.service';
 import { ObjUserData, ObjLocalStorage } from 'src/interfaces/interfaces';
 import { PrintService } from '../services/print.service';
 import { ActualizacionService } from '../services/actualizacion/actualizacion.service';
+import { ToastService } from '../services/toast.service';
 
 //plugins
 
@@ -46,7 +47,8 @@ export class MenuPage implements OnInit {
     private events: Events,
     private pedidosPostServ: PedidosPostService,
     private plt:Platform,
-    private actualizacionServ: ActualizacionService) {
+    private actualizacionServ: ActualizacionService,
+    private toastServ: ToastService) {
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     // VARIABLE TEST PONER EN FALSE PARA BUILDS DE PRODUCCION  !!!!!!!!!!!!!!!!!!!!!!!!
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -146,32 +148,32 @@ export class MenuPage implements OnInit {
     }
     if (contador == 0){
       var subHeader = "No tiene facturas sin procesar, pero esta acción eliminará todas las facturas de contingencia ¿Esta seguro que desea salir de la sesión?";
-    }else{
-      var subHeader = "Esta acción eliminará " + contador + " facturas de contingencia sin procesar! ¿Esta seguro que desea salir de la sesión?";
-    }
-    let header = "ALERTA !!!!!!!!!!";
-    let buttons = [
-      {
-        text: "Cancelar",
-        role: "cancel"
-      },
-      {
-        text: "Aceptar",
-        handler: () => {
-          this.showSplash = true;
-          let user:ObjUserData = this.localStorageServ.localStorageObj.dataUser;
-          this.pedidosPostServ.cerrarSesion(user.idUser, user.usuario).then((respuestaCerrarSesion)=>{
-            this.localStorageServ.eliminateAllValuesInStorage().then(() => {
-              this.localStorageServ.localStorageObj = new Object() as ObjLocalStorage;
-              this.showSplash = false;
-              this.navCtrl.navigateRoot('/login');
-            })
+      let header = "ALERTA !!!!!!!!!!";
+      let buttons = [
+        {
+          text: "Cancelar",
+          role: "cancel"
+        },
+        {
+          text: "Aceptar",
+          handler: () => {
+            this.showSplash = true;
+            let user:ObjUserData = this.localStorageServ.localStorageObj.dataUser;
+            this.pedidosPostServ.cerrarSesion(user.idUser, user.usuario).then((respuestaCerrarSesion)=>{
+              this.localStorageServ.eliminateAllValuesInStorage().then(() => {
+                this.localStorageServ.localStorageObj = new Object() as ObjLocalStorage;
+                this.showSplash = false;
+                this.navCtrl.navigateRoot('/login');
+              })
 
-          })
+            })
+          }
         }
-      }
-    ]
-    this.localStorageServ.presentAlert(header, subHeader, undefined, buttons)
+      ]
+      this.localStorageServ.presentAlert(header, subHeader, undefined, buttons)
+    }else{
+      this.toastServ.presentToast("Esta acción eliminará " + contador + " facturas de contingencia sin procesar! Debe guardarlas antes de poder salir de la sesión");
+    }
   }
 
 

@@ -306,10 +306,10 @@ export class FacturasTotalesPage implements OnInit {
 
   //----------------------------------------------------------------------------------------------------------------
 
-  facturaNuevaEliminando() {
+  volver(textMsg, reInit = false) {
     let objAlert = {
       title: "Confirmación",
-      subTitle: "Volverá al menu de facturas eliminando la factura actual",
+      subTitle: textMsg,
       buttons: [{
         text: "Cancelar",
         role: "cancel"
@@ -317,63 +317,11 @@ export class FacturasTotalesPage implements OnInit {
         text: "Confirmar",
         handler: () => {
 
-          this.navCtrl.navigateBack("/menu-crear-factura");
-          /*
-          this.event.publish("dismissAllViews");
-          this.showSplash = true;
-          setTimeout(()=>{
-            this.showSplash = false;
-            this.viewCtrl.dismiss();
-          },3000)
-          */
-        }
-      }]
-    };
-    this.localStorageServ.presentAlert(objAlert["title"], objAlert["subTitle"], objAlert["inputs"], objAlert["buttons"]);
-  }
-
-  //----------------------------------------------------------------------------------------------------------------
-
-
-  volver() {
-    let objAlert = {
-      title: "Confirmación",
-      subTitle: "Volvera al menu sin eliminar la factura actual",
-      buttons: [{
-        text: "Cancelar",
-        role: "cancel"
-      }, {
-        text: "Confirmar",
-        handler: () => {
-
-          this.navCtrl.navigateRoot("/menu");
-          /*
-          this.event.publish("dismissAllViews");
-          this.showSplash = true;
-          setTimeout(()=>{
-            this.showSplash = false;
-            this.viewCtrl.dismiss();
-          },3000)
-          */
-        }
-      }]
-    };
-    this.localStorageServ.presentAlert(objAlert["title"], objAlert["subTitle"], objAlert["inputs"], objAlert["buttons"]);
-  }
-
-  facturaNueva(){
-    let objAlert = {
-      title: "Confirmación",
-      subTitle: "¿Desea generar una factura nueva?",
-      buttons: [{
-        text: "Cancelar",
-        role: "cancel"
-      }, {
-        text: "Confirmar",
-        handler: () => {
-
-          this.dataFacturaServ.reInitView.bool = true;
-          this.dataFacturaServ.reInitView.view = "online";
+          if(reInit){
+            this.dataFacturaServ.reInitView.bool = true;
+            this.dataFacturaServ.reInitView.view = "online";
+          }
+          this.dataFacturaServ.dataFacturaTemporalCopy = JSON.parse(JSON.stringify(this.dataFacturaServ.dataFactura));
 
           this.navCtrl.navigateBack("/menu-crear-factura");
           /*

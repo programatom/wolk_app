@@ -139,14 +139,12 @@ export class ParcialPagePage implements OnInit {
         if (number > 0) {
           this.factura.idNC = number;
           this.factura.isguardado = "S";
-          this.NCLogic.guardar(this.factura).then(()=>{
-            this.navCtrl.navigateForward("/procesar-parcial");
-          });
+          this.navCtrl.navigateForward("/procesar-parcial");
         } else if (number < 0) {
           this.toastServ.toastMensajeDelServidor("Consulte a soporte ERROR al generar NC de Anulación", "error");
           return
         } else if (number == 0) {
-          this.toastServ.toastMensajeDelServidor("Ya la factura de referencia tiene una NC de ANULACION , favor verifique", "error");
+          this.toastServ.toastMensajeDelServidor("Ya la factura de referencia tiene una NC , favor verifique", "error");
           return
         }
       });

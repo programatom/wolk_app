@@ -6,7 +6,7 @@ import { CommonOperationsService } from 'src/app/services/common-operations/comm
 import { NotasDeCreditoHttpService } from 'src/app/services/notas-de-credito/notas-de-credito-http.service';
 import { ObjUserData } from 'src/interfaces/interfaces';
 import { NotasDeCreditoService } from 'src/app/services/notas-de-credito/notas-de-credito.service';
-import { Events } from '@ionic/angular';
+import { Events, NavController } from '@ionic/angular';
 import { PrintService } from 'src/app/services/print.service';
 
 @Component({
@@ -39,7 +39,7 @@ export class ProcesarParcialPage implements OnInit {
   monImpuesto = '';
   totalFinal = '';
   objNCTotalesParametrosHTTP: { id_cliente_ws: number; UsuarioUbicacion: any; documento: any; txtDocu: any; };
-
+  NCisGuardada = false;
 
 
 
@@ -50,7 +50,8 @@ export class ProcesarParcialPage implements OnInit {
               private _NCHttp: NotasDeCreditoHttpService,
               private _NCLogic: NotasDeCreditoService,
               private event: Events,
-              private printServ: PrintService
+              private printServ: PrintService,
+              private navCtrl: NavController
               ) {
                 this.event.subscribe("loading" , ()=>{
                   this.showSplash = true;
@@ -88,6 +89,11 @@ export class ProcesarParcialPage implements OnInit {
 
 
               }
+
+
+  dismiss(){
+    this.navCtrl.navigateBack("/elejir-factura")
+  }
 
   ngOnInit() {
 
@@ -476,8 +482,9 @@ export class ProcesarParcialPage implements OnInit {
       this.showSplash = true;
       this._NCLogic.guardar(this.factura).then(()=>{
         this.toastServ.toastMensajeDelServidor("Se guardó la nota de crédito con éxito");
+        this.NCisGuardada = true;
         this.showSplash = false;
-      })
+      });
     }
 
     imprimir(reimpresion){

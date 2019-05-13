@@ -22,8 +22,10 @@
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
-    </ion-buttons>
+      <ion-button icon-only (click)="dismiss()">
+        <ion-icon name="arrow-back">
+        </ion-icon>
+      </ion-button>    </ion-buttons>
   </ion-toolbar>
 
 </ion-header>
@@ -103,7 +105,7 @@
   </ion-item-group>
 
 
-  <ion-button color="primary" (click)="agregarProducto()" expand="block" [disabled]="factura.isProcesada"><strong>AGREGAR PRODUCTO</strong></ion-button>
+  <ion-button color="primary" (click)="agregarProducto()" expand="block" [disabled]="factura.isProcesada || NCisGuardada"><strong>AGREGAR PRODUCTO</strong></ion-button>
   <ion-row>
     <ion-col>
       <ion-text>
@@ -132,7 +134,7 @@
 
   <div *ngFor="let producto of arrayProductosDisplay; let i = index">
 
-    <ion-item color="primary" lines="none" text-wrap class='bounceInUp productoItem' [disabled]="factura.isProcesada">
+    <ion-item color="primary" lines="none" text-wrap class='bounceInUp productoItem' [disabled]="factura.isProcesada || NCisGuardada">
       <ion-buttons slot="end">
         <ion-icon class="icono-boton" name="close-circle" (click)="eliminarProducto(i)" color="light" item-end>
         </ion-icon>
@@ -178,11 +180,11 @@
     </ion-item>
   </div>
 
-  <ion-button expand="block" [disabled]="arrayProductosDisplay.length == 0" (click)="guardarNotaDeCredito()">
+  <ion-button expand="block" [disabled]="arrayProductosDisplay.length == 0 || NCisGuardada" (click)="guardarNotaDeCredito()">
     Guardar
   </ion-button>
 
-  <ion-button expand="block" [disabled]="arrayProductosDisplay.length == 0 || factura['Consecutivo Hacienda'] == '0' || factura.isProcesada" (click)="procesarNCEnHacienda()">
+  <ion-button expand="block" [disabled]="arrayProductosDisplay.length == 0 || factura['Consecutivo Hacienda'] == '0' || factura.isProcesada || !NCisGuardada" (click)="procesarNCEnHacienda()">
     Enviar a hacienda
   </ion-button>
   <ion-button expand="block" [disabled]="arrayProductosDisplay.length == 0" (click)="imprimir(false)">

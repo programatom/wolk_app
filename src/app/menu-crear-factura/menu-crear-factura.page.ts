@@ -306,15 +306,26 @@ export class MenuCrearFacturaPage implements OnInit {
       "Fecha_ini": fecha1,
       "Fecha_fin": fecha2,
       "Moneda": "-",
-      "FiltroCodiPro": this.user.sucursal
+      "FiltroCodiPro": ""
     }
 
     this.showSplash = true;
     this.facturasAbiertasServ.selectfacturascreditoFiltro(data).subscribe((resp) => {
       this.showSplash = false;
-      this.facturasAbiertasServ.facturas = resp;
+      console.log(resp)
+      let facturasDeLaMismaSucursal = [];
+      let facturasDeOtra = [];
+      for(let i = 0; i < resp.length; i ++){
+        if(resp[i]["Sucursal"] == this.user.sucursal){
+          facturasDeLaMismaSucursal.push(resp[i]);
+        }else{
+          facturasDeOtra.push(resp[i])
+        }
+      }
+      console.log(facturasDeOtra);
+      this.facturasAbiertasServ.facturas = facturasDeLaMismaSucursal;
       this.navCtrl.navigateForward("/facturas-abiertas")
-    })
+    });
   }
 
 
@@ -322,6 +333,7 @@ export class MenuCrearFacturaPage implements OnInit {
     if(this.dataFacturaServ.reInitView.bool){
       this.dataFacturaServ.reInitView.bool = false;
       let modo = this.dataFacturaServ.reInitView.view;
+
       this.crearFactura(modo);
     }
   }

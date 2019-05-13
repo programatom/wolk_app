@@ -17,7 +17,8 @@ export class FacturasAbiertasPage implements OnInit {
   facturas = [];
   showSplash: boolean = false
 
-  constructor(public facurasAbiertasServ: FacturasAbiertasService,
+  constructor(
+    public facurasAbiertasServ: FacturasAbiertasService,
     public localStorageServ: LocalStorageService,
     private navCtrl: NavController,
     private dataFacturaServ: DataFacturaService,

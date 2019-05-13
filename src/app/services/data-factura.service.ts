@@ -16,6 +16,8 @@ export class DataFacturaService {
 
   dataFactura = {} as ObjFactura;
   dataFacturaOffline = new Object() as ObjFactura;
+  dataFacturaTemporalCopy = new Object() as ObjFactura;
+
   arrayProductos = [];
   ObjUserData = new Object() as ObjUserData;
   productosCXC = [];

@@ -160,13 +160,13 @@
 
 <br><br>
 
-<ion-button  color = "primary" (click) = "facturaNuevaEliminando()" [disabled] = "this.dataFacturaServ.dataFactura.isProcesadaInterno" expand="block">
+<ion-button  color = "primary" (click) = "volver('Volverá al menu de facturas eliminando la factura actual')" [disabled] = "this.dataFacturaServ.dataFactura.isProcesadaInterno" expand="block">
   <strong>ELIMINAR Y VOLVER</strong>
 </ion-button>
-<ion-button  color = "primary" (click) = "facturaNueva()" expand="block" [disabled] = "this.dataFacturaServ.dataFactura.isProcesadaInterno == false">
+<ion-button  color = "primary" (click) = "volver('¿Desea crear una factura nueva?', true)" expand="block" [disabled] = "this.dataFacturaServ.dataFactura.isProcesadaInterno == false">
   <strong>CREAR UNA FACTURA NUEVA</strong>
 </ion-button>
-<ion-button  color = "primary" (click) = "volver()" expand="block" [disabled] = "this.dataFacturaServ.dataFactura.isProcesadaInterno == false">
+<ion-button  color = "primary" (click) = "volver('¿Desea volver al menu principal?')" expand="block" [disabled] = "this.dataFacturaServ.dataFactura.isProcesadaInterno == false">
   <strong>VOLVER</strong>
 </ion-button>
 

@@ -120,17 +120,16 @@ export class ElejirFacturaPage implements OnInit {
         this.NCLogic.backURL = "/elejir-factura";
         this.navCtrl.navigateForward("/anular-factura");
       }
-    },{
-      text:"Ver Factura",
-      handler:async ()=>{
-        this.NCLogic.facturaElegida = new Object ();
-        this.NCLogic.facturaElegida = factura;
-        await this.NCLogic.inicializarFacturaElegida();
-        this.NCLogic.backURL = "/elejir-factura";
-        this.navCtrl.navigateForward("/factura-visual-hacienda-nc");
-      }
     }];
     this.localStorageServ.presentAlert(header, subHeader, undefined, buttons);
+  }
+
+  async verFactura(factura){
+    this.NCLogic.facturaElegida = new Object ();
+    this.NCLogic.facturaElegida = factura;
+    await this.NCLogic.inicializarFacturaElegida();
+    this.NCLogic.backURL = "/elejir-factura";
+    this.navCtrl.navigateForward("/factura-visual-hacienda-nc");
   }
 
   addCeroToNumber(number) {

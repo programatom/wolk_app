@@ -341,7 +341,6 @@ export class DatosDeClientePage implements OnInit {
 
 
   ngOnDestroy() {
-    console.log(this.router.url)
     if(this.router.url == "/menu-crear-factura"){
       console.log("Se vuelve al default la factura offline");
       this.dataFacturaServ.dataFacturaOffline = new Object() as ObjFactura;

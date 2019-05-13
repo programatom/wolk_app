@@ -16,6 +16,7 @@ import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { DataFacturaService } from 'src/app/services/data-factura.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { CommonOperationsService } from 'src/app/services/common-operations/common-operations.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-detalles-productos',
   templateUrl: './detalles-productos.page.html',
@@ -59,7 +60,8 @@ export class DetallesProductosPage implements OnInit {
     private toastServ: ToastService,
     private event: Events,
     private barcodeScanner: BarcodeScanner,
-    private common: CommonOperationsService) {
+    private common: CommonOperationsService,
+    private router: Router) {
 
       this.backButtonSubscription = this.plt.backButton.subscribeWithPriority(0,()=>{
 
@@ -241,7 +243,7 @@ export class DetallesProductosPage implements OnInit {
 
 
   inicializarProducto(producto) {
-
+    this.exonerarImpuestosBool = false;
     this.codigoInicializado = producto['Código Producto'];
     this.objProductoSeleccionado.codigo_producto = producto['Código Producto'];
     this.objProductoSeleccionado.monto_imp = producto['Monto Imp'];
@@ -753,10 +755,15 @@ export class DetallesProductosPage implements OnInit {
     return;
   }
 
-  ngOnDestroy(){
+  ionViewWillLeave(){
     this.backButtonSubscription.unsubscribe();
     this.instanciarDatosEnStorageObj();
   }
+
+  ngOnDestroy(){
+    this.backButtonSubscription.unsubscribe();
+  }
+
 
   ngOnInit() {
     console.log(this.dataFacturaServ.dataFacturaOffline)
