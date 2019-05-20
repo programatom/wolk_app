@@ -278,7 +278,7 @@ export class FacturasTotalesPage implements OnInit {
 
     for (let i = 0; i < productos.length; i++) {
       let producto: ObjProducto = productos[i];
-      let linea = this.printStringProcess.generateLineProduct(producto.nombre_producto, producto.cantidad, Math.round( producto.cantidad * producto.precio_venta_sin_imp * 100) / 100);
+      let linea = this.printStringProcess.generateLineProduct(producto.nombre_producto, producto.cantidad, producto.subtotales.total_linea);
       stringProductos = stringProductos + linea;
     }
 
