@@ -65,12 +65,14 @@ export class FacturasTotalesPage implements OnInit {
     })
     this.showSplash = true;
 
-
+    this.getSubtotales();
     if (this.localStorageServ.localStorageObj.impresora != undefined) {
       this.selectedPrinter = this.localStorageServ.localStorageObj.impresora;
     }
-    let localizacion;
 
+  }
+
+  examineUserStatusAndReturnLoc(){
     if(this.dataFacturaServ.dataFactura.usuarioExcepcionBool){
       this.user = this.localStorageServ.localStorageObj['dataUser'];
       let userA:ObjUserData = this.localStorageServ.localStorageObj['dataUser'];
@@ -79,12 +81,16 @@ export class FacturasTotalesPage implements OnInit {
       if(!arraySucursalTerminalUserA.includes(userB.sucursal) || !arraySucursalTerminalUserA.includes(userB.nro_terminal)){
         this.usuarioExceptionDifferentTerminalAndSucursal = true;
       }
-      localizacion = userB.nom_localizacion;
+      return userB.nom_localizacion;
     }else{
       this.user = this.localStorageServ.localStorageObj['dataUser'];
-      localizacion = this.user.nom_localizacion;
+      return this.user.nom_localizacion;
     }
+  }
 
+  getSubtotales(){
+
+    let localizacion = this.examineUserStatusAndReturnLoc();
     this.pedidosGetServ.selectTotales(this.user.idUser, localizacion, this.dataFacturaServ.dataFactura.id_facturaPV)
       .then((data: any) => {
         this.showSplash = false;
@@ -200,7 +206,7 @@ export class FacturasTotalesPage implements OnInit {
     let identificacion_cliente = factura.identificacion_cliente;
     let sucursal = this.user.sucursal;
     let nro_terminal = this.user.nro_terminal;
-    let nom_localizacion = this.user.nom_localizacion;
+    let nom_localizacion = this.examineUserStatusAndReturnLoc();
     let cliente = factura.cliente;
     let id_condicion_venta = factura.id_condicion_venta;
     let plazo_credito = factura.plazo_credito;
@@ -232,6 +238,7 @@ export class FacturasTotalesPage implements OnInit {
       pCodigoAfiliado,
       Usuario,
     ).then((resp) => {
+      console.log(resp)
       this.showSplash = false;
       if (resp == 0) {
         if (consecutivo == undefined && this.dataFacturaServ.dataFactura.isProcesadaInterno == false) {
@@ -299,7 +306,7 @@ export class FacturasTotalesPage implements OnInit {
 
   async pago() {
 
-
+    console.log("MODALL")
     const modal = await this.presentModalPage()
     modal.present();
   }

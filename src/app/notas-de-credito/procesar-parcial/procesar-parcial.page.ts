@@ -94,6 +94,9 @@ export class ProcesarParcialPage implements OnInit {
   dismiss(){
     this.navCtrl.navigateBack("/elejir-factura")
   }
+  volverAlMenu(){
+    this.navCtrl.navigateBack("/menu-crear-factura")
+  }
 
   ngOnInit() {
 

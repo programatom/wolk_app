@@ -3,6 +3,7 @@ import { NavController, AlertController } from '@ionic/angular';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { NavigationParamsService } from 'src/app/services/navigation-params.service';
 import { AlertOptions } from '@ionic/core';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-facturas-a-procesar',
@@ -16,7 +17,8 @@ export class FacturasAProcesarPage implements OnInit {
 
   constructor(public navCtrl: NavController, public navParams: NavigationParamsService,
               public localStorageServ: LocalStorageService,
-              private alertCtrl: AlertController) {
+              private alertCtrl: AlertController,
+              private toastServ: ToastService) {
 
 
   }
@@ -49,6 +51,10 @@ export class FacturasAProcesarPage implements OnInit {
   }
 
   eliminarFactura(factura ,index, slidingItem){
+    if(factura.factura.isProcesada == false){
+      this.toastServ. presentToast("No se puede eliminar una factura sin procesar!");
+      return;
+    }
     let header = '¿Está seguro que desea eliminar esta factura?';
     let buttons = [
       {

@@ -47,7 +47,7 @@
     Anular factura
   </ion-button>
 
-  <ion-button expand="block" [disabled]="factura.isAnulada == false || factura.isProcesada || factura['Consecutivo Hacienda']" (click)="procesarNCEnHacienda()">
+  <ion-button expand="block" [disabled]="factura.isAnulada == false || factura.isProcesada || factura['Consecutivo Hacienda'] == '0'" (click)="procesarNCEnHacienda()">
     Enviar a hacienda
   </ion-button>
 
@@ -57,6 +57,10 @@
 
   <ion-button expand="block" [disabled]="factura.isAnulada == false" (click)="imprimir(true)">
     Reimprimir
+  </ion-button>
+
+  <ion-button expand="block" (click)="volverAlMenu()">
+    Volver al menu
   </ion-button>
 
 

@@ -27,7 +27,8 @@ export class FacturasCuentasCobrarPage implements OnInit {
   facturas = [];
 
   user: ObjUserData;
-  constructor(public facurasAbiertasServ: FacturasAbiertasService,
+  constructor(
+    public facurasAbiertasServ: FacturasAbiertasService,
     public localStorageServ: LocalStorageService,
     private navCtrl: NavController,
     private dataFacturaServ: DataFacturaService,
@@ -91,7 +92,7 @@ export class FacturasCuentasCobrarPage implements OnInit {
         this.showSplash = false;
         console.log(resp);
         this.facturas = resp;
-      })
+      });
     }
   }
 
@@ -153,7 +154,7 @@ export class FacturasCuentasCobrarPage implements OnInit {
           factura.claveDocHacienda = facturaDatos["Consecutivo Hacienda"];
           factura.isProcesada = true;
           factura.noPaga = false;
-          this.navigate(factura)
+          this.navigate(factura);
           console.log(this.dataFacturaServ.dataFactura);
         }
 

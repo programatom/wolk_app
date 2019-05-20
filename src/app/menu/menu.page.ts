@@ -54,7 +54,7 @@ export class MenuPage implements OnInit {
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     // TEST VARIABLE CHANGE
     let test = false;
-    if(this.plt.is("cordova") == false || test){
+    if(this.plt.is("cordova") == false){
       this.localStorageServ.localStorageObj.dataUser.msg = "01";
     }
 

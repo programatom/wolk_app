@@ -184,7 +184,7 @@ export class MenuCrearFacturaPage implements OnInit {
     this.dataFacturaServ.dataFacturaOffline.descuentoFijo = 0;
     this.dataFacturaServ.dataFacturaOffline.isguardado = "N";
     this.dataFacturaServ.dataFacturaOffline.emailCliente = "";
-
+    this.dataFacturaServ.dataFacturaOffline.isProcesadaInterno = false;
     this.dataFacturaServ.dataFacturaOffline.pagoOfflineData = {
       "pendiente":undefined,
       "formaDePago":""
@@ -316,7 +316,7 @@ export class MenuCrearFacturaPage implements OnInit {
       let facturasDeLaMismaSucursal = [];
       let facturasDeOtra = [];
       for(let i = 0; i < resp.length; i ++){
-        if(resp[i]["Sucursal"] == this.user.sucursal){
+        if(resp[i]["Localización"] == this.user.nom_localizacion){
           facturasDeLaMismaSucursal.push(resp[i]);
         }else{
           facturasDeOtra.push(resp[i])

@@ -43,6 +43,10 @@ export class AnularFacturaPage implements OnInit {
     });
   }
 
+  volverAlMenu(){
+    this.navCtrl.navigateBack("/menu-crear-factura");
+  }
+
   anularFactura(){
 
     let terminalUser = this.user.nro_terminal;

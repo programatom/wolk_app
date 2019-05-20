@@ -94,7 +94,7 @@ export class FacturasTotalesPage implements OnInit {
   guardarFactura() {
     let objAlert = {
       title: "Confirmación",
-      subTitle: "Volverá al menu principal guardando la factura. Recuerde imprimir antes de realizar ésta acción!",
+      subTitle: "Esta acción no puede deshacerse y solo se puede guardar una vez",
       buttons: [{
         text: "Cancelar",
         role: "cancel"
@@ -121,9 +121,8 @@ export class FacturasTotalesPage implements OnInit {
           let minutos = date.getMinutes();
           let fechahora = dia + "_" + mes + "_" + año + "_" + hora + "_" + minutos;
           let nombre = "factura_" + fechahora;
-
           this.localStorageServ.insertAndInstantiateValue(nombre, this.dataFacturaServ.dataFacturaOffline);
-          this.navCtrl.navigateRoot("/menu");
+          factura.isProcesadaInterno = true;
         }
       }]
 
@@ -131,6 +130,9 @@ export class FacturasTotalesPage implements OnInit {
     this.localStorageServ.presentAlert(objAlert["title"], objAlert["subTitle"], objAlert["inputs"], objAlert["buttons"]);
   }
 
+  volver(){
+    this.navCtrl.navigateRoot("/menu");
+  }
   //----------------------------------------------------------------------------------------------------------------
 
   facturaNueva() {
@@ -276,7 +278,7 @@ export class FacturasTotalesPage implements OnInit {
 
     for (let i = 0; i < productos.length; i++) {
       let producto: ObjProducto = productos[i];
-      let linea = this.printStringProcess.generateLineProduct(producto.nombre_producto, producto.cantidad, Math.round(producto.precio_venta_sin_imp * 100) / 100);
+      let linea = this.printStringProcess.generateLineProduct(producto.nombre_producto, producto.cantidad, Math.round( producto.cantidad * producto.precio_venta_sin_imp * 100) / 100);
       stringProductos = stringProductos + linea;
     }
 

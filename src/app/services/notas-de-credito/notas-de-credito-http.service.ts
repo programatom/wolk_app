@@ -70,7 +70,6 @@ export class NotasDeCreditoHttpService {
     ZonaHoraria?: string
     Usuario: string
   }) {
-    this.toastServ.presentToast("TEST MSG: Se guarda en el servidor la NC. Con is guardado: " + data.isguardado );
     data.ZonaHoraria = "Central America Standard Time";
     data.pCodigoAfiliado = "";
     let url = URL_SERVICES + "procesoNCParciales";
