@@ -21,6 +21,7 @@ export interface ObjFactura {
     emailCliente:string,
     emails:string,
     isOffline:boolean,
+    isFacturaAbierta:boolean,
     arrayProductos?:Array<any>,
     clienteSeleccionado:any,
     subTotales:{

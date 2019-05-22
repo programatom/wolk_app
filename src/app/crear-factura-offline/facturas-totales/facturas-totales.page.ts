@@ -266,10 +266,10 @@ export class FacturasTotalesPage implements OnInit {
       + "Consecutivo:" + this.printStringProcess.cutString(consecutivo, 28, "left", true) + "\n"
       + "Fecha " + fecha + this.printStringProcess.cutString(hora, 40 - "Fecha ".length - fecha.length, "left") + "\n"
       + "No CPU:MOVIL-854FD-3977\nSucursal:"
-      + sucursal + "\nTerminal:"
+      + sucursal + "\nTerminal: "
       + terminal + "\nAtendido por: "
       + usuario + "\nCliente: "
-      + nombreCliente + "\n\nDESCRIPCION          CANTI         TOTAL"
+      + nombreCliente + "\n\nDESCRIPCIÓN      CANTI             TOTAL"
       + "\n\n----------------------------------------\n\n";
 
     let productos = this.dataFacturaServ.dataFacturaOffline.arrayProductos;
@@ -288,8 +288,8 @@ export class FacturasTotalesPage implements OnInit {
     let impuestos = factura.subTotales.monImpuesto;
     let descuento = factura.subTotales.monoDescuento;
     let total = factura.subTotales.total;
-    let medioPago = factura.facturaOfflineVisualize[0].valor;
-    let formaPago = factura.pagoOfflineData.formaDePago;
+    let condicionVenta = factura.facturaOfflineVisualize[0].valor;
+    let medioDePago = factura.facturaOfflineVisualize[1].valor;
     let pendiente = factura.pagoOfflineData.pendiente;
     let montoAbonado = factura.pagoOfflineData.montoAbonado;
     let vuelto = factura.pagoOfflineData.vuelto;
@@ -314,8 +314,8 @@ export class FacturasTotalesPage implements OnInit {
       + "Su cambio" + this.printStringProcess.cutString(vuelto, 31, "left") + "\n"
       + printString3
       + "\n----------------------------------------\n"
-      + "Factura de: " + medioPago + "\n"
-      + "Medio de Pago: " + formaPago + "\n"
+      + "Factura de: " + condicionVenta + "\n"
+      + "Medio de Pago: " + medioDePago + "\n"
       + "\n----------------------------------------\n"
       + "\n          Gracias por su compra\n\n  "
       + "  Autorizado mediante resolucion "

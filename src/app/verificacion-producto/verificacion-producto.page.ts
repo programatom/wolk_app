@@ -68,7 +68,14 @@ export class VerificacionProductoPage implements OnInit {
     this.localizacion = this.localStorageServ.localStorageObj.dataUser.nom_localizacion;
   }
   dismiss() {
-    this.navCtrl.navigateBack("/menu");
+
+    this.localStorageServ.presentAlert("Confirmación","Perderá todos los datos, asegurese de imprimir",[],[{
+      "text":"Cancelar",
+      "role" :"cancel"
+    },{
+      "text" :"Volver",
+      "handler" : () => { this.navCtrl.navigateBack("/menu")}
+    }]);
   }
 
   inicializarVariables(){
@@ -84,6 +91,9 @@ export class VerificacionProductoPage implements OnInit {
     if(this.productoSeleccionado != undefined && this.productoSeleccionado.Existencia != undefined){
       let diferencia = parseFloat(existencia) - parseFloat(this.productoSeleccionado.Existencia);
       this.diferenciaTotal = this.common.aproxXDecimals(diferencia, 3);
+      if(isNaN(this.diferenciaTotal) ){
+        this.diferenciaTotal = 0;
+      }
     }
 
   }
@@ -560,7 +570,7 @@ export class VerificacionProductoPage implements OnInit {
     let sucursal = user.sucursal;
     let usuario = user.usuario;
     let terminal = user.nro_terminal;
-    let header = "\n\nCODIGO    DESCRIP                    DIF"
+    let header = "\n\nCODIGO          DESCRIP              DIF"
 
     let printString1 = "        Verificación inventario\n"
       + this.stringProcessPrint.centeredString(this.datosEmisor.nombre_comercial_cliente)

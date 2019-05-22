@@ -147,6 +147,7 @@ export class FacturasAbiertasPage implements OnInit {
       factura.usuarioExcepcion.nro_terminal = facturaDatos["N° Terminal"]
       factura.usuarioExcepcion.nom_localizacion = facturaDatos["Localización"]
     }
+    factura.isFacturaAbierta = true;
 
     factura.isProcesadaInterno = true;
     factura.isguardado = "S"

@@ -48,6 +48,8 @@ export class DataFacturaService {
     this.dataFactura.emailCliente = "";
     this.dataFactura.reimpresionString = "";
     this.dataFactura.isOffline = false;
+    this.dataFactura.isFacturaAbierta = false;
+
     this.dataFactura.descuentoFijo = 0;
     this.dataFactura.consecutivoMH = "0";
     this.dataFactura.subTotales = {

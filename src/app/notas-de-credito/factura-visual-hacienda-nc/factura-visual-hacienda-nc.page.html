@@ -135,15 +135,6 @@
   </ion-button>
 
   <br>
-  <ion-text>
-    Printer Selected:
-  </ion-text>
-  <ion-item *ngIf="selectedPrinter !=undefined">
-    <div style="color:grey; font-size = 5 vw">
-      {{selectedPrinter.name}} ...
-    </div>
-  </ion-item>
-  <ion-item *ngIf="selectedPrinter == undefined"></ion-item>
 
   <ion-button  color = "primary" (click) = "imprimir(false)" expand="block" >
     Imprimir

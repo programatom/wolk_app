@@ -93,6 +93,8 @@ export class GenerarOrdenPage implements OnInit {
       text:"Aceptar",
       handler:()=>{
         this.arrayProductosDisplay = [];
+        this.codigoProducto = "";
+        this.cantidadProducto = 1;
         this.ordenesServ.inicializarOrden();
       }
     }];

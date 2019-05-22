@@ -87,7 +87,7 @@
   </ion-item>
 
   <ion-item [disabled]="orden.isGenerada">
-    <ion-label>Tipo de movimientos</ion-label>
+    <ion-label>Tipo de ajuste</ion-label>
     <ion-select okText="Ok" cancelText="Cancelar" [(ngModel)]="ordenesServ.orden.id_tipo_ajuste" >
       <ion-select-option *ngFor="let tipos of tiposDeMovimientos" [value]="tipos.id_tipo_ajuste">{{tipos.nombre_ajuste}}</ion-select-option>
     </ion-select>

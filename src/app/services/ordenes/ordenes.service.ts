@@ -26,7 +26,9 @@ export class OrdenesService {
     let mes = this.addCeroToNumber(hoy.getMonth() + 1);
     let anno = hoy.getFullYear();
     let fullFecha = fecha + "/" + mes + "/" + anno;
+
     this.orden.num_documento = undefined;
+    this.orden.id_tipo_ajuste = 0;
     this.orden.id_tipo_movimiento = "S";
     this.orden.Observaciones = "";
     this.orden.fecha = fullFecha;

@@ -78,7 +78,7 @@ export class FacturasTotalesPage implements OnInit {
       let userA:ObjUserData = this.localStorageServ.localStorageObj['dataUser'];
       let userB = this.dataFacturaServ.dataFactura.usuarioExcepcion;
       let arraySucursalTerminalUserA = [userA.nro_terminal, userA.sucursal];
-      if(!arraySucursalTerminalUserA.includes(userB.sucursal) || !arraySucursalTerminalUserA.includes(userB.nro_terminal)){
+      if(!arraySucursalTerminalUserA.includes(userB.sucursal) || !arraySucursalTerminalUserA.includes(userB.nro_terminal) && !this.dataFacturaServ.dataFactura.isFacturaAbierta){
         this.usuarioExceptionDifferentTerminalAndSucursal = true;
       }
       return userB.nom_localizacion;

@@ -7,11 +7,11 @@ export class PrintStringProcessService {
 
   constructor() { }
 
-  generateLineProduct(codigo: string, nombre: number, diferencia: number) {
-    var productoCut = this.cutString(codigo, 10, "right", true);
-    var nombreCut = this.cutString(nombre.toString(), 20, "right", true);
-    var numeroCut = this.cutString(diferencia, 10, "left")
-    var linea = productoCut + nombreCut + numeroCut + "\n";
+  generateLineProduct(first: string, second: number, third: number) {
+    var firstCut = this.cutString(first, 10, "right", true);
+    var secondCut = this.cutString(second.toString(), 20, "center", true);
+    var thirdCut = this.cutString(third, 10, "left");
+    var linea = firstCut + secondCut + thirdCut + "\n";
     return linea;
   }
 
@@ -34,8 +34,11 @@ export class PrintStringProcessService {
       let espacios = max - len;
       if (pad == "right") {
         return string + ' '.repeat(espacios);
-      } else {
+      } else if ( pad == "left"){
         return ' '.repeat(espacios) + string;
+      } else if( pad =="center"){
+        return ' '.repeat(Math.floor(espacios/2)) + string + ' '.repeat(Math.floor(espacios/2));
+
       }
     }
   }
