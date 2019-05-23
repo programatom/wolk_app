@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, AlertController } from '@ionic/angular';
+import { NavController,  } from '@ionic/angular';
 
 
 // Services
@@ -9,11 +9,9 @@ import { DataFacturaService } from '../services/data-factura.service';
 import { ProcesoFacturasService } from '../services/proceso-facturas.service';
 import {  ObjUserData, ObjFactura } from 'src/interfaces/interfaces';
 import { PedidosGetService } from '../services/pedidos-get.service';
-import { AlertOptions } from '@ionic/core';
 import { PedidosPostService } from '../services/pedidos-post.service';
 import { CajaDiariaService } from '../services/caja-diaria/caja-diaria.service';
 import { FacturasAbiertasService } from '../services/facturas-abiertas/facturas-abiertas.service';
-import { ActualizacionService } from '../services/actualizacion/actualizacion.service';
 
 
 @Component({
@@ -25,7 +23,7 @@ export class MenuCrearFacturaPage implements OnInit {
 
   showSplash: boolean = false;
   user: ObjUserData;
-  constructor(private alertCtrl: AlertController,
+  constructor(
     public localStorageServ: LocalStorageService,
     private toastServ: ToastService,
     public dataFacturaServ: DataFacturaService,
@@ -34,8 +32,7 @@ export class MenuCrearFacturaPage implements OnInit {
     private pedidosGetServ: PedidosGetService,
     private pedidosPostServ: PedidosPostService,
     private cajaDiaria: CajaDiariaService,
-    private facturasAbiertasServ: FacturasAbiertasService,
-    private actualizacionServ: ActualizacionService) {
+    private facturasAbiertasServ: FacturasAbiertasService) {
       this.user = this.localStorageServ.localStorageObj.dataUser;
     }
 

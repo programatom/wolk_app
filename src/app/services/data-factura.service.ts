@@ -35,6 +35,7 @@ export class DataFacturaService {
 
   inicializarDataOnline(){
     this.dataFactura = new Object() as ObjFactura;
+    console.log("Se inicializa la factura online");
     this.arrayProductos = [];
     this.dataFactura.pagoOfflineData = new Object() as{
       pendiente:number

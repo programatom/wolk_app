@@ -151,6 +151,7 @@ export class FacturasCuentasCobrarPage implements OnInit {
         }else{
           // CASO 2 SE ENVIÓ A HACIENDA
           this.showSplash = false;
+          factura.consecutivoMH = facturaDatos["Consecutivo Hacienda"];
           factura.claveDocHacienda = facturaDatos["Consecutivo Hacienda"];
           factura.isProcesada = true;
           factura.noPaga = false;

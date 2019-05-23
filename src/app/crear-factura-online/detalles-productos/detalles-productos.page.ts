@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import {
-  AlertController,
   Platform, Events, NavController
 } from '@ionic/angular';
 
@@ -14,8 +13,8 @@ import { PedidosGetService } from '../../services/pedidos-get.service';
 import { PedidosPostService } from '../../services/pedidos-post.service';
 import { DataFacturaService } from '../../services/data-factura.service';
 import { ToastService } from '../../services/toast.service';
-import { AlertOptions } from '@ionic/core';
 import { CommonOperationsService } from 'src/app/services/common-operations/common-operations.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -58,7 +57,7 @@ export class DetallesProductosPage implements OnInit {
   CCVException = false;
   backButtonSubscription: import("/Users/tomasgarciapineiro/Desktop/proyecto facturas/wolk-app/node_modules/rxjs/internal/Subscription").Subscription;
 
-  constructor(private alertCtrl: AlertController,
+  constructor(
     private plt: Platform,
     private event: Events,
     public localStorageServ: LocalStorageService,
@@ -68,7 +67,8 @@ export class DetallesProductosPage implements OnInit {
     public dataFacturaServ: DataFacturaService,
     private navCtrl: NavController,
     private barcodeScanner: BarcodeScanner,
-    private common: CommonOperationsService) {
+    private common: CommonOperationsService,
+    private router: Router) {
 
       this.backButtonSubscription = this.plt.backButton.subscribeWithPriority(0,()=>{
 
@@ -747,13 +747,15 @@ export class DetallesProductosPage implements OnInit {
 
 
   ngOnDestroy() {
-    this.backButtonSubscription.unsubscribe();
-    this.dataFacturaServ.arrayProductos = this.arrayProductosDisplay;
-     this.dataFacturaServ.dataFactura.subTotales.subTotal = this.subTotal;
-     this.dataFacturaServ.dataFactura.subTotales.monoDescuento = this.monoDescuento;
-     this.dataFacturaServ.dataFactura.subTotales.subTotalDesc = this.subTotalDesc;
-     this.dataFacturaServ.dataFactura.subTotales.monImpuesto = this.monImpuesto;
-     this.dataFacturaServ.dataFactura.subTotales.total = this.totalFinal;
+      this.backButtonSubscription.unsubscribe();
+      if(this.router.url != "/menu-crear-factura"){
+        this.dataFacturaServ.arrayProductos = this.arrayProductosDisplay;
+        this.dataFacturaServ.dataFactura.subTotales.subTotal = this.subTotal;
+        this.dataFacturaServ.dataFactura.subTotales.monoDescuento = this.monoDescuento;
+        this.dataFacturaServ.dataFactura.subTotales.subTotalDesc = this.subTotalDesc;
+        this.dataFacturaServ.dataFactura.subTotales.monImpuesto = this.monImpuesto;
+        this.dataFacturaServ.dataFactura.subTotales.total = this.totalFinal;
+      }
   }
 
 
