@@ -72,25 +72,41 @@ export class FacturasTotalesPage implements OnInit {
 
   }
 
-  examineUserStatusAndReturnLoc(){
+  examineUserStatusAndReturn(returnvar){
+
+    this.user = this.localStorageServ.localStorageObj['dataUser'];
+
+    var userReturnValues;
     if(this.dataFacturaServ.dataFactura.usuarioExcepcionBool){
-      this.user = this.localStorageServ.localStorageObj['dataUser'];
+
       let userA:ObjUserData = this.localStorageServ.localStorageObj['dataUser'];
       let userB = this.dataFacturaServ.dataFactura.usuarioExcepcion;
+      userReturnValues = userB;
+
       let arraySucursalTerminalUserA = [userA.nro_terminal, userA.sucursal];
-      if(!arraySucursalTerminalUserA.includes(userB.sucursal) || !arraySucursalTerminalUserA.includes(userB.nro_terminal) && !this.dataFacturaServ.dataFactura.isFacturaAbierta){
+
+      if(!arraySucursalTerminalUserA.includes(userB.sucursal)
+      || !arraySucursalTerminalUserA.includes(userB.nro_terminal)
+      && !this.dataFacturaServ.dataFactura.isFacturaAbierta){
         this.usuarioExceptionDifferentTerminalAndSucursal = true;
       }
-      return userB.nom_localizacion;
+
     }else{
-      this.user = this.localStorageServ.localStorageObj['dataUser'];
-      return this.user.nom_localizacion;
+      userReturnValues = this.user;
     }
+
+    let objReturn = {
+      "localizacion" : userReturnValues.nom_localizacion,
+      "sucursal" : userReturnValues.sucursal,
+      "terminal" : userReturnValues.nro_terminal
+    }
+
+    return objReturn[returnvar];
   }
 
   getSubtotales(){
 
-    let localizacion = this.examineUserStatusAndReturnLoc();
+    let localizacion = this.examineUserStatusAndReturn("localizacion");
     this.pedidosGetServ.selectTotales(this.user.idUser, localizacion, this.dataFacturaServ.dataFactura.id_facturaPV)
       .then((data: any) => {
         this.showSplash = false;
@@ -147,8 +163,11 @@ export class FacturasTotalesPage implements OnInit {
     }
 
     var pNombreReceptor = factura.cliente;
-    let UsuarioSucursal = this.user.sucursal;
-    let UsuarioTerminal = this.user.nro_terminal;
+
+    let UsuarioSucursal = this.examineUserStatusAndReturn("sucursal");
+    let UsuarioTerminal = this.examineUserStatusAndReturn("terminal");
+
+
     let Usuario = this.user.usuario;
     let ClaveFactura = ""
     let ZonaHoraria = "Central America Standard Time";
@@ -206,7 +225,7 @@ export class FacturasTotalesPage implements OnInit {
     let identificacion_cliente = factura.identificacion_cliente;
     let sucursal = this.user.sucursal;
     let nro_terminal = this.user.nro_terminal;
-    let nom_localizacion = this.examineUserStatusAndReturnLoc();
+    let nom_localizacion = this.examineUserStatusAndReturn("localizacion");
     let cliente = factura.cliente;
     let id_condicion_venta = factura.id_condicion_venta;
     let plazo_credito = factura.plazo_credito;

@@ -159,14 +159,26 @@ export class MenuPage implements OnInit {
           handler: () => {
             this.showSplash = true;
             let user:ObjUserData = this.localStorageServ.localStorageObj.dataUser;
-            this.pedidosPostServ.cerrarSesion(user.idUser, user.usuario).then((respuestaCerrarSesion)=>{
-              this.localStorageServ.eliminateAllValuesInStorage().then(() => {
+            this.pedidosPostServ.cerrarSesion(user.idUser, user.usuario).then(()=>{
+              //Guardar alguno valores en el local storage
+
+              let last_user_id = this.localStorageServ.localStorageObj.last_user_id
+              let last_user = this.localStorageServ.localStorageObj.last_user
+              let last_user_pw = this.localStorageServ.localStorageObj.last_user_pw
+              let dataUser_last_login = this.localStorageServ.localStorageObj.dataUser_last_login
+
+              this.localStorageServ.eliminateAllValuesInStorage().then(async () => {
+
+                await this.localStorageServ.insertAndInstantiateValue("last_user_id",last_user_id);
+                await this.localStorageServ.insertAndInstantiateValue("last_user",last_user);
+                await this.localStorageServ.insertAndInstantiateValue("last_user_pw",last_user_pw);
+                await this.localStorageServ.insertAndInstantiateValue("dataUser_last_login",dataUser_last_login);
+
                 this.localStorageServ.localStorageObj = new Object() as ObjLocalStorage;
                 this.showSplash = false;
                 this.navCtrl.navigateRoot('/login');
-              })
-
-            })
+              });
+            });
           }
         }
       ]

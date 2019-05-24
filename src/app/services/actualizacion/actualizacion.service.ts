@@ -16,7 +16,7 @@ export class ActualizacionService {
 
   buscarActualizacion(){
     var updatedVersion = "10003";
-    if(this.plt.is("cordova")){
+    if(false){
       this.version.getVersionCode().then((versionCode)=>{
         console.log("La version code es: " + versionCode)
         if(versionCode != updatedVersion){

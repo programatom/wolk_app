@@ -30,11 +30,15 @@ export class LocalStorageService {
     }
   }
 
-  checkInternetConnection(){
+  checkInternetConnection(postLogic = false){
     if(this.internetConnection == false){
-      this.toastServ.toastMensajeDelServidor("No tiene conexión a internet!" , "error")
+      if(postLogic){
+        return false;
+      }else{
+        this.toastServ.toastMensajeDelServidor("No tiene conexión a internet!" , "error");
+      }
     }else{
-      return;
+      return true;
     }
   }
 
@@ -81,7 +85,7 @@ export class LocalStorageService {
 
         // Tiro lengthKeys tareas asincronas
 
-        this.insertAndInstantiateValue(key, value).then((asyncEnd) => {
+        this.insertAndInstantiateValue(key, value).then(() => {
           asyncEndCount = asyncEndCount + 1;
           if (asyncEndCount == lengthArray) {
             resolve(this.objResponse = {
@@ -337,7 +341,7 @@ export class LocalStorageService {
             this.desinstantiate(key);
             resolve(this.objResponse);
           })
-          .catch((error)=>{
+          .catch(()=>{
             console.log("Ocurrio un error con la elminacion del value ", key)
           })
         })

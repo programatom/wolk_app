@@ -12,7 +12,6 @@ import { ObjResponse } from "../interfaces/interfaces";
 
 // Serviders
 import { LocalStorageService } from './services/local-storage.service';
-import { ActualizacionService } from './services/actualizacion/actualizacion.service';
 
 
 @Component({
@@ -33,7 +32,6 @@ export class AppComponent {
     public localStorageServ: LocalStorageService,
     private navCtrl: NavController,
     private network: Network,
-    private actualizacionServ: ActualizacionService
   ) {
     this.initializeApp();
   }
@@ -92,10 +90,10 @@ export class AppComponent {
 
   internetSubscription() {
 
-    console.log("hasta aca llega")
     // watch network for a disconnection
     this.network.onDisconnect().subscribe(() => {
       if (this.network.type == "none") {
+        console.log("No hay internet")
         this.localStorageServ.internetConnection = false;
       } else {
         this.localStorageServ.internetConnection = true;

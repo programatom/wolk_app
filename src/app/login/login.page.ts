@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, Events, Platform } from '@ionic/angular';
+import { NavController, Events } from '@ionic/angular';
 
 // Providers
 import { LocalStorageService } from '../services/local-storage.service';
 import { ToastService } from '../services/toast.service';
 import { PedidosPostService } from '../services/pedidos-post.service';
-import { ActualizacionService } from '../services/actualizacion/actualizacion.service';
 
 
 
@@ -33,13 +32,11 @@ export class LoginPage implements OnInit {
   usuarioValidoBool = false;
 
   constructor(
-    private plt: Platform,
     private event: Events,
     private localStorageServ: LocalStorageService,
     private pedidosPostServ: PedidosPostService,
     private toastServ: ToastService,
     private navCtrl: NavController,
-    private actulizacionServ: ActualizacionService
 ) {
     this.event.subscribe('errorServidor', () => {
       this.showSplash = false;
@@ -63,7 +60,22 @@ export class LoginPage implements OnInit {
 
   ingresar() {
 
-    this.localStorageServ.checkInternetConnection();
+    let hasInternet = this.localStorageServ.checkInternetConnection();
+
+    if(!hasInternet){
+      if(this.localStorageServ.localStorageObj.last_user){
+
+        if(this.id_cliente_ws == this.localStorageServ.localStorageObj.last_user_id
+           && this.cedula == this.localStorageServ.localStorageObj.last_user
+           && this.password == this.localStorageServ.localStorageObj.last_user_pw){
+             this.advance(this.localStorageServ.localStorageObj.dataUser_last_login);
+           }else{
+             this.toastServ.toastMensajeDelServidor("No tiene conexión a internet!" , "error");
+             return;
+           }
+      }
+    }
+
     this.showSplash = true;
     this.pedidosPostServ.login(this.id_cliente_ws, this.cedula, this.password).then((data: any) => {
 
@@ -74,41 +86,18 @@ export class LoginPage implements OnInit {
           data[0].msg == "03" ||
           data[0].msg == "04" ||
           data[0].msg == "05") {
-        if (this.plt.is('cordova')) {
 
+            data[0].idUser = this.id_cliente_ws;
+            data[0].usuario = this.cedula;
 
-          data[0].idUser = this.id_cliente_ws;
-          data[0].usuario = this.cedula;
-          console.log('Como se guarda la data del user desde el login: ')
-          console.log(data[0])
-          this.localStorageServ.insertAndInstantiateValue("dataUser", data[0]).then(()=>{
-            this.usuarioValidoBool = true;
-            this.usuarioValido = data[0].NombreUsuario;
-            this.localStorageServ.searchAndInstantiateAllKeysInStorage().then(() => {
-              console.log('Se encontró el dataUser')
-              console.log(JSON.stringify(this.localStorageServ.localStorageObj["dataUser"]))
-              this.navCtrl.navigateRoot('/menu').then(()=>{
-              });
-              this.showSplash = false;
-            });
-          });
-        } else {
+            this.localStorageServ.insertAndInstantiateValue("last_user_id", data[0].idUser);
+            this.localStorageServ.insertAndInstantiateValue("last_user", data[0].usuario);
+            this.localStorageServ.insertAndInstantiateValue("last_user_pw", this.password);
+            this.localStorageServ.insertAndInstantiateValue("dataUser_last_login", data[0]);
+            this.localStorageServ.insertAndInstantiateValue("offlineOK", false);
 
+            this.advance(data[0]);
 
-          data[0].idUser = this.id_cliente_ws;
-          data[0].usuario = this.cedula;
-          console.log('Como se guarda la data del user desde el login: ')
-          console.log(data[0])
-          this.localStorageServ.insertAndInstantiateValue("dataUser", data[0]);
-          this.usuarioValidoBool = true;
-          this.usuarioValido = data[0].NombreUsuario;
-          this.localStorageServ.searchAndInstantiateAllKeysInStorage().then(() => {
-            console.log('Se encontró el dataUser');
-            this.localStorageServ.insertAndInstantiateValue("offlineOK" , false);
-            this.navCtrl.navigateRoot('/menu');
-            this.showSplash = false;
-          })
-        }
       } else {
         this.showSplash = false;
         this.toastServ.toastMensajeDelServidor(data[0].msg , "error");
@@ -116,6 +105,19 @@ export class LoginPage implements OnInit {
     }).catch(()=>{
       this.toastServ.toastMensajeDelServidor("Ingrese datos válidos" , "error")
     })
+  }
+
+  advance(dataUser){
+
+    this.localStorageServ.insertAndInstantiateValue("dataUser", dataUser).then(()=>{
+      this.usuarioValidoBool = true;
+      this.usuarioValido = dataUser.NombreUsuario;
+      this.localStorageServ.searchAndInstantiateAllKeysInStorage().then(() => {
+        this.navCtrl.navigateRoot('/menu').then(()=>{
+        });
+        this.showSplash = false;
+      });
+    });
   }
 
 

@@ -131,6 +131,10 @@ export interface ObjLocalStorage {
     dia
     contador
   }
+  last_user_id:any
+  last_user:any
+  last_user_pw:any
+  dataUser_last_login:any
 }
 
 
