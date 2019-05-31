@@ -66,9 +66,6 @@ export class FacturasTotalesPage implements OnInit {
     this.showSplash = true;
 
     this.getSubtotales();
-    if (this.localStorageServ.localStorageObj.impresora != undefined) {
-      this.selectedPrinter = this.localStorageServ.localStorageObj.impresora;
-    }
 
   }
 
@@ -91,7 +88,9 @@ export class FacturasTotalesPage implements OnInit {
         this.usuarioExceptionDifferentTerminalAndSucursal = true;
       }
 
-    }else{
+    }
+    else
+    {
       userReturnValues = this.user;
     }
 
@@ -101,6 +100,8 @@ export class FacturasTotalesPage implements OnInit {
       "terminal" : userReturnValues.nro_terminal
     }
 
+    console.log(objReturn[returnvar]);
+
     return objReturn[returnvar];
   }
 
@@ -109,6 +110,7 @@ export class FacturasTotalesPage implements OnInit {
     let localizacion = this.examineUserStatusAndReturn("localizacion");
     this.pedidosGetServ.selectTotales(this.user.idUser, localizacion, this.dataFacturaServ.dataFactura.id_facturaPV)
       .then((data: any) => {
+        console.log(data)
         this.showSplash = false;
 
         this.subTotal = data.SUBTOTAL;
@@ -164,8 +166,8 @@ export class FacturasTotalesPage implements OnInit {
 
     var pNombreReceptor = factura.cliente;
 
-    let UsuarioSucursal = this.examineUserStatusAndReturn("sucursal");
-    let UsuarioTerminal = this.examineUserStatusAndReturn("terminal");
+    let UsuarioSucursal = this.user.sucursal;
+    let UsuarioTerminal = this.user.nro_terminal;
 
 
     let Usuario = this.user.usuario;
@@ -223,8 +225,8 @@ export class FacturasTotalesPage implements OnInit {
     }
     let id_tipo_identificacion = factura.id_tipo_identificacion;
     let identificacion_cliente = factura.identificacion_cliente;
-    let sucursal = this.user.sucursal;
-    let nro_terminal = this.user.nro_terminal;
+    let sucursal = this.examineUserStatusAndReturn("sucursal");
+    let nro_terminal = this.examineUserStatusAndReturn("terminal");
     let nom_localizacion = this.examineUserStatusAndReturn("localizacion");
     let cliente = factura.cliente;
     let id_condicion_venta = factura.id_condicion_venta;

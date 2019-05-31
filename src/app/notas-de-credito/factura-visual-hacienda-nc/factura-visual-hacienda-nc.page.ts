@@ -115,32 +115,38 @@ export class FacturaVisualHaciendaNCPage implements OnInit {
       this.showSplash = true;
       this.NCLogic.searchClienteAndInsertDisAndEmOnFactura(this.factura["N° Identificación"],this.factura).then(()=>{
         console.log(this.factura);
-        this.facturaLogic.procesarDocumentoHaciendaYGuardar(
-          this.factura["N° Factura"],
-          this.factura.correoCliente,
-          this.factura["Clientes"],
-          tipoDoc,
-          {
-            "id_tipo_identificacion": this.factura["Tipo Identificacíon"],
-            "identificacion_cliente": this.factura["N° Identificación"],
-            "id_medio_pago": this.factura["Medios de Pago"],// CHECKEAR TEMA ID
-            "id_moneda": this.factura["Monedas"],// CHECKEAR TEMA ID
-            "isguardado": "S",
-            "observaciones": this.factura["Observaciones"],
-            "tipo_cambio": this.factura["Tipo de Cambio"],
-            "cliente":this.factura["Clientes"],
-            "id_condicion_venta": this.factura["Condicion Venta"], // CHECKEAR TEMA ID
-            "plazo_credito": this.factura.plazo_credito,
+        this.NCLogic
+        .getIDsOfCondicionYMedioYMotivo(this.factura["Medios de Pago"],
+                                        this.factura["Condicion Venta"],
+                                        this.factura["Tipo Identificacíon"]).then((idObject:any)=>{
 
-          }
-        ).then((data:any)=>{
-            console.log(data);
-            this.showSplash = false;
-            if(data.isProcesada){
-              this.factura["Consecutivo Hacienda"] = data.clave;
-            }else{
-            }
-        })
+                                          this.facturaLogic.procesarDocumentoHaciendaYGuardar(
+                                            this.factura["N° Factura"],
+                                            this.factura.correoCliente,
+                                            this.factura["Clientes"],
+                                            tipoDoc,
+                                            {
+                                              "id_tipo_identificacion": this.factura["Tipo Identificacíon"],
+                                              "identificacion_cliente": this.factura["N° Identificación"],
+                                              "id_medio_pago": idObject.id_medio,// CHECKEAR TEMA ID
+                                              "id_moneda": this.factura["Monedas"],// CHECKEAR TEMA ID
+                                              "isguardado": "S",
+                                              "observaciones": this.factura["Observaciones"],
+                                              "tipo_cambio": this.factura["Tipo de Cambio"],
+                                              "cliente":this.factura["Clientes"],
+                                              "id_condicion_venta": idObject.id_condicion, // CHECKEAR TEMA ID
+                                              "plazo_credito": this.factura.plazo_credito,
+
+                                            }
+                                          ).then((data:any)=>{
+                                            console.log(data);
+                                            this.showSplash = false;
+                                            if(data.isProcesada){
+                                              this.factura["Consecutivo Hacienda"] = data.clave;
+                                            }else{
+                                            }
+                                          })
+                                        })
 
       })
     }

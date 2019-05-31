@@ -172,6 +172,7 @@ export class NotasDeCreditoHttpService {
     data.CondicionVenta = "-"
 
     let url = URL_SERVICES + "SelecthistoricoNCClientesXLocalizacion?id_cliente_ws=" +data["id_cliente_ws"] + "&Fecha_ini=" +data["Fecha_ini"] + "&Fecha_fin=" +data["Fecha_fin"] + "&CondicionVenta=" +data["CondicionVenta"] + "&Moneda=" +data["Moneda"] + "&UsuarioUbicacion=" +data["UsuarioUbicacion"] + "&FiltroCodiPro=" +data["FiltroCodiPro"];
+    console.log(url)
     return this.http.httpGet(url);
   }
 
