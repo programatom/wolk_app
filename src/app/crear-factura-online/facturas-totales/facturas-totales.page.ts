@@ -69,6 +69,10 @@ export class FacturasTotalesPage implements OnInit {
 
   }
 
+  dismiss(){
+    this.navCtrl.navigateBack("/detalles-productos")
+  }
+
   examineUserStatusAndReturn(returnvar){
 
     this.user = this.localStorageServ.localStorageObj['dataUser'];
@@ -197,12 +201,12 @@ export class FacturasTotalesPage implements OnInit {
         this.toastServ.toastMensajeDelServidor(data["Mensaje"], "success");
         this.dataFacturaServ.dataFactura.isProcesada = true;
         this.dataFacturaServ.dataFactura.claveDocHacienda = data["Clave"];
-        this.guardarEmitir(data["Clave"]);
+        this.guardarEmitir();
       } else {
         this.toastServ.toastMensajeDelServidor(data["Mensaje"], "error", 10000);
         this.dataFacturaServ.dataFactura.isProcesada = true;
         this.dataFacturaServ.dataFactura.claveDocHacienda = data["Clave"];
-        this.guardarEmitir(data["Clave"]);
+        this.guardarEmitir();
       }
     });
   }
@@ -210,19 +214,14 @@ export class FacturasTotalesPage implements OnInit {
   //----------------------------------------------------------------------------------------------------------------
 
 
-  guardarEmitir(consecutivo?) {
+  guardarEmitir(html?) {
     this.showSplash = true;
 
     let factura = this.dataFacturaServ.dataFactura;
 
     let id_cliente_ws = this.user.idUser;
     let id_facturaPV = factura.id_facturaPV;
-    let consecutivoMH;
-    if (consecutivo != undefined) {
-      consecutivoMH = consecutivo;
-    } else {
-      consecutivoMH = factura.consecutivoMH;
-    }
+    let claveDocHacienda = factura.claveDocHacienda;
     let id_tipo_identificacion = factura.id_tipo_identificacion;
     let identificacion_cliente = factura.identificacion_cliente;
     let sucursal = this.examineUserStatusAndReturn("sucursal");
@@ -242,7 +241,7 @@ export class FacturasTotalesPage implements OnInit {
     this.procesoFacturasServ.procesoFacturaFn(
       id_cliente_ws,
       id_facturaPV,
-      consecutivoMH,
+      claveDocHacienda,
       id_tipo_identificacion,
       identificacion_cliente,
       sucursal,
@@ -262,14 +261,16 @@ export class FacturasTotalesPage implements OnInit {
       console.log(resp)
       this.showSplash = false;
       if (resp == 0) {
-        if (consecutivo == undefined && this.dataFacturaServ.dataFactura.isProcesadaInterno == false) {
+        // SI NUNCA SE HABIA GUARDADO Y VIENE DESDE EL BOTON
+        if (html != undefined && this.dataFacturaServ.dataFactura.isProcesadaInterno == false) {
           this.dataFacturaServ.dataFactura.isProcesadaInterno = true;
           this.dataFacturaServ.dataFactura.pagoOfflineData.pendiente = this.dataFacturaServ.dataFactura.subTotales.total;
           this.pago();
+          // SE GUARDO PERO NO SE PAGO
         } else if (this.dataFacturaServ.dataFactura.noPaga == true && this.dataFacturaServ.dataFactura.isProcesadaInterno == true) {
           this.dataFacturaServ.dataFactura.pagoOfflineData.pendiente = this.dataFacturaServ.dataFactura.subTotales.total;
           this.pago();
-        } else if(consecutivo == undefined) {
+        } else if(html != undefined) {
           this.pago();
         } else {
           this.showSplash = false;

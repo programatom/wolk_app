@@ -111,7 +111,6 @@ export class DetallesProductosPage implements OnInit {
     }
 
 
-  //--------------------------------------------------------------------------------------------------------------------------------
 
 
 
@@ -127,7 +126,6 @@ export class DetallesProductosPage implements OnInit {
 }
 
 
-  //--------------------------------------------------------------------------------------------------------------------------------
 
 
 
@@ -166,7 +164,6 @@ export class DetallesProductosPage implements OnInit {
   }
 
 
-  //--------------------------------------------------------------------------------------------------------------------------------
 
 
 
@@ -191,7 +188,6 @@ export class DetallesProductosPage implements OnInit {
 
   }
 
-  //--------------------------------------------------------------------------------------------------------------------------------
 
 
   buscarArrayReturnResults( array, filtro){
@@ -239,7 +235,6 @@ export class DetallesProductosPage implements OnInit {
   }
 
 
-  //--------------------------------------------------------------------------------------------------------------------------------
 
 
   inicializarProducto(producto) {
@@ -276,7 +271,6 @@ export class DetallesProductosPage implements OnInit {
   }
 
 
-  //--------------------------------------------------------------------------------------------------------------------------------
 
 
   productSelector(arrayProductos) {
@@ -343,7 +337,6 @@ export class DetallesProductosPage implements OnInit {
   }
 
 
-  //--------------------------------------------------------------------------------------------------------------------------------
 
 
 
@@ -352,7 +345,6 @@ export class DetallesProductosPage implements OnInit {
   }
 
 
-  //--------------------------------------------------------------------------------------------------------------------------------
 
 
   agregarProducto() {
@@ -439,7 +431,6 @@ export class DetallesProductosPage implements OnInit {
 
   }
 
-  //--------------------------------------------------------------------------------------------------------------------------------
 
 
   validarCampos(){
@@ -481,7 +472,6 @@ export class DetallesProductosPage implements OnInit {
 
   }
 
-  //--------------------------------------------------------------------------------------------------------------------------------
 
 
   calcularSubtotalesGlobales(){
@@ -512,7 +502,6 @@ export class DetallesProductosPage implements OnInit {
 
   }
 
-  //--------------------------------------------------------------------------------------------------------------------------------
 
 
   calcularSubtotales(producto: ObjProducto, displayStatus, indexMatch?){
@@ -566,7 +555,6 @@ export class DetallesProductosPage implements OnInit {
     return Math.round((equation)*100)/100;
   }
 
-  //--------------------------------------------------------------------------------------------------------------------------------
 
 
   checkearNuevoProducto(){
@@ -584,7 +572,6 @@ export class DetallesProductosPage implements OnInit {
 
   }
 
-  //--------------------------------------------------------------------------------------------------------------------------------
 
 
 

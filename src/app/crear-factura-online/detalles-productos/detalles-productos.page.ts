@@ -549,7 +549,6 @@ export class DetallesProductosPage implements OnInit {
         return true;
       }
     }
-
     return false;
   }
 

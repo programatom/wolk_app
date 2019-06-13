@@ -31,31 +31,31 @@
 
 <ion-content padding>
 
-  <ion-item [disabled]="factura.isAnulada == true">
+  <ion-item [disabled]="factura.isguardado == 'S'">
     <ion-label>Forma de pago</ion-label>
     <ion-select okText="Ok" cancelText="Cancelar" [(ngModel)]="formaDePagoID" value = "caja x efectivo" placeholder=" Caja x Efectivo">
       <ion-select-option *ngFor="let formaDePago of formasDePago" [value]="formaDePago['Forma de pago']">{{formaDePago["Forma de pago"]}}</ion-select-option>
     </ion-select>
   </ion-item>
 
-  <ion-item [disabled]="factura.isAnulada == true">
+  <ion-item [disabled]="factura.isguardado == 'S'">
     <ion-textarea [(ngModel)]="observaciones" placeholder="Observaciones" maxlength = "38"></ion-textarea>
   </ion-item>
 
 
-  <ion-button expand="block" (click)="anularFactura()" [disabled]="observaciones.length == 0 || factura.isAnulada == true">
+  <ion-button expand="block" (click)="anularFactura()" [disabled]="observaciones.length == 0 || factura.isguardado == 'S'">
     Anular factura
   </ion-button>
 
-  <ion-button expand="block" [disabled]="factura.isAnulada == false || factura.isProcesada || factura['Consecutivo Hacienda'] == '0'" (click)="procesarNCEnHacienda()">
+  <ion-button expand="block" [disabled]="haciendaBotonDisabled()" (click)="procesarNCEnHacienda()">
     Enviar a hacienda
   </ion-button>
 
-  <ion-button expand="block" [disabled]="factura.isAnulada == false" (click)="imprimir(false)">
+  <ion-button expand="block" [disabled]="factura.isguardado == 'N'" (click)="imprimir(false)">
     Imprimir
   </ion-button>
 
-  <ion-button expand="block" [disabled]="factura.isAnulada == false" (click)="imprimir(true)">
+  <ion-button expand="block" [disabled]="factura.isguardado == 'N'" (click)="imprimir(true)">
     Reimprimir
   </ion-button>
 

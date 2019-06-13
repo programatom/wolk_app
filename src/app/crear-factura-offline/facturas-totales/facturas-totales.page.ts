@@ -119,10 +119,14 @@ export class FacturasTotalesPage implements OnInit {
           let año = date.getFullYear();
           let hora = date.getHours();
           let minutos = date.getMinutes();
-          let fechahora = dia + "_" + mes + "_" + año + "_" + hora + "_" + minutos;
+          let segundos = date.getSeconds();
+          let fechahora = dia + "_" + mes + "_" + año + "_" + hora + "_" + minutos + "_" + segundos;
           let nombre = "factura_" + fechahora;
-          this.localStorageServ.insertAndInstantiateValue(nombre, this.dataFacturaServ.dataFacturaOffline);
-          factura.isProcesadaInterno = true;
+          this.showSplash = true;
+          this.localStorageServ.insertAndInstantiateValue(nombre, this.dataFacturaServ.dataFacturaOffline).then(()=>{
+            this.showSplash = false;
+            factura.isProcesadaInterno = true;
+          });
         }
       }]
 
@@ -167,11 +171,13 @@ export class FacturasTotalesPage implements OnInit {
     if(!this.hasConsecutive){
       this.hasConsecutive = true;
       if(this.localStorageServ.localStorageObj["contador"] == undefined){
+        this.showSplash = true;
         this.localStorageServ.insertAndInstantiateValue("contador",{
           "dia": fecha,
           "contador":1
+        }).then(()=>{
+          this.showSplash = false;
         });
-        return;
       }else{
         if(this.localStorageServ.localStorageObj.contador.dia == fecha){
           // Estamos en el mismo dia
@@ -329,11 +335,6 @@ export class FacturasTotalesPage implements OnInit {
     return printString;
 
   }
-
-
-
-
-
 
   ngOnInit() {
 

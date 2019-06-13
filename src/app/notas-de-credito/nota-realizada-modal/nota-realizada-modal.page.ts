@@ -6,6 +6,7 @@ import { NotasDeCreditoHttpService } from 'src/app/services/notas-de-credito/not
 import { ObjUserData } from 'src/interfaces/interfaces';
 import { PrintService } from 'src/app/services/print.service';
 import { ToastService } from 'src/app/services/toast.service';
+import { HaciendaService } from 'src/app/services/hacienda.service';
 
 @Component({
   selector: 'app-nota-realizada-modal',
@@ -54,7 +55,8 @@ export class NotaRealizadaModalPage implements OnInit {
               private modalCtrl: ModalController,
               private NCHttp: NotasDeCreditoHttpService,
               private printServ: PrintService,
-              private toastServ: ToastService) {
+              private toastServ: ToastService,
+              private haciendaServ: HaciendaService) {
                 this.user = this.localStorageServ.localStorageObj.dataUser;
                 this.NC = this.NCLogic.NCElegida;
                 console.log(this.NC);
@@ -74,6 +76,12 @@ export class NotaRealizadaModalPage implements OnInit {
     });
 
   }
+
+  botonHaciendaDisabled(){
+    return this.haciendaServ.haciendaDisabled("S", this.NC["Consecutivo Hacienda"] ,this.NC["Referencia Factura Hacienda"])
+  }
+
+
   dismissModal(){
     this.modalCtrl.dismiss();
   }
@@ -93,7 +101,7 @@ export class NotaRealizadaModalPage implements OnInit {
       this.NC.isguardado = "S";
       this.NC.plazo_credito = 0;
 
-      this.NCLogic.procesarNCEnHacienda(this.NC).then(()=>{
+      this.NCLogic.procesarNCEnHacienda(this.NC, "NOTADECREDITO").then(()=>{
         this.showSplash = false;
       }).catch((mensajeError)=>{
         this.toastServ.toastMensajeDelServidor(mensajeError);

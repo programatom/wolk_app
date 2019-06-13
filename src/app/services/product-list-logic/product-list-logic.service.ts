@@ -266,6 +266,8 @@ export class ProductListLogicService {
   barrerArrayDeBusquedaYCompararConCodigoIngresado(array) {
 
     for (let i = 0; i <= array.length - 1; i++) {
+      console.log(array);
+      console.log(this.codigoProducto);
       if (array[i]['Código Producto'] == this.codigoProducto) {
         this.event.publish("inicializar" , array[i])
         return true;
@@ -273,6 +275,7 @@ export class ProductListLogicService {
     }
     return false;
   }
+
 
   habilitarCampos() {
     if (this.dismissCambioCheckBoxAutorizacion) {

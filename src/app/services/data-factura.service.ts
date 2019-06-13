@@ -52,7 +52,7 @@ export class DataFacturaService {
     this.dataFactura.isFacturaAbierta = false;
 
     this.dataFactura.descuentoFijo = 0;
-    this.dataFactura.consecutivoMH = "0";
+    this.dataFactura.claveDocHacienda = "0";
     this.dataFactura.subTotales = {
       "subTotal": 0,
       "monoDescuento": 0,

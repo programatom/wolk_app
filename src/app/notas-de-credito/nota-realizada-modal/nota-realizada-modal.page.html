@@ -83,7 +83,7 @@
     </ion-item>
   </div>
 
-  <ion-button expand="block" (click)="enviarAHacienda()" [disabled]="NC.claveHaciendaNC != '0'">
+  <ion-button expand="block" (click)="enviarAHacienda()" [disabled]="botonHaciendaDisabled()">
     Enviar a hacienda
   </ion-button>
   <ion-button  color = "primary" (click) = "imprimir(false)" expand="block" >

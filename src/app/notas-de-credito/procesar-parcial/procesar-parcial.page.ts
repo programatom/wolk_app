@@ -8,6 +8,7 @@ import { ObjUserData } from 'src/interfaces/interfaces';
 import { NotasDeCreditoService } from 'src/app/services/notas-de-credito/notas-de-credito.service';
 import { Events, NavController } from '@ionic/angular';
 import { PrintService } from 'src/app/services/print.service';
+import { HaciendaService } from 'src/app/services/hacienda.service';
 
 @Component({
   selector: 'app-procesar-parcial',
@@ -51,8 +52,11 @@ export class ProcesarParcialPage implements OnInit {
               private _NCLogic: NotasDeCreditoService,
               private event: Events,
               private printServ: PrintService,
-              private navCtrl: NavController
-              ) {
+              private navCtrl: NavController,
+              private haciendaServ: HaciendaService
+            ) {
+
+                console.log("El objeto factura traido por la API con variables de la nota de creidto: " ,this._NCLogic.facturaElegida)
                 this.event.subscribe("loading" , ()=>{
                   this.showSplash = true;
                 });
@@ -90,10 +94,15 @@ export class ProcesarParcialPage implements OnInit {
 
               }
 
+  haciendaBotonDisabled(){
+
+    return this.haciendaServ.haciendaDisabled(this.factura.isguardado,this.factura.claveHaciendaNC , this.factura["Consecutivo Hacienda"]);
+  }
 
   dismiss(){
     this.navCtrl.navigateBack("/elejir-factura")
   }
+
   volverAlMenu(){
     this.navCtrl.navigateBack("/menu-crear-factura")
   }
@@ -145,7 +154,6 @@ export class ProcesarParcialPage implements OnInit {
     */
   }
 
-
   verMasProducto(i) {
     if (this.arrayProductosDisplay[i]['verMas'] == true) {
       this.arrayProductosDisplay[i]['icono'] = 'add-circle';
@@ -155,7 +163,6 @@ export class ProcesarParcialPage implements OnInit {
       this.arrayProductosDisplay[i]['verMas'] = true;
     }
   }
-
 
   habilitarCampos(){
     if (this.dismissCambioCheckBoxAutorizacion) {
@@ -178,8 +185,6 @@ export class ProcesarParcialPage implements OnInit {
       }
     }
   }
-
-
 
   inicializarProducto(producto) {
 
@@ -380,136 +385,121 @@ export class ProcesarParcialPage implements OnInit {
     })
   }
 
-
-
-
-
-  //--------------------------------------------------------------------------------------------------------------------------------
-
-
-
   nuevoProductoCheck() {
 
-    return new Promise((resolve) => {
-      if (this.productoSeleccionado == undefined) {
-        // Si voy acá es que no hay producto seleccionado, porque nunca se seleccionó uno y se ingresa a pelo
-        this.productLogic.busquedaProductoUnico().then((resp:any) => {
-          if (resp.status == "fail") {
-            this.toastServ.toastNoSeEncontroProducto();
-          }else{
+  return new Promise((resolve) => {
+    if (this.productoSeleccionado == undefined) {
+      // Si voy acá es que no hay producto seleccionado, porque nunca se seleccionó uno y se ingresa a pelo
+      this.productLogic.busquedaProductoUnico(this.codigoProducto).then((encontro:any) => {
+        if (encontro) {
+          resolve();
+        }else{
+          this.toastServ.toastNoSeEncontroProducto();
+        }
+      });
+    } else {
+
+      // Acá se mete si ya hay un producto seleccionado, pero puede ser que el codigo que esté ingresado no coincida con el codigo definido
+      // en el producto seleccionado, que es un campo que se inicializa una vez que se buscan los datos del producto.
+
+      if (this.productoSeleccionado['Código Producto'] == this.codigoProducto) {
+        resolve();
+      } else {
+        this.productLogic.busquedaProductoUnico(this.codigoProducto).then((encontro) => {
+          if (encontro) {
             resolve();
+          }else{
+            this.toastServ.toastNoSeEncontroProducto();
           }
         });
-      } else {
-
-        // Acá se mete si ya hay un producto seleccionado, pero puede ser que el codigo que esté ingresado no coincida con el codigo definido
-        // en el producto seleccionado, que es un campo que se inicializa una vez que se buscan los datos del producto.
-
-        if (this.productoSeleccionado['Código Producto'] == this.codigoProducto) {
-          resolve();
-        } else {
-          this.productLogic.busquedaProductoUnico().then((encontro) => {
-            if (encontro) {
-              resolve();
-            }else{
-              this.toastServ.toastNoSeEncontroProducto();
-            }
-          });
-        }
       }
+    }
+  });
+  }
+
+  updateProduct(i, totalesLineas) {
+    // Subtotales
+    this.subTotalesInsert(this.arrayProductosDisplay[i], totalesLineas, i)
+
+    this.arrayProductosDisplay[i]['Precio Venta sin Imp'] = this.precioProducto;
+    this.arrayProductosDisplay[i].Existencia = this.productoSeleccionado.Existencia - this.cantidadProducto;
+    this.arrayProductosDisplay[i]['Cantidad'] = this.common.aproxXDecimals(this.arrayProductosDisplay[i]['Cantidad'] + this.cantidadProducto, 3);
+    this.arrayProductosDisplay[i]['descuento'] = this.common.aproxXDecimals(this.descuentoProducto + this.factura.descuentoFijo, 2);
+    this.showSplash = false;
+  }
+
+  insertProduct(totalesLineas) {
+    this.productoSeleccionado.Existencia = this.productoSeleccionado.existenciaInicial - this.cantidadProducto;
+    this.productoSeleccionado['Precio Venta sin Imp'] = this.precioProducto;
+    this.productoSeleccionado['Cantidad'] = parseFloat(this.cantidadProducto);
+    this.productoSeleccionado['verMas'] = false;
+    this.productoSeleccionado['icono'] = 'add-circle';
+    this.productoSeleccionado["descuento"] = this.common.aproxXDecimals(this.descuentoProducto + this.factura.descuentoFijo, 2);
+
+    //Subtotales
+    this.productoSeleccionado["subTotales"] = {};
+    this.subTotalesInsert(this.productoSeleccionado, totalesLineas, 0);
+    this.arrayProductosDisplay.unshift(this.productoSeleccionado);
+    this.showSplash = false;
+
+  }
+
+  subTotalesInsert(array, totalesLineas, index) {
+
+    array["subTotales"]["Sub Total"] = totalesLineas[index]["Sub Total"]
+    array["subTotales"]["Descuento"] = totalesLineas[index]["Descuento"]
+    array["subTotales"]["Sub Total descuento"] = totalesLineas[index]["Sub Total descuento"]
+    array["subTotales"]["Impuestos"] = totalesLineas[index]["Impuestos"]
+    array["subTotales"]["Total Linea"] = totalesLineas[index]["Total Linea"]
+  }
+
+  boolToString() {
+    if (this.exonerarImpuestosBool == true) {
+      this.exonerarImpuestos = "1";
+    } else {
+      this.exonerarImpuestos = "0";
+    }
+  }
+
+  procesarNCEnHacienda(){
+    this.showSplash = true;
+    this._NCLogic.procesarNCEnHacienda(this.factura, "FACTURA").then(()=>{
+      this.showSplash = false;
+    }).catch((mensajeError)=>{
+      this.toastServ.toastMensajeDelServidor(mensajeError);
+      this.showSplash = false;
     });
   }
 
-
-    updateProduct(i, totalesLineas) {
-      // Subtotales
-      this.subTotalesInsert(this.arrayProductosDisplay[i], totalesLineas, i)
-
-      this.arrayProductosDisplay[i]['Precio Venta sin Imp'] = this.precioProducto;
-      this.arrayProductosDisplay[i].Existencia = this.productoSeleccionado.Existencia - this.cantidadProducto;
-      this.arrayProductosDisplay[i]['Cantidad'] = this.common.aproxXDecimals(this.arrayProductosDisplay[i]['Cantidad'] + this.cantidadProducto, 3);
-      this.arrayProductosDisplay[i]['descuento'] = this.common.aproxXDecimals(this.descuentoProducto + this.factura.descuentoFijo, 2);
+  guardarNotaDeCredito(){
+    this.showSplash = true;
+    this._NCLogic.guardarParcial(this.factura).then(()=>{
+      this.toastServ.toastMensajeDelServidor("Se guardó la nota de crédito con éxito");
+      this.NCisGuardada = true;
       this.showSplash = false;
+    });
+  }
+
+  imprimir(reimpresion){
+    this.showSplash = true;
+    let data  = {
+      id_cliente_ws: parseInt(this.user.idUser),
+      id_facturaPV: this.factura.idNC,
+      nombreUsuario: this.user.usuario,
+      sePagaCon: -1,
+      vuelto: -1,
+      clave: this.factura.claveHaciendaNC,
+      reImpresion: reimpresion
     }
-
-    // ---------------------------------------------------------------------------------------------------------------------
-
-
-
-    insertProduct(totalesLineas) {
-      this.productoSeleccionado.Existencia = this.productoSeleccionado.existenciaInicial - this.cantidadProducto;
-      this.productoSeleccionado['Precio Venta sin Imp'] = this.precioProducto;
-      this.productoSeleccionado['Cantidad'] = parseFloat(this.cantidadProducto);
-      this.productoSeleccionado['verMas'] = false;
-      this.productoSeleccionado['icono'] = 'add-circle';
-      this.productoSeleccionado["descuento"] = this.common.aproxXDecimals(this.descuentoProducto + this.factura.descuentoFijo, 2);
-
-      //Subtotales
-      this.productoSeleccionado["subTotales"] = {};
-      this.subTotalesInsert(this.productoSeleccionado, totalesLineas, 0);
-      this.arrayProductosDisplay.unshift(this.productoSeleccionado);
+    console.log("DATA ENVIADA AL SERVICIO DE IMPRESIÓN: ", data)
+    this._NCHttp.buscarPrintString(data).subscribe((printString)=>{
       this.showSplash = false;
+      console.log(printString);
+      this.printService(printString);
+    })
+  }
 
-    }
-
-    subTotalesInsert(array, totalesLineas, index) {
-
-      array["subTotales"]["Sub Total"] = totalesLineas[index]["Sub Total"]
-      array["subTotales"]["Descuento"] = totalesLineas[index]["Descuento"]
-      array["subTotales"]["Sub Total descuento"] = totalesLineas[index]["Sub Total descuento"]
-      array["subTotales"]["Impuestos"] = totalesLineas[index]["Impuestos"]
-      array["subTotales"]["Total Linea"] = totalesLineas[index]["Total Linea"]
-    }
-
-    boolToString() {
-      if (this.exonerarImpuestosBool == true) {
-        this.exonerarImpuestos = "1";
-      } else {
-        this.exonerarImpuestos = "0";
-      }
-    }
-
-
-
-    procesarNCEnHacienda(){
-      this.showSplash = true;
-      this._NCLogic.procesarNCEnHacienda(this.factura).then(()=>{
-        this.showSplash = false;
-      }).catch((mensajeError)=>{
-        this.toastServ.toastMensajeDelServidor(mensajeError);
-        this.showSplash = false;
-      });
-    }
-
-    guardarNotaDeCredito(){
-      this.showSplash = true;
-      this._NCLogic.guardar(this.factura).then(()=>{
-        this.toastServ.toastMensajeDelServidor("Se guardó la nota de crédito con éxito");
-        this.NCisGuardada = true;
-        this.showSplash = false;
-      });
-    }
-
-    imprimir(reimpresion){
-      this.showSplash = true;
-      let data  = {
-        id_cliente_ws: parseInt(this.user.idUser),
-        id_facturaPV: this.factura.idNC,
-        nombreUsuario: this.user.usuario,
-        sePagaCon: -1,
-        vuelto: -1,
-        clave: this.factura.claveHaciendaNC,
-        reImpresion: reimpresion
-      }
-      console.log("DATA ENVIADA AL SERVICIO DE IMPRESIÓN: ", data)
-      this._NCHttp.buscarPrintString(data).subscribe((printString)=>{
-        this.showSplash = false;
-        console.log(printString);
-        this.printService(printString);
-      })
-    }
-
-    printService(printString) {
+  printService(printString) {
 
       this.printServ.printFN(this.localStorageServ.localStorageObj.impresora, printString).then(() => {
       })

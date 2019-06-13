@@ -34,7 +34,6 @@ export class NotasDeCreditoService {
 
   async inicializarFacturaElegida() {
     let facturaElegidaAInicializarEnComp = this.facturaElegida;
-    facturaElegidaAInicializarEnComp.isAnulada = false;
     facturaElegidaAInicializarEnComp.isProcesada = false;
     facturaElegidaAInicializarEnComp.claveHaciendaNC = "0";
     facturaElegidaAInicializarEnComp.descuentoFijo = 0;
@@ -54,22 +53,37 @@ export class NotasDeCreditoService {
   };
 
 
-  insertDocumentoReferenciaNC(factura) {
+  insertDocumentoReferenciaNC(factura, tipo) {
+    var objHaciendaFacturaRef = {
+      "NOTADECREDITO":factura["Referencia Factura Hacienda"],
+      "FACTURA":factura["Consecutivo Hacienda"]
+    }
+
+    let data = {
+      "id_cliente_ws": parseInt(this.user.idUser),
+      "pClave": objHaciendaFacturaRef[tipo]
+    }
+    console.log("Data enviada a busqueda de fecha para la emision: " + " de tipo: " + tipo,  data);
     return new Promise((resolve, reject) => {
-      let substrClaveIDDoc:string = factura["Consecutivo Hacienda"];
+    this._NCHttp.buscarFechaDeEmisionParaHacienda(data).subscribe((respuesta)=>{
+
+      console.log(respuesta);
+
+      let substrClaveIDDoc:string = objHaciendaFacturaRef[tipo];
       substrClaveIDDoc = substrClaveIDDoc.substring(29, 31);
 
       let data = {
         id_cliente_ws: parseInt(this.user.idUser),
         pIdNotaCredito: factura.idNC,
         pIdTipoDocumento: substrClaveIDDoc,
-        pClave: factura["Consecutivo Hacienda"],
-        pFechaEmision: factura["Fechas Creación"],
+        pClave: objHaciendaFacturaRef[tipo],
+        pFechaEmision: respuesta,
         pIdCodigoReferencia: factura.motivoID,
         pRazon: factura.observacionesNC,
         Usuario: this.user.usuario,
         ZonaHoraria: "Central America Standard Time"
       }
+
       console.log("LA DATA ENVIADA A INSERT DOC", data);
       this._NCHttp.insertDocumentoReferenciaNC(data).subscribe((respuesta) => {
         console.log("Respuesta INSERT", respuesta);
@@ -80,7 +94,8 @@ export class NotasDeCreditoService {
         }
       })
 
-    })
+    });
+  })
 
   }
 
@@ -95,78 +110,48 @@ export class NotasDeCreditoService {
     return arraySinClientesAjenos;
   }
 
-  async guardar(factura){
+  async guardarParcial(factura){
 
     return new Promise((resolve)=>{
-      if(factura["Motivo NC"] != undefined){
-        if(factura["Motivo NC"] == "Anula Documento de Referencia"){
-          factura.motivoID == "01";
-        }
+      let data = {
+        "id_cliente_ws":this.user.idUser,
+        "id_facturaPV": factura["N° Factura"],
+        "id_DocumentoPV": factura.idNC,
+        "consecutivoMH": factura.claveHaciendaNC,
+        "id_tipo_identificacion": factura["Tipo Identificacíon"] ,
+        "identificacion_cliente": factura["N° Identificación"],
+        sucursal: this.user.sucursal,
+        nro_terminal: this.user.nro_terminal,
+        nom_localizacion: this.user.nom_localizacion,
+        "cliente": factura["Clientes"],
+        "nom_formaPago": factura.formaDePagoID,
+        "id_codigo_referencia": factura.motivoID,
+        "id_condicion_venta": factura.id_condicion_de_venta, // CHECKEAR TEMA ID
+        "plazo_credito": factura.plazo_credito,
+        "id_medio_pago": factura.id_medio_de_pago,// CHECKEAR TEMA ID
+        "id_moneda": factura["Monedas"],// CHECKEAR TEMA ID
+        "tipo_cambio": 1,
+        "observaciones": factura.observacionesNC,
+        "isguardado": factura.isguardado,
+        "pCodigoAfiliado":"",
+        "ZonaHoraria": "Central America Standard Time",
+        "Usuario":this.user.usuario
       }
-      if(factura.motivoID == "01"){
-        let data = {
-          id_cliente_ws: this.user.idUser,
-          id_facturaPV: factura["N° Factura"],
-          sucursal: this.user.sucursal,
-          nro_terminal: this.user.nro_terminal,
-          nom_localizacion:this.user.nom_localizacion,
-          nom_formaPago: factura.formaDePagoID,
-          id_codigo_referencia: "01",
-          observaciones_nc: factura.observacionesNC,
-          ZonaHoraria:"Central America Standard Time",
-          Usuario: this.user.usuario
-        };
-
-        console.log("SE GUARDA EN EL SERVIDOR CON PROCESO NC CLIENTES", data);
-
-        this._NCHttp.procesoNCClientes(data).subscribe((respuesta)=>{
-          factura.isguardado = "S";
-          console.log("PROCESO RESPUESTA NC CLIENTE: " + respuesta);
-          resolve();
-        });
-      }else{
-        let data = {
-          "id_cliente_ws":this.user.idUser,
-          "id_facturaPV": factura["N° Factura"],
-          "id_DocumentoPV": factura.idNC,
-          "consecutivoMH": factura.claveHaciendaNC,
-          "id_tipo_identificacion": factura["Tipo Identificacíon"] ,
-          "identificacion_cliente": factura["N° Identificación"],
-          sucursal: this.user.sucursal,
-          nro_terminal: this.user.nro_terminal,
-          nom_localizacion: this.user.nom_localizacion,
-          "cliente": factura["Clientes"],
-          "nom_formaPago": factura.formaDePagoID,
-          "id_codigo_referencia": factura.motivoID,
-          "id_condicion_venta": factura.id_condicion_de_venta, // CHECKEAR TEMA ID
-          "plazo_credito": factura.plazo_credito,
-          "id_medio_pago": factura.id_medio_de_pago,// CHECKEAR TEMA ID
-          "id_moneda": factura["Monedas"],// CHECKEAR TEMA ID
-          "tipo_cambio": 1,
-          "observaciones": factura.observacionesNC,
-          "isguardado": factura.isguardado,
-          "pCodigoAfiliado":"",
-          "ZonaHoraria": "Central America Standard Time",
-          "Usuario":this.user.usuario
-        }
-        console.log("SE GUARDA EN EL SERVIDOR CON PROCESO NC PARCIAL", data);
-        this._NCHttp.procesoNCParcial(data).subscribe((respuesta)=>{
-          console.log("RESPUESTA PROCESO NC PARCIAL: " + respuesta);
-          factura.isguardado = "S";
-          resolve();
-        })
-      }
-
-
-    })
+      console.log("SE GUARDA EN EL SERVIDOR CON PROCESO NC PARCIAL", data);
+      this._NCHttp.procesoNCParcial(data).subscribe((respuesta)=>{
+        console.log("RESPUESTA PROCESO NC PARCIAL: " + respuesta);
+        factura.isguardado = "S";
+        resolve();
+      });
+    });
 
   }
 
 
-  procesarNCEnHacienda(factura) {
+  procesarNCEnHacienda(factura, tipo) {
     return new Promise((resolve, reject) => {
 
-      this.insertDocumentoReferenciaNC(factura).then(() => {
+      this.insertDocumentoReferenciaNC(factura, tipo).then(() => {
         var id_clientews = this.user.idUser;
         var id_documento = factura.idNC; // VARIABLE CON KEY CAMBIANTE
         var pTipoDocumento = "03";
@@ -200,26 +185,31 @@ export class NotasDeCreditoService {
           } else if (respuesta["Estado"] == "ACEPTADO") {
             this.toastServ.toastMensajeDelServidor(respuesta["Mensaje"], "success");
             factura.isProcesada = true;
-            factura.claveHaciendaNC = respuesta["Clave"];
-            await this.guardar(factura);
+            this.applyHaciendaChangesInObject(respuesta["Clave"] , tipo, factura);
             resolve();
 
           } else {
-            this.toastServ.toastMensajeDelServidor(respuesta["Mensaje"], "error", 10000);
             factura.isProcesada = true;
-            factura.claveHaciendaNC = respuesta["Clave"];
-            await this.guardar(factura);
+            this.toastServ.toastMensajeDelServidor(respuesta["Mensaje"], "error", 10000);
+            this.applyHaciendaChangesInObject(respuesta["Clave"] , tipo, factura);
             resolve();
-
           }
         }).catch(()=>{
           reject("Comunícate con el soporte técnico Wolk +506 4000, error en el envío del documento a hacienda");
-        })
+        });
       }).catch(()=>{
         reject("Comunícate con el soporte técnico Wolk +506 4000 1301 : Problema con el Servidor Dase de Datos al intentar Relacionar la NC a la factura de referencia");
-      })
-    })
+      });
+    });
+  }
 
+  applyHaciendaChangesInObject(clave, tipo, factura){
+    if(tipo == "FACTURA"){
+      factura.claveHaciendaNC = clave;
+    }else{
+      factura["Consecutivo Hacienda"] = clave;
+    }
+    return;
   }
 
   searchClienteAndInsertDisAndEmOnFactura(idDelCiente, factura){

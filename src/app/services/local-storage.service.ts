@@ -100,82 +100,92 @@ export class LocalStorageService {
 
 
   insertAndInstantiateValue(key, value) {
+
     return new Promise((resolve) => {
+
+
       if (this.plt.is('cordova')) {
         this.storage.ready().then(() => {
           if (typeof value === "object") {
-            this.insertValue(true, key, value)
-            resolve(this.objResponse);
+            this.insertValue(true, key, value).then(()=>{
+              resolve(this.objResponse);
+            })
           } else {
-            this.insertValue(false, key, value)
-            resolve(this.objResponse);
+            this.insertValue(false, key, value).then(()=>{
+              resolve(this.objResponse);
+            })
           }
         }).catch((error)=>{
           console.log(error)
-        })
+        });
+
+
       } else {
 
         if (typeof value === "object") {
-          this.insertValue(true, key, value);
-          resolve(this.objResponse);
+          this.insertValue(true, key, value).then(()=>{
+            resolve(this.objResponse);
+          });
         } else {
-          this.insertValue(false, key, value)
-          resolve(this.objResponse);
+          this.insertValue(false, key, value).then(()=>{
+            resolve(this.objResponse);
+          });
         }
-
       }
     })
   }
 
   insertValue(stringify: boolean, key, value) {
+    return new Promise((resolve)=>{
+      if (stringify) {
+        if (this.isCordova) {
+          this.storage.set(key, JSON.stringify(value)).then((data)=>{
+            this.instantiate(key, value);
+            this.objResponse = {
+              "status": "success",
+              "mensaje": 'Se guardó el value' + value + ' en la key: ' + key + ' con éxito'
+            }
+            resolve();
+          });
 
-    if (stringify) {
-      if (this.isCordova) {
-        this.storage.set(key, JSON.stringify(value)).then((data)=>{
-          console.log("TOMA BUG DE MIERDA");
-          console.log(JSON.stringify(data));
+        } else {
+          localStorage.setItem(key, JSON.stringify(value));
+          //console.log('Se guardó el value: ' + value + "en la key: " + key + ' con éxito');
+          this.instantiate(key, value);
+          console.log('Se guardó el value' + value + ' en la key: ' + key + ' con éxito');
+          this.objResponse = {
+            "status": "success",
+            "mensaje": 'Se guardó el value: ' + value + "en la key: " + key + ' con éxito'
+          }
+          resolve();
+
+        }
+      } else {
+        if (this.isCordova) {
+          this.storage.set(key, value).then((data)=>{
+            console.log("TOMA BUG DE MIERDA")
+            console.log(JSON.stringify(data))
+            //console.log('Se guardó el value: ', value, "en la key: ", key,' con éxito');
+            this.instantiate(key, value);
+            this.objResponse = {
+              "status": "success",
+              "mensaje": 'Se guardó el value' + value + ' en la key: ' + key + ' con éxito'
+            }
+            resolve();
+          });
+        } else {
+          localStorage.setItem(key, value);
+          console.log('Se guardó el value: ' + value + "en la key: " + key + ' con éxito');
           this.instantiate(key, value);
           this.objResponse = {
             "status": "success",
-            "mensaje": 'Se guardó el value' + value + ' en la key: ' + key + ' con éxito'
+            "mensaje": 'Se guardó el value: ' + value + "en la key: " + key + ' con éxito'
           }
-        });
-        //console.log('Se guardó el value: ', value, "en la key: ", key,' con éxito');
-        return;
-      } else {
-        localStorage.setItem(key, JSON.stringify(value));
-        //console.log('Se guardó el value: ' + value + "en la key: " + key + ' con éxito');
-        this.instantiate(key, value);
-        this.objResponse = {
-          "status": "success",
-          "mensaje": 'Se guardó el value: ' + value + "en la key: " + key + ' con éxito'
+          resolve()
         }
-        return;
       }
-    } else {
-      if (this.isCordova) {
-        this.storage.set(key, value).then((data)=>{
-          console.log("TOMA BUG DE MIERDA")
-          console.log(JSON.stringify(data))
-          //console.log('Se guardó el value: ', value, "en la key: ", key,' con éxito');
-          this.instantiate(key, value);
-          this.objResponse = {
-            "status": "success",
-            "mensaje": 'Se guardó el value' + value + ' en la key: ' + key + ' con éxito'
-          }
-        });
-        return;
-      } else {
-        localStorage.setItem(key, value);
-        //console.log('Se guardó el value: ' + value + "en la key: " + key + ' con éxito');
-        this.instantiate(key, value);
-        this.objResponse = {
-          "status": "success",
-          "mensaje": 'Se guardó el value: ' + value + "en la key: " + key + ' con éxito'
-        }
-        return;
-      }
-    }
+
+    })
 
   }
 
@@ -193,9 +203,9 @@ export class LocalStorageService {
         let keys = Object.keys(localStorage);
         this.iterateKeys(keys).then((response) => {
           resolve(response);
-        })
+        });
       }
-    })
+    });
   }
 
   iterateKeys(keys) {

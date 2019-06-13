@@ -184,7 +184,7 @@
     Guardar
   </ion-button>
 
-  <ion-button expand="block" [disabled]="arrayProductosDisplay.length == 0 || factura['Consecutivo Hacienda'] == '0' || factura.isProcesada || !NCisGuardada" (click)="procesarNCEnHacienda()">
+  <ion-button expand="block" [disabled]="haciendaBotonDisabled() || !NCisGuardada" (click)="procesarNCEnHacienda()">
     Enviar a hacienda
   </ion-button>
   <ion-button expand="block" [disabled]="arrayProductosDisplay.length == 0" (click)="imprimir(false)">

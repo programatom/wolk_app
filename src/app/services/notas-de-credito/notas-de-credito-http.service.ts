@@ -144,6 +144,8 @@ export class NotasDeCreditoHttpService {
     return this.http.httpPost(url, data);
   }
 
+  // PASO PREVIO A ENVIAR A HACIENDA
+
   insertDocumentoReferenciaNC(data:{
     id_cliente_ws:number
     pIdNotaCredito:number
@@ -202,6 +204,14 @@ export class NotasDeCreditoHttpService {
     reImpresion:boolean
   }){
     let url = URL_SERVICES + "PrintTicketNC?id_cliente_ws=" + data["id_cliente_ws"] + "&vid_facturaPV=" + data["id_facturaPV"] + "&NombreUsuario=" + data["nombreUsuario"] + "&pPagaCon=" + data["sePagaCon"] + "&pVuelto=" + data["vuelto"] + "&pClave=" + data["clave"] + "&pReimpresion=" + data["reImpresion"];
+    return this.http.httpGet(url);
+  }
+
+  buscarFechaDeEmisionParaHacienda(data:{
+    "id_cliente_ws",
+    "pClave"
+  }){
+    let url = URL_SERVICES + "SelectDocumentoHaciendaPorClave?id_cliente_ws=" + data["id_cliente_ws"] + "&pClave=" + data["pClave"];
     return this.http.httpGet(url);
   }
 

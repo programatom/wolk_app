@@ -6,6 +6,7 @@ import { NotasDeCreditoHttpService } from 'src/app/services/notas-de-credito/not
 import { ToastService } from 'src/app/services/toast.service';
 import { NotasDeCreditoService } from 'src/app/services/notas-de-credito/notas-de-credito.service';
 import { PrintService } from 'src/app/services/print.service';
+import { HaciendaService } from 'src/app/services/hacienda.service';
 
 @Component({
   selector: 'app-anular-factura',
@@ -28,7 +29,8 @@ export class AnularFacturaPage implements OnInit {
               private NCLogic: NotasDeCreditoService,
               private toastServ: ToastService,
               private printServ: PrintService,
-              private _NCServ: NotasDeCreditoService) { }
+              private _NCServ: NotasDeCreditoService,
+              private haciendaServ: HaciendaService) { }
 
   ngOnInit() {
     this.factura = this.NCLogic.facturaElegida;
@@ -45,6 +47,12 @@ export class AnularFacturaPage implements OnInit {
 
   volverAlMenu(){
     this.navCtrl.navigateBack("/menu-crear-factura");
+  }
+
+  haciendaBotonDisabled(){
+
+    return this.haciendaServ.haciendaDisabled(this.factura.isguardado,this.factura.claveHaciendaNC , this.factura["Consecutivo Hacienda"]);
+
   }
 
   anularFactura(){
@@ -79,7 +87,7 @@ export class AnularFacturaPage implements OnInit {
       Usuario: this.user.usuario
     };
 
-    console.log(data)
+    console.log("La data enviada a NC Clientes: ",data);
     this.showSplash = true;
 
     this.NCServHTTP.procesoNCClientes(data).subscribe((respuesta)=>{
@@ -87,11 +95,10 @@ export class AnularFacturaPage implements OnInit {
       let number = parseInt(respuesta);
       this.showSplash = false;
       if(number > 0 ){
-        this.factura.isAnulada = true;
         this.factura.motivoID = "01";
         this.factura.observacionesNC = this.observaciones;
         this.factura.formaDePagoID = this.formaDePagoID;
-
+        this.factura.isguardado = "S";
         this.factura.idNC = number;
       }else if (number < 0){
         this.toastServ.toastMensajeDelServidor("Consulte a soporte ERROR al generar NC de Anulación" , "error");
@@ -132,7 +139,7 @@ export class AnularFacturaPage implements OnInit {
 
   procesarNCEnHacienda(){
     this.showSplash = true;
-    this._NCServ.procesarNCEnHacienda(this.factura).then(()=>{
+    this._NCServ.procesarNCEnHacienda(this.factura, "FACTURA").then(()=>{
       this.showSplash = false;
     }).catch(()=>{
       this.toastServ.toastMensajeDelServidor("Comunícate con el soporte técnico Wolk +506 4000 1301 : Problema con el Servidor Base de Datos al intentar Relacionar la NC a la factura de referencia")

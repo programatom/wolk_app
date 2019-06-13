@@ -12,7 +12,6 @@
   </div>
 </div>
 <ion-header>
-
   <ion-toolbar color = "primary" text-center>
     <ion-title>Facturas totales</ion-title>
     <ion-buttons slot="end">
@@ -21,7 +20,9 @@
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-button [disabled]="dataFacturaServ.dataFactura.isProcesadaInterno" (click)="dismiss()">
+        <ion-icon slot="icon-only" name="arrow-back" ></ion-icon>
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 
@@ -142,7 +143,9 @@
   <ion-input type="text" [(ngModel)]="this.dataFacturaServ.dataFactura.observaciones"></ion-input>
 </ion-item>
 
-<ion-button  color = "primary" (click) = "guardarEmitir()" expand="block" [disabled] = "this.dataFacturaServ.dataFactura.pagoOfflineData.pendiente == 0"><strong>GUARDAR Y PAGAR</strong></ion-button>
+<ion-button  color = "primary" (click) = "guardarEmitir('html')" expand="block"
+[disabled] = "this.dataFacturaServ.dataFactura.pagoOfflineData.pendiente == 0">
+  <strong>GUARDAR Y PAGAR</strong></ion-button>
 <ion-button  color = "primary" (click) = "procesarDocumentoHacienda('04')" expand="block"
 [disabled] = "this.dataFacturaServ.dataFactura.noPaga || this.dataFacturaServ.dataFactura.isProcesada || usuarioExceptionDifferentTerminalAndSucursal">
 <strong>ENVIAR-TIQUETE ELETRÓNICO</strong></ion-button>

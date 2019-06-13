@@ -69,7 +69,11 @@ export class NotasRealizadasPage implements OnInit {
     let modal = await this.presentModalNota();
     modal.present();
     modal.onDidDismiss().then(()=>{
-      this.buscarNC();
+      this.showSplash = true;
+      setTimeout(()=>{
+        this.showSplash = false;
+        this.buscarNC();
+      },4000)
     });
   }
 
