@@ -36,7 +36,6 @@ export class GenerarOrdenPage implements OnInit {
   CCV = false;
   CCVException = false;
 
-  impresora:any;
   backButtonSubscription: import("/Users/tomasgarciapineiro/Desktop/proyecto facturas/wolk-app/node_modules/rxjs/internal/Subscription").Subscription;
 
   constructor(public localStorageServ: LocalStorageService,
@@ -50,9 +49,7 @@ export class GenerarOrdenPage implements OnInit {
     private common: CommonOperationsService) {
     this.user = this.localStorageServ.localStorageObj.dataUser;
     this.orden = this.ordenesServ.orden;
-    this.impresora = this.localStorageServ.localStorageObj.impresora;
     this.backButtonSubscription = this.plt.backButton.subscribeWithPriority(0,()=>{
-
     });
   }
 
@@ -364,7 +361,7 @@ export class GenerarOrdenPage implements OnInit {
     this.ordenesServ.printOrdenesES(data).subscribe((resp)=>{
       this.showSplash = false;
       console.log(resp)
-      this.printServ.printFN(this.impresora,resp).then(()=>{
+      this.printServ.printFN(this.localStorageServ.localStorageObj.impresora,resp).then(()=>{
 
       }).catch((error)=>{
         if(error == "No hay impresora"){

@@ -22,8 +22,6 @@ export class VerificacionProductoPage implements OnInit {
   codigoProducto: any;
   cantidadProducto: number = 1;
   user: any;
-  impresora: any;
-
   localizacion: string = "";
   observaciones: string = "";
 
@@ -58,15 +56,16 @@ export class VerificacionProductoPage implements OnInit {
   ngOnDestroy(){
     this.backButtonSubscription.unsubscribe();
   }
+
   iniciarVerif() {
     this.verificando = true;
   }
 
   ngOnInit() {
     this.user = this.localStorageServ.localStorageObj.dataUser;
-    this.impresora = this.localStorageServ.localStorageObj.impresora;
     this.localizacion = this.localStorageServ.localStorageObj.dataUser.nom_localizacion;
   }
+
   dismiss() {
 
     this.localStorageServ.presentAlert("Confirmación","Perderá todos los datos, asegurese de imprimir",[],[{
@@ -114,7 +113,6 @@ export class VerificacionProductoPage implements OnInit {
     }]
     this.localStorageServ.presentAlert(header, subHeader, undefined, buttons);
   }
-
 
   buscarProducto() {
     let header = 'Ingrese un producto';
@@ -190,7 +188,6 @@ export class VerificacionProductoPage implements OnInit {
     });
   }
 
-
   productSelector(arrayProductos) {
     this.showSplash = false;
     return new Promise((resolve, reject) => {
@@ -262,22 +259,44 @@ export class VerificacionProductoPage implements OnInit {
     })
   }
 
-
   imprimir() {
 
     let printString = this.generarPrintString();
-    console.log(printString)
-    this.printServ.printFN(this.impresora, printString).then(() => {
-
+    this.showSplash = true;
+    this.printServ.printFN(this.localStorageServ.localStorageObj.impresora, printString).then(() => {
+      this.showSplash = false;
     }).catch((error) => {
+      this.showSplash = false;
       if (error == "No hay impresora") {
         this.printServ.buscarImpresora("/verificacion-producto").then(() => {
         }).catch(() => {
         })
       }
-    })
+    });
   }
 
+  /*imprimirTEST(){
+    this.showSplash = true;
+    var printString = "            PRUEBA\n";
+    for(let i = 0; i < 41; i ++){
+      printString += "            PRUEBA\n";
+    }
+    console.log(printString)
+
+
+    this.printServ.printFN(this.localStorageServ.localStorageObj.impresora, printString).then(() => {
+
+      this.showSplash = false;
+    }).catch((error) => {
+      this.showSplash = false;
+      if (error == "No hay impresora") {
+        this.printServ.buscarImpresora("/verificacion-producto").then(() => {
+        }).catch(() => {
+        })
+      }
+    });
+  }
+*/
   cantidadProductoFn(comando) {
     if (comando == 'agregar') {
       this.existenciaReal = this.existenciaReal + 1;
@@ -294,8 +313,6 @@ export class VerificacionProductoPage implements OnInit {
       this.agregarProducto();
     });
   }
-
-
 
   agregarProducto() {
     this.showSplash = true;
@@ -388,10 +405,6 @@ export class VerificacionProductoPage implements OnInit {
     }
   }
 
-  // ---------------------------------------------------------------------------------------------------------------------
-
-
-
   insertProduct() {
     this.showSplash = false;
 
@@ -440,8 +453,6 @@ export class VerificacionProductoPage implements OnInit {
       }
     });
   }
-
-
 
   inicializarProducto(producto) {
 
@@ -501,8 +512,6 @@ export class VerificacionProductoPage implements OnInit {
     })
   }
 
-  // ---------------------------------------------------------------------------------------------------------------------
-
   barrerArrayDeBusquedaYCompararConCodigoIngresado(array) {
 
     for (let i = 0; i <= array.length - 1; i++) {
@@ -530,11 +539,6 @@ export class VerificacionProductoPage implements OnInit {
     this.localStorageServ.presentAlert(header, subHeader, inputs, buttons)
 
   }
-
-
-  // ---------------------------------------------------------------------------------------------------------------------
-
-
 
   eliminarProductoFN(index) {
     let producto = this.arrayProductosDisplay[index];
@@ -564,15 +568,13 @@ export class VerificacionProductoPage implements OnInit {
     let linealarga = "\n----------------------------------------\n";
     let direccionSplit = this.datosEmisor.direccion.split(",");
     let direccion = direccionSplit[1] + "," + direccionSplit[2];
-
-
     let user: ObjUserData = this.localStorageServ.localStorageObj.dataUser;
     let sucursal = user.sucursal;
     let usuario = user.usuario;
     let terminal = user.nro_terminal;
     let header = "\n\nCODIGO          DESCRIP              DIF"
 
-    let printString1 = "        Verificación inventario\n"
+    let printString1 = "     Verificación inventario\n"
       + this.stringProcessPrint.centeredString(this.datosEmisor.nombre_comercial_cliente)
       + "\n" + this.stringProcessPrint.centeredString(this.datosEmisor.nombre_cliente)
       + "\n    Ced: "+ this.datosEmisor.identificacion_cliente
@@ -610,8 +612,6 @@ export class VerificacionProductoPage implements OnInit {
 
     return printString1 + stringProductos + this.observaciones + "\n\n" + stringFirmas + "\n\n\n\n";
   }
-
-
 
 
 }

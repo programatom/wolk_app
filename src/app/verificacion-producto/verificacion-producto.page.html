@@ -56,7 +56,7 @@
     <ion-input readonly [(ngModel)]="diferenciaTotal">
     </ion-input>
   </ion-item>
-  
+
   <ion-item text-wrap [disabled]="verificando == false">
     <ion-label fixed>Existencia real</ion-label>
     <ion-input type = "number" [(ngModel)]="existenciaReal" (ionChange)="updateDiferencia($event)"></ion-input>

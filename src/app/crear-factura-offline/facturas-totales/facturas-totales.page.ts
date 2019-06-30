@@ -198,7 +198,12 @@ export class FacturasTotalesPage implements OnInit {
     this.contadorLogic();
 
     let printString = this.generarPrintString();
-    console.log(printString)
+    console.log(printString);
+    let split = printString.split("\n");
+    for(let i = 0; i < split.length - 1; i ++){
+      let linea = split[i];
+      console.log( "linea " + i + " "+ linea.length);
+    }
     this.printServ.printFN(this.localStorageServ.localStorageObj.impresora, printString).then(() => {
     })
       .catch((err) => {

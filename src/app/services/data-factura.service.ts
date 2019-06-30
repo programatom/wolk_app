@@ -19,7 +19,6 @@ export class DataFacturaService {
   dataFacturaTemporalCopy = new Object() as ObjFactura;
 
   arrayProductos = [];
-  ObjUserData = new Object() as ObjUserData;
   productosCXC = [];
   facturasTotalesType = "normal";
 
@@ -82,7 +81,6 @@ export class DataFacturaService {
 
     return new Promise((resolve) => {
       this.plazos();
-      this.ObjUserData = this.localStorageServ.localStorageObj["dataUser"];
       this.toastServ.toastMensajeDelServidor("Cargando datos para el modo offline, puede tardar unos minutos")
       this.mediosDePago().then(() => {
         this.condicionesDeVenta().then(() => {
@@ -103,7 +101,7 @@ export class DataFacturaService {
 
   formasDePagoActivas() {
     return new Promise((resolve) => {
-      this.pedidosGetServ.selectCuentasFormasdePagoActivas(this.ObjUserData.idUser).then((formasDePago: any) => {
+      this.pedidosGetServ.selectCuentasFormasdePagoActivas(this.localStorageServ.localStorageObj["dataUser"].idUser).then((formasDePago: any) => {
         formasDePago.splice(0, 1);
         this.localStorageServ.insertAndInstantiateValue("formasDePago", formasDePago);
         resolve();
@@ -150,7 +148,7 @@ export class DataFacturaService {
 
   obtenerDatosEmisor() {
     return new Promise((resolve) => {
-      this.pedidosGetServ.obtenerDatosEmisor(this.ObjUserData.idUser).then((datosEmisor: any) => {
+      this.pedidosGetServ.obtenerDatosEmisor(this.localStorageServ.localStorageObj["dataUser"].idUser).then((datosEmisor: any) => {
         console.log(datosEmisor)
         this.localStorageServ.insertAndInstantiateValue("datosEmisor", datosEmisor[0]);
         resolve();
@@ -160,7 +158,7 @@ export class DataFacturaService {
 
   productos() {
     return new Promise((resolve) => {
-      this.pedidosGetServ.selectProductosFull(this.ObjUserData.idUser, this.ObjUserData.nom_localizacion).then((productosArray: any) => {
+      this.pedidosGetServ.selectProductosFull(this.localStorageServ.localStorageObj["dataUser"].idUser, this.localStorageServ.localStorageObj["dataUser"].nom_localizacion).then((productosArray: any) => {
         this.localStorageServ.insertAndInstantiateValue("productos", productosArray);
         resolve();
       });
@@ -169,7 +167,7 @@ export class DataFacturaService {
 
   clientes() {
     return new Promise((resolve) => {
-      this.pedidosGetServ.buscarCliente(this.ObjUserData.idUser, "").then((clientesArray: any) => {
+      this.pedidosGetServ.buscarCliente(this.localStorageServ.localStorageObj["dataUser"].idUser, "").then((clientesArray: any) => {
         this.localStorageServ.insertAndInstantiateValue("clientes", clientesArray);
         resolve();
       });

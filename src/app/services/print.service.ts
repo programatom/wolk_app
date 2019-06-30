@@ -30,7 +30,6 @@ export class PrintService {
   }
 
   print(address, printData) {
-    console.log(address);
     return new Promise((resolve, reject) => {
       let xyz = this.connectBT(address).subscribe((data) => {
         this.btSerial.write(printData).then(dataz => {
@@ -46,7 +45,7 @@ export class PrintService {
         }, errx => {
           console.log("WRITE FAILED", errx);
           let objAlert = {
-            title: "Ocurrió un error con la impresión!",
+            title: "Ocurrió un error con la impresión! ",
             subTitle: errx,
           };
           this.toastServ.toastMensajeDelServidor(objAlert["title"] + errx, "error");
@@ -88,7 +87,7 @@ export class PrintService {
           this.print(id, dataPrint).then(() => {
             resolve();
           })
-            .catch(() => {
+            .catch((err) => {
               reject();
             });
         }

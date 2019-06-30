@@ -5,6 +5,7 @@ import { NavController, Events } from '@ionic/angular';
 import { LocalStorageService } from '../services/local-storage.service';
 import { ToastService } from '../services/toast.service';
 import { PedidosPostService } from '../services/pedidos-post.service';
+import { DataFacturaService } from '../services/data-factura.service';
 
 
 
@@ -37,6 +38,7 @@ export class LoginPage implements OnInit {
     private pedidosPostServ: PedidosPostService,
     private toastServ: ToastService,
     private navCtrl: NavController,
+    private dataFacturaServ: DataFacturaService
 ) {
     this.event.subscribe('errorServidor', () => {
       this.showSplash = false;
@@ -69,7 +71,9 @@ export class LoginPage implements OnInit {
            && this.cedula == this.localStorageServ.localStorageObj.last_user
            && this.password == this.localStorageServ.localStorageObj.last_user_pw){
              this.advance(this.localStorageServ.localStorageObj.dataUser_last_login);
-           }else{
+           }
+           else
+           {
              this.toastServ.toastMensajeDelServidor("No tiene conexión a internet!" , "error");
              return;
            }
@@ -110,13 +114,15 @@ export class LoginPage implements OnInit {
   advance(dataUser){
 
     this.localStorageServ.insertAndInstantiateValue("dataUser", dataUser).then(()=>{
-      this.usuarioValidoBool = true;
-      this.usuarioValido = dataUser.NombreUsuario;
-      this.localStorageServ.searchAndInstantiateAllKeysInStorage().then(() => {
-        this.navCtrl.navigateRoot('/menu').then(()=>{
+      this.dataFacturaServ.obtenerDatosEmisor().then(()=>{
+        this.usuarioValidoBool = true;
+        this.usuarioValido = dataUser.NombreUsuario;
+        this.localStorageServ.searchAndInstantiateAllKeysInStorage().then(() => {
+          this.navCtrl.navigateRoot('/menu').then(()=>{
+          });
+          this.showSplash = false;
         });
-        this.showSplash = false;
-      });
+      })
     });
   }
 

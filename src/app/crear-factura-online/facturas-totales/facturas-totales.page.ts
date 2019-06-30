@@ -211,9 +211,6 @@ export class FacturasTotalesPage implements OnInit {
     });
   }
 
-  //----------------------------------------------------------------------------------------------------------------
-
-
   guardarEmitir(html?) {
     this.showSplash = true;
 
@@ -283,9 +280,6 @@ export class FacturasTotalesPage implements OnInit {
     })
   }
 
-
-  //----------------------------------------------------------------------------------------------------------------
-
   buscarPrintString(reimpresion) {
     this.showSplash = true;
     if (this.dataFacturaServ.dataFactura.claveDocHacienda == undefined) {
@@ -315,8 +309,6 @@ export class FacturasTotalesPage implements OnInit {
       })
   }
 
-  //----------------------------------------------------------------------------------------------------------------
-
   async presentModalPage() {
 
     return this.modalCtrl.create({
@@ -324,16 +316,12 @@ export class FacturasTotalesPage implements OnInit {
     });
   }
 
-  //----------------------------------------------------------------------------------------------------------------
-
   async pago() {
 
     console.log("MODALL")
     const modal = await this.presentModalPage()
     modal.present();
   }
-
-  //----------------------------------------------------------------------------------------------------------------
 
   volver(textMsg, reInit = false) {
     let objAlert = {
@@ -366,8 +354,6 @@ export class FacturasTotalesPage implements OnInit {
     };
     this.localStorageServ.presentAlert(objAlert["title"], objAlert["subTitle"], objAlert["inputs"], objAlert["buttons"]);
   }
-
-
 
   ngOnInit() {
 
